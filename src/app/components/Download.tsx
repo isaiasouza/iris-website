@@ -35,8 +35,7 @@ export default function Download() {
 
           {/* Download button */}
           <a
-            href="/Iris Downloader.dmg"
-            download
+            href="https://github.com/isaiasouza/DriveDownloader/releases/latest/download/IrisDownloader-1.2.dmg"
             className="mt-8 inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-iris-600 to-iris-500 px-10 py-4 text-lg font-semibold text-white shadow-xl shadow-iris-600/25 transition-all hover:shadow-2xl hover:shadow-iris-600/30 hover:brightness-110"
           >
             <svg
@@ -57,14 +56,18 @@ export default function Download() {
 
           {/* Info */}
           <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-zinc-500">
-            <span>v1.0</span>
+            <span>v1.2</span>
             <span>&middot;</span>
-            <span>2.7 MB</span>
+            <span>DMG</span>
             <span>&middot;</span>
             <span>macOS 14+</span>
             <span>&middot;</span>
             <span>Apple Silicon</span>
           </div>
+
+          <p className="mt-3 text-xs text-zinc-600">
+            Inclui o app + rclone. Tudo instalado automaticamente.
+          </p>
 
           {/* Installation note */}
           <div className="mt-8 rounded-xl border border-yellow-500/10 bg-yellow-500/5 px-6 py-4 text-left">
@@ -74,20 +77,6 @@ export default function Download() {
             <p className="mt-1 text-sm leading-relaxed text-zinc-400">
               Como o app ainda não é notarizado pela Apple, o macOS pode bloquear a abertura.
               Clique com o botão direito no app &rarr; &ldquo;Abrir&rdquo; para autorizar.
-              Você também precisa do{" "}
-              <a
-                href="https://brew.sh"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-iris-400 underline underline-offset-2 hover:text-iris-300"
-              >
-                Homebrew
-              </a>{" "}
-              e do{" "}
-              <code className="rounded bg-zinc-800 px-1.5 py-0.5 text-xs text-iris-300">
-                rclone
-              </code>{" "}
-              instalados.
             </p>
           </div>
         </div>

@@ -1,16 +1,16 @@
 const steps = [
   {
     number: "01",
-    title: "Instale o rclone",
+    title: "Instale com um clique",
     description:
-      "Abra o Terminal e execute: brew install rclone. É a engine de transferência por trás do Iris Downloader.",
-    code: "brew install rclone",
+      "Baixe o instalador e dê duplo-clique. O Iris Downloader e todas as dependências são instalados automaticamente. Sem terminal, sem complicação.",
+    code: null,
   },
   {
     number: "02",
     title: "Conecte sua conta Google",
     description:
-      "Abra o Iris Downloader e adicione sua conta do Google Drive. A autenticação é feita diretamente pelo navegador.",
+      "Abra o Iris Downloader e adicione sua conta do Google Drive. A autenticação é feita diretamente pelo navegador, com segurança.",
     code: null,
   },
   {

@@ -63,7 +63,7 @@ export default function Hero() {
 
         {/* System requirements */}
         <p className="mt-6 text-sm text-zinc-600">
-          Requer macOS 14 (Sonoma) ou superior &middot; Apple Silicon
+          Requer macOS 14 (Sonoma) ou superior &middot; Apple Silicon &middot; Inclui tudo, sem dependências extras
         </p>
 
         {/* App preview mockup */}

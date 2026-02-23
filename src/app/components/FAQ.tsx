@@ -14,9 +14,9 @@ const faqs = [
       "Não! O Iris Downloader é totalmente gratuito. Sem assinatura, sem anúncios, sem limites de uso.",
   },
   {
-    question: "O que é o rclone e por que preciso dele?",
+    question: "Preciso instalar algo além do app?",
     answer:
-      "O rclone é uma ferramenta de linha de comando open-source que gerencia transferências com serviços de nuvem. O Iris Downloader usa ele como backend para fazer os downloads e uploads. Instale com: brew install rclone",
+      "Não! O instalador já inclui tudo que você precisa. O rclone (motor de transferência) é instalado automaticamente junto com o app. Basta baixar, instalar e usar.",
   },
   {
     question: "Funciona em Macs Intel?",
