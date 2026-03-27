@@ -7,7 +7,7 @@ export default function Download() {
       </div>
 
       <div className="relative mx-auto max-w-3xl px-6 text-center">
-        <div className="rounded-3xl border border-white/10 bg-gradient-to-b from-zinc-800/50 to-zinc-900/50 p-10 backdrop-blur-sm md:p-16">
+        <div className="rounded-3xl border border-white/10 bg-gradient-to-b from-[#1E191C]/50 to-[#161316]/50 p-10 backdrop-blur-sm md:p-16">
           {/* Icon */}
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-iris-500 to-iris-700 shadow-xl shadow-iris-600/20">
             <svg
@@ -35,7 +35,7 @@ export default function Download() {
 
           {/* Download button */}
           <a
-            href="https://github.com/isaiasouza/DriveDownloader/releases/latest/download/IrisDownloader-1.2.dmg"
+            href="https://github.com/isaiasouza/IrisDownloader/releases/latest/download/Iris.Downloader.Installer.pkg"
             className="mt-8 inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-iris-600 to-iris-500 px-10 py-4 text-lg font-semibold text-white shadow-xl shadow-iris-600/25 transition-all hover:shadow-2xl hover:shadow-iris-600/30 hover:brightness-110"
           >
             <svg
@@ -56,9 +56,9 @@ export default function Download() {
 
           {/* Info */}
           <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-zinc-500">
-            <span>v1.2</span>
+            <span>v1.8.1</span>
             <span>&middot;</span>
-            <span>DMG</span>
+            <span>PKG</span>
             <span>&middot;</span>
             <span>macOS 14+</span>
             <span>&middot;</span>
@@ -68,17 +68,6 @@ export default function Download() {
           <p className="mt-3 text-xs text-zinc-600">
             Inclui o app + rclone. Tudo instalado automaticamente.
           </p>
-
-          {/* Installation note */}
-          <div className="mt-8 rounded-xl border border-yellow-500/10 bg-yellow-500/5 px-6 py-4 text-left">
-            <p className="text-sm font-medium text-yellow-400/90">
-              Nota de instalação
-            </p>
-            <p className="mt-1 text-sm leading-relaxed text-zinc-400">
-              Como o app ainda não é notarizado pela Apple, o macOS pode bloquear a abertura.
-              Clique com o botão direito no app &rarr; &ldquo;Abrir&rdquo; para autorizar.
-            </p>
-          </div>
         </div>
       </div>
     </section>
