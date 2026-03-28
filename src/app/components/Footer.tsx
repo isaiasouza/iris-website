@@ -4,7 +4,7 @@ export default function Footer() {
       <div className="mx-auto max-w-6xl px-6">
         <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
           <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-iris-500 to-iris-700">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-iris-500 to-iris-600">
               <svg
                 className="h-4 w-4 text-white"
                 fill="none"
@@ -22,7 +22,7 @@ export default function Footer() {
             <span className="font-semibold text-white">Iris Downloader</span>
           </div>
 
-          <p className="text-sm text-zinc-500">
+          <p className="text-sm text-[#58585F]">
             &copy; {new Date().getFullYear()} Iris Media. Todos os direitos
             reservados.
           </p>

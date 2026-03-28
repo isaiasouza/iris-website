@@ -48,19 +48,19 @@ export default function HowItWorks() {
                 <div className="absolute right-0 top-10 hidden h-px w-full translate-x-1/2 bg-gradient-to-r from-iris-600/30 to-transparent md:block" />
               )}
 
-              <div className="relative rounded-2xl border border-white/5 bg-zinc-900/30 p-6">
-                <span className="text-4xl font-extrabold text-iris-600/20">
+              <div className="relative rounded-2xl border border-white/5 bg-[#19191E] p-6 transition-all hover:border-iris-500/10 hover:bg-[#1E1E23]">
+                <span className="text-4xl font-extrabold text-iris-600/25">
                   {step.number}
                 </span>
                 <h3 className="mt-2 text-xl font-semibold text-white">
                   {step.title}
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-zinc-400">
+                <p className="mt-3 text-sm leading-relaxed text-[#9F9FA3]">
                   {step.description}
                 </p>
                 {step.code && (
                   <div className="mt-4 rounded-lg bg-black/50 px-4 py-2.5 font-mono text-sm text-iris-300">
-                    <span className="mr-2 text-zinc-600">$</span>
+                    <span className="mr-2 text-[#58585F]">$</span>
                     {step.code}
                   </div>
                 )}

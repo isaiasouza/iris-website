@@ -6,10 +6,10 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[#0a0a0f]/80 backdrop-blur-xl">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[#13131A]/80 backdrop-blur-xl">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <a href="#" className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-iris-500 to-iris-700">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-iris-500 to-iris-600">
             <svg
               className="h-5 w-5 text-white"
               fill="none"
@@ -33,25 +33,25 @@ export default function Header() {
         <div className="hidden items-center gap-8 md:flex">
           <a
             href="#features"
-            className="text-sm text-zinc-400 transition-colors hover:text-white"
+            className="text-sm text-[#9F9FA3] transition-colors hover:text-white"
           >
             Recursos
           </a>
           <a
             href="#how-it-works"
-            className="text-sm text-zinc-400 transition-colors hover:text-white"
+            className="text-sm text-[#9F9FA3] transition-colors hover:text-white"
           >
             Como funciona
           </a>
           <a
             href="#faq"
-            className="text-sm text-zinc-400 transition-colors hover:text-white"
+            className="text-sm text-[#9F9FA3] transition-colors hover:text-white"
           >
             FAQ
           </a>
           <a
             href="#download"
-            className="rounded-full bg-iris-600 px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-iris-500 hover:shadow-lg hover:shadow-iris-600/25"
+            className="rounded-full bg-gradient-to-r from-iris-600 to-iris-500 px-5 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg hover:shadow-iris-600/25 hover:brightness-110"
           >
             Download Grátis
           </a>
@@ -59,7 +59,7 @@ export default function Header() {
 
         {/* Mobile hamburger */}
         <button
-          className="md:hidden text-zinc-400"
+          className="md:hidden text-[#9F9FA3]"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Menu"
         >
@@ -75,14 +75,14 @@ export default function Header() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="border-t border-white/5 bg-[#0a0a0f]/95 px-6 py-4 md:hidden">
+        <div className="border-t border-white/5 bg-[#13131A]/95 px-6 py-4 md:hidden">
           <div className="flex flex-col gap-4">
-            <a href="#features" className="text-sm text-zinc-400" onClick={() => setMenuOpen(false)}>Recursos</a>
-            <a href="#how-it-works" className="text-sm text-zinc-400" onClick={() => setMenuOpen(false)}>Como funciona</a>
-            <a href="#faq" className="text-sm text-zinc-400" onClick={() => setMenuOpen(false)}>FAQ</a>
+            <a href="#features" className="text-sm text-[#9F9FA3]" onClick={() => setMenuOpen(false)}>Recursos</a>
+            <a href="#how-it-works" className="text-sm text-[#9F9FA3]" onClick={() => setMenuOpen(false)}>Como funciona</a>
+            <a href="#faq" className="text-sm text-[#9F9FA3]" onClick={() => setMenuOpen(false)}>FAQ</a>
             <a
               href="#download"
-              className="mt-2 rounded-full bg-iris-600 px-5 py-2 text-center text-sm font-semibold text-white"
+              className="mt-2 rounded-full bg-gradient-to-r from-iris-600 to-iris-500 px-5 py-2 text-center text-sm font-semibold text-white"
               onClick={() => setMenuOpen(false)}
             >
               Download Grátis

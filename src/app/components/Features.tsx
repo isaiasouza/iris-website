@@ -73,16 +73,16 @@ export default function Features() {
           <h2 className="mt-3 text-3xl font-bold text-white md:text-4xl">
             Tudo que você precisa para gerenciar seus arquivos
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-zinc-400">
+          <p className="mx-auto mt-4 max-w-2xl text-[#9F9FA3]">
             Interface simples e intuitiva que torna o Google Drive mais fácil de usar no seu Mac.
           </p>
         </div>
 
-        <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, i) => (
             <div
               key={i}
-              className="group rounded-2xl border border-white/5 bg-zinc-900/50 p-6 transition-all hover:border-iris-500/20 hover:bg-zinc-900/80"
+              className="group rounded-2xl border border-white/5 bg-[#19191E] p-6 transition-all hover:border-iris-500/20 hover:bg-[#1E1E23]"
             >
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-iris-600/10 text-iris-400 transition-colors group-hover:bg-iris-600/20">
                 {feature.icon}
@@ -90,7 +90,7 @@ export default function Features() {
               <h3 className="mt-4 text-lg font-semibold text-white">
                 {feature.title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-400">
+              <p className="mt-2 text-sm leading-relaxed text-[#9F9FA3]">
                 {feature.description}
               </p>
             </div>

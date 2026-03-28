@@ -7,9 +7,9 @@ export default function Download() {
       </div>
 
       <div className="relative mx-auto max-w-3xl px-6 text-center">
-        <div className="rounded-3xl border border-white/10 bg-gradient-to-b from-[#1E191C]/50 to-[#161316]/50 p-10 backdrop-blur-sm md:p-16">
+        <div className="rounded-3xl border border-white/8 bg-[#19191E] p-10 md:p-16">
           {/* Icon */}
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-iris-500 to-iris-700 shadow-xl shadow-iris-600/20">
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-iris-500 to-iris-600 shadow-xl shadow-iris-600/20">
             <svg
               className="h-10 w-10 text-white"
               fill="none"
@@ -28,7 +28,7 @@ export default function Download() {
           <h2 className="mt-8 text-3xl font-bold text-white md:text-4xl">
             Baixe agora, é grátis
           </h2>
-          <p className="mt-4 text-zinc-400">
+          <p className="mt-4 text-[#9F9FA3]">
             Comece a transferir seus arquivos do Google Drive em segundos.
             Sem cadastro, sem assinatura.
           </p>
@@ -55,17 +55,17 @@ export default function Download() {
           </a>
 
           {/* Info */}
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-zinc-500">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-[#58585F]">
             <span>v1.8.1</span>
             <span>&middot;</span>
-            <span>PKG</span>
+            <span>PKG assinado</span>
             <span>&middot;</span>
             <span>macOS 14+</span>
             <span>&middot;</span>
             <span>Apple Silicon</span>
           </div>
 
-          <p className="mt-3 text-xs text-zinc-600">
+          <p className="mt-3 text-xs text-[#58585F]">
             Inclui o app + rclone. Tudo instalado automaticamente.
           </p>
         </div>

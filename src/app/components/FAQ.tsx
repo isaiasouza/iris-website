@@ -50,11 +50,11 @@ export default function FAQ() {
           </h2>
         </div>
 
-        <div className="mt-12 space-y-3">
+        <div className="mt-12 space-y-2">
           {faqs.map((faq, i) => (
             <div
               key={i}
-              className="rounded-xl border border-white/5 bg-zinc-900/30 transition-colors hover:border-white/10"
+              className="rounded-xl border border-white/5 bg-[#19191E] transition-all hover:border-iris-500/15"
             >
               <button
                 className="flex w-full items-center justify-between px-6 py-5 text-left"
@@ -64,7 +64,7 @@ export default function FAQ() {
                   {faq.question}
                 </span>
                 <svg
-                  className={`h-5 w-5 shrink-0 text-zinc-400 transition-transform ${
+                  className={`h-5 w-5 shrink-0 text-[#9F9FA3] transition-transform ${
                     openIndex === i ? "rotate-180" : ""
                   }`}
                   fill="none"
@@ -81,7 +81,7 @@ export default function FAQ() {
               </button>
               {openIndex === i && (
                 <div className="px-6 pb-5">
-                  <p className="text-sm leading-relaxed text-zinc-400">
+                  <p className="text-sm leading-relaxed text-[#9F9FA3]">
                     {faq.answer}
                   </p>
                 </div>
