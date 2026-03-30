@@ -35,7 +35,7 @@ export default function Download() {
 
           {/* Download button */}
           <a
-            href="https://github.com/isaiasouza/IrisDownloader/releases/latest/download/Iris.Downloader.Installer.pkg"
+            href="https://github.com/isaiasouza/IrisDownloader/releases/download/v2.0.0/IrisDownloader-v2.0.0.dmg"
             className="mt-8 inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-iris-600 to-iris-500 px-10 py-4 text-lg font-semibold text-white shadow-xl shadow-iris-600/25 transition-all hover:shadow-2xl hover:shadow-iris-600/30 hover:brightness-110"
           >
             <svg
@@ -56,17 +56,17 @@ export default function Download() {
 
           {/* Info */}
           <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-[#58585F]">
-            <span>v1.8.1</span>
+            <span>v2.0.0</span>
             <span>&middot;</span>
-            <span>PKG assinado</span>
+            <span>DMG assinado</span>
             <span>&middot;</span>
             <span>macOS 14+</span>
             <span>&middot;</span>
-            <span>Apple Silicon</span>
+            <span>Apple Silicon + Intel</span>
           </div>
 
           <p className="mt-3 text-xs text-[#58585F]">
-            Inclui o app + rclone. Tudo instalado automaticamente.
+            Sem dependências externas. Abre e instala direto.
           </p>
         </div>
       </div>

@@ -12,7 +12,7 @@ export default function Hero() {
         <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-iris-500/20 bg-iris-600/10 px-4 py-1.5">
           <span className="h-2 w-2 rounded-full bg-iris-400 animate-pulse-glow" />
           <span className="text-sm font-medium text-iris-300">
-            v1.8.1 — Grátis para macOS
+            v2.0 — Grátis para macOS
           </span>
         </div>
 
