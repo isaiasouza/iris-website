@@ -1,3 +1,7 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+
 const features = [
   {
     icon: (
@@ -6,8 +10,7 @@ const features = [
       </svg>
     ),
     title: "Sem compactação",
-    description:
-      "Baixe pastas inteiras do Google Drive direto para o seu Mac, sem precisar gerar ZIP. Mantém a estrutura original das pastas.",
+    description: "Baixe pastas inteiras do Google Drive direto para o seu Mac, sem precisar gerar ZIP. Mantém a estrutura original.",
   },
   {
     icon: (
@@ -15,9 +18,8 @@ const features = [
         <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M7.5 12l4.5-4.5m0 0L16.5 12M12 7.5V21" />
       </svg>
     ),
-    title: "Upload com drag-and-drop",
-    description:
-      "Arraste arquivos direto para o app e envie para qualquer pasta do seu Google Drive. Simples e rápido.",
+    title: "Upload drag-and-drop",
+    description: "Arraste arquivos direto para o app e envie para qualquer pasta do seu Google Drive. Simples e rápido.",
   },
   {
     icon: (
@@ -26,18 +28,7 @@ const features = [
       </svg>
     ),
     title: "Múltiplas contas",
-    description:
-      "Conecte quantas contas do Google Drive quiser. Alterne entre contas pessoais e de trabalho facilmente.",
-  },
-  {
-    icon: (
-      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-      </svg>
-    ),
-    title: "Transferências rápidas",
-    description:
-      "Controle a velocidade com limites de banda de 5 a 200 MB/s. Downloads concorrentes para máxima eficiência.",
+    description: "Conecte quantas contas do Google Drive quiser. Alterne entre contas pessoais e de trabalho sem sair do app.",
   },
   {
     icon: (
@@ -47,8 +38,7 @@ const features = [
       </svg>
     ),
     title: "Navegador de pastas",
-    description:
-      "Navegue pelas pastas do seu Google Drive diretamente no app. Escolha exatamente o que baixar ou onde enviar.",
+    description: "Navegue pelas pastas do Drive diretamente no app. Escolha exatamente o que baixar ou onde enviar.",
   },
   {
     icon: (
@@ -57,14 +47,61 @@ const features = [
       </svg>
     ),
     title: "Seguro e privado",
-    description:
-      "App nativo para macOS. Seus dados nunca passam por servidores de terceiros. Autenticação direta com o Google.",
+    description: "App nativo para macOS. Seus dados nunca passam por servidores de terceiros. Autenticação direta com o Google.",
+  },
+  {
+    icon: (
+      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    ),
+    title: "Pausar e retomar",
+    description: "Pause qualquer download em andamento e retome de onde parou. Controle total sobre as transferências.",
+  },
+  {
+    icon: (
+      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+      </svg>
+    ),
+    title: "Mover para lixeira",
+    description: "Delete arquivos do Google Drive direto pelo app. Rápido, sem precisar abrir o navegador.",
+  },
+  {
+    icon: (
+      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+      </svg>
+    ),
+    title: "Copiar link de compartilhamento",
+    description: "Um clique para copiar o link de qualquer arquivo. Perfeito para compartilhar sem abrir o Drive.",
   },
 ];
 
 export default function Features() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in-view");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const targets = sectionRef.current?.querySelectorAll(".fade-up-hidden");
+    targets?.forEach((t) => observer.observe(t));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="features" className="relative py-24 md:py-32">
+    <section id="features" ref={sectionRef} className="relative py-24 md:py-32">
       <div className="mx-auto max-w-6xl px-6">
         <div className="text-center">
           <span className="text-sm font-semibold uppercase tracking-widest text-iris-400">
@@ -74,7 +111,7 @@ export default function Features() {
             Tudo que você precisa para gerenciar seus arquivos
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-[#9F9FA3]">
-            Interface simples e intuitiva que torna o Google Drive mais fácil de usar no seu Mac.
+            Interface nativa para macOS com as features que você realmente usa.
           </p>
         </div>
 
@@ -82,17 +119,14 @@ export default function Features() {
           {features.map((feature, i) => (
             <div
               key={i}
-              className="group rounded-2xl border border-white/5 bg-[#19191E] p-6 transition-all hover:border-iris-500/20 hover:bg-[#1E1E23]"
+              className="fade-up-hidden group rounded-2xl border border-white/5 bg-[#19191E] p-6 transition-all hover:border-iris-500/20 hover:bg-[#1E1E23]"
+              style={{ transitionDelay: `${(i % 3) * 80}ms` }}
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-iris-600/10 text-iris-400 transition-colors group-hover:bg-iris-600/20">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-iris-700/15 text-iris-400 transition-colors group-hover:bg-iris-700/25">
                 {feature.icon}
               </div>
-              <h3 className="mt-4 text-lg font-semibold text-white">
-                {feature.title}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-[#9F9FA3]">
-                {feature.description}
-              </p>
+              <h3 className="mt-4 text-lg font-semibold text-white">{feature.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-[#9F9FA3]">{feature.description}</p>
             </div>
           ))}
         </div>

@@ -3,31 +3,27 @@ const steps = [
     number: "01",
     title: "Instale com um clique",
     description:
-      "Baixe o instalador e dê duplo-clique. O Iris Downloader e todas as dependências são instalados automaticamente. Sem terminal, sem complicação.",
-    code: null,
+      "Baixe o DMG, abra e arraste para /Applications. Tudo incluso, sem terminal, sem dependências externas.",
   },
   {
     number: "02",
     title: "Conecte sua conta Google",
     description:
-      "Abra o Iris Downloader e adicione sua conta do Google Drive. A autenticação é feita diretamente pelo navegador, com segurança.",
-    code: null,
+      "Adicione sua conta do Google Drive diretamente no app. A autenticação é feita via OAuth, com tokens seguros no Keychain do macOS.",
   },
   {
     number: "03",
-    title: "Cole o link e baixe",
+    title: "Navegue e baixe",
     description:
-      "Cole o link de qualquer pasta ou arquivo do Google Drive, escolha onde salvar e pronto. O download começa imediatamente.",
-    code: null,
+      "Browse pelo Drive, selecione arquivos ou pastas e baixe sem ZIP. Upload com drag-and-drop direto para qualquer pasta.",
   },
 ];
 
 export default function HowItWorks() {
   return (
     <section id="how-it-works" className="relative py-24 md:py-32">
-      {/* Background accent */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-0 top-1/2 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-iris-700/5 blur-[120px]" />
+        <div className="absolute left-0 top-1/2 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-iris-800/5 blur-[120px]" />
       </div>
 
       <div className="relative mx-auto max-w-6xl px-6">
@@ -43,27 +39,13 @@ export default function HowItWorks() {
         <div className="mt-16 grid gap-8 md:grid-cols-3">
           {steps.map((step, i) => (
             <div key={i} className="relative">
-              {/* Connector line */}
               {i < steps.length - 1 && (
-                <div className="absolute right-0 top-10 hidden h-px w-full translate-x-1/2 bg-gradient-to-r from-iris-600/30 to-transparent md:block" />
+                <div className="absolute right-0 top-10 hidden h-px w-full translate-x-1/2 bg-gradient-to-r from-iris-700/30 to-transparent md:block" />
               )}
-
               <div className="relative rounded-2xl border border-white/5 bg-[#19191E] p-6 transition-all hover:border-iris-500/10 hover:bg-[#1E1E23]">
-                <span className="text-4xl font-extrabold text-iris-600/25">
-                  {step.number}
-                </span>
-                <h3 className="mt-2 text-xl font-semibold text-white">
-                  {step.title}
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-[#9F9FA3]">
-                  {step.description}
-                </p>
-                {step.code && (
-                  <div className="mt-4 rounded-lg bg-black/50 px-4 py-2.5 font-mono text-sm text-iris-300">
-                    <span className="mr-2 text-[#58585F]">$</span>
-                    {step.code}
-                  </div>
-                )}
+                <span className="text-4xl font-extrabold text-iris-700/25">{step.number}</span>
+                <h3 className="mt-2 text-xl font-semibold text-white">{step.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-[#9F9FA3]">{step.description}</p>
               </div>
             </div>
           ))}

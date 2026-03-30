@@ -6,10 +6,21 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[#13131A]/80 backdrop-blur-xl">
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 backdrop-blur-xl">
+      {/* Animated gradient background */}
+      <div
+        className="absolute inset-0 animate-gradient"
+        style={{
+          background:
+            "linear-gradient(135deg, #13131A 0%, #1a1430 30%, #13131A 60%, #1c1240 85%, #13131A 100%)",
+          backgroundSize: "200% 200%",
+        }}
+      />
+      <div className="absolute inset-0 bg-[#13131A]/60" />
+
+      <nav className="relative mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <a href="#" className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-iris-500 to-iris-600">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-iris-500 to-iris-700">
             <svg
               className="h-5 w-5 text-white"
               fill="none"
@@ -24,36 +35,28 @@ export default function Header() {
               />
             </svg>
           </div>
-          <span className="text-lg font-bold text-white">
-            Iris Downloader
-          </span>
+          <span className="text-lg font-bold text-white">Iris Downloader</span>
         </a>
 
         {/* Desktop nav */}
         <div className="hidden items-center gap-8 md:flex">
-          <a
-            href="#features"
-            className="text-sm text-[#9F9FA3] transition-colors hover:text-white"
-          >
+          <a href="#features" className="text-sm text-[#9F9FA3] transition-colors hover:text-white">
             Recursos
           </a>
-          <a
-            href="#how-it-works"
-            className="text-sm text-[#9F9FA3] transition-colors hover:text-white"
-          >
-            Como funciona
+          <a href="#screenshots" className="text-sm text-[#9F9FA3] transition-colors hover:text-white">
+            Screenshots
           </a>
-          <a
-            href="#faq"
-            className="text-sm text-[#9F9FA3] transition-colors hover:text-white"
-          >
+          <a href="#pricing" className="text-sm text-[#9F9FA3] transition-colors hover:text-white">
+            Preços
+          </a>
+          <a href="#faq" className="text-sm text-[#9F9FA3] transition-colors hover:text-white">
             FAQ
           </a>
           <a
-            href="#download"
-            className="rounded-full bg-gradient-to-r from-iris-600 to-iris-500 px-5 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg hover:shadow-iris-600/25 hover:brightness-110"
+            href="#pricing"
+            className="rounded-full bg-gradient-to-r from-iris-600 to-iris-500 px-5 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg hover:shadow-iris-600/30 hover:brightness-110"
           >
-            Download Grátis
+            Começar agora
           </a>
         </div>
 
@@ -75,17 +78,18 @@ export default function Header() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="border-t border-white/5 bg-[#13131A]/95 px-6 py-4 md:hidden">
+        <div className="relative border-t border-white/5 bg-[#13131A]/95 px-6 py-4 md:hidden">
           <div className="flex flex-col gap-4">
             <a href="#features" className="text-sm text-[#9F9FA3]" onClick={() => setMenuOpen(false)}>Recursos</a>
-            <a href="#how-it-works" className="text-sm text-[#9F9FA3]" onClick={() => setMenuOpen(false)}>Como funciona</a>
+            <a href="#screenshots" className="text-sm text-[#9F9FA3]" onClick={() => setMenuOpen(false)}>Screenshots</a>
+            <a href="#pricing" className="text-sm text-[#9F9FA3]" onClick={() => setMenuOpen(false)}>Preços</a>
             <a href="#faq" className="text-sm text-[#9F9FA3]" onClick={() => setMenuOpen(false)}>FAQ</a>
             <a
-              href="#download"
+              href="#pricing"
               className="mt-2 rounded-full bg-gradient-to-r from-iris-600 to-iris-500 px-5 py-2 text-center text-sm font-semibold text-white"
               onClick={() => setMenuOpen(false)}
             >
-              Download Grátis
+              Começar agora
             </a>
           </div>
         </div>
