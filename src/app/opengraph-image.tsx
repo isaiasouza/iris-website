@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "Iris Downloader — Google Drive para Mac, do jeito certo";
+export const alt = "Iris Downloader — Baixe do Google Drive sem ZIP no Mac";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -13,141 +13,141 @@ export default async function OGImage() {
           width: "100%",
           height: "100%",
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
           background: "#0E0E14",
           fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          position: "relative",
         }}
       >
-        {/* Background glow */}
+        {/* Background glow top */}
         <div
           style={{
             position: "absolute",
-            width: 600,
-            height: 600,
+            width: 700,
+            height: 500,
             borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(126,96,248,0.18) 0%, transparent 70%)",
-            top: "50%",
+            background: "radial-gradient(circle, rgba(126,96,248,0.22) 0%, transparent 65%)",
+            top: -100,
             left: "50%",
-            transform: "translate(-50%, -50%)",
+            transform: "translateX(-50%)",
             display: "flex",
           }}
         />
 
-        {/* Content */}
+        {/* Content row */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            gap: 56,
-            padding: "0 80px",
+            gap: 64,
+            padding: "0 96px",
+            position: "relative",
           }}
         >
-          {/* Icon */}
+          {/* App icon */}
           <div
             style={{
-              width: 180,
-              height: 180,
-              borderRadius: 40,
-              background: "linear-gradient(135deg, #4C3CC6, #7E60F8)",
+              width: 160,
+              height: 160,
+              borderRadius: 36,
+              background: "linear-gradient(145deg, #5b3fdf, #7E60F8)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               flexShrink: 0,
-              boxShadow: "0 0 60px rgba(126,96,248,0.4)",
+              boxShadow: "0 0 80px rgba(126,96,248,0.5), 0 20px 60px rgba(0,0,0,0.4)",
             }}
           >
-            {/* Arrow down icon */}
-            <svg width="96" height="96" viewBox="0 0 24 24" fill="white">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 13.41V8h2v7.41l2.29-2.3 1.41 1.41L12 20l-4.71-4.48 1.42-1.41L11 15.41z"/>
+            <svg width="88" height="88" viewBox="0 0 24 24" fill="none">
+              <path d="M12 3v13M7 12l5 5 5-5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M4 19h16" stroke="white" strokeWidth="2" strokeLinecap="round"/>
             </svg>
           </div>
 
-          {/* Text */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <span
-                style={{
-                  fontSize: 14,
-                  fontWeight: 600,
-                  color: "#c4b5fd",
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                }}
-              >
-                Novo
-              </span>
+          {/* Text block */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {/* Label */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+              }}
+            >
               <div
                 style={{
-                  background: "rgba(126,96,248,0.2)",
-                  border: "1px solid rgba(126,96,248,0.4)",
+                  background: "rgba(126,96,248,0.18)",
+                  border: "1px solid rgba(126,96,248,0.35)",
                   borderRadius: 30,
-                  padding: "4px 14px",
+                  padding: "5px 16px",
                   display: "flex",
                 }}
               >
-                <span style={{ fontSize: 13, color: "#c4b5fd", fontWeight: 600 }}>
-                  macOS 14+
+                <span style={{ fontSize: 13, color: "#c4b5fd", fontWeight: 600, letterSpacing: "0.04em" }}>
+                  macOS 14+ · App nativo
                 </span>
               </div>
             </div>
 
+            {/* Main headline */}
             <h1
               style={{
-                fontSize: 56,
+                fontSize: 52,
                 fontWeight: 800,
                 color: "#ffffff",
                 margin: 0,
                 lineHeight: 1.1,
-                letterSpacing: "-1px",
+                letterSpacing: "-1.5px",
               }}
             >
               Iris Downloader
             </h1>
 
+            {/* Subheading */}
             <p
               style={{
-                fontSize: 22,
+                fontSize: 24,
                 color: "#9F9FA3",
                 margin: 0,
-                lineHeight: 1.4,
-                maxWidth: 520,
+                lineHeight: 1.35,
+                maxWidth: 500,
               }}
             >
-              Google Drive para Mac, do jeito certo.
+              Baixe pastas do Google Drive sem ZIP. Direto no Mac.
             </p>
 
+            {/* Price strip */}
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: 24,
-                marginTop: 8,
+                gap: 16,
+                marginTop: 6,
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.08)",
+                borderRadius: 12,
+                padding: "10px 20px",
+                width: "fit-content",
               }}
             >
-              <span style={{ fontSize: 16, color: "#58585F" }}>
-                A partir de
-              </span>
-              <span
-                style={{
-                  fontSize: 28,
-                  fontWeight: 700,
-                  color: "#c4b5fd",
-                }}
-              >
+              <span style={{ fontSize: 15, color: "#9F9FA3" }}>A partir de</span>
+              <span style={{ fontSize: 26, fontWeight: 700, color: "#c4b5fd" }}>
                 R$ 49,90/ano
               </span>
+              <span style={{ fontSize: 13, color: "#58585F" }}>· 7 dias de garantia</span>
             </div>
           </div>
         </div>
 
-        {/* Bottom URL */}
+        {/* Bottom watermark */}
         <div
           style={{
             position: "absolute",
             bottom: 28,
-            right: 48,
-            fontSize: 14,
+            right: 52,
+            fontSize: 13,
             color: "#3a3a45",
             display: "flex",
           }}

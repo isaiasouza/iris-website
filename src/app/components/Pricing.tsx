@@ -14,12 +14,11 @@ const annualFeatures = [
 ];
 
 const lifetimeFeatures = [
-  "Acesso vitalício ao app",
-  "Todas as atualizações para sempre",
-  "Suporte prioritário por email",
-  "Múltiplas contas Google",
-  "Sem limite de downloads",
+  "Tudo do plano Anual",
+  "Atualizações para sempre",
+  "Suporte prioritário",
   "Acesso a versões futuras",
+  "Paga uma vez, usa para sempre",
 ];
 
 function CheckIcon() {
@@ -62,10 +61,10 @@ export default function Pricing() {
           <div className="text-center">
             <span className="text-sm font-semibold uppercase tracking-widest text-iris-400">Preços</span>
             <h2 className="mt-3 text-3xl font-bold text-white md:text-4xl">
-              Escolha o plano certo para você
+              Simples. Sem pegadinha.
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-[#9F9FA3]">
-              Pague uma vez ou assine anualmente. Sem surpresas.
+              Anual ou pague uma vez e acabou. Sem renovação surpresa, sem cobrança escondida.
             </p>
           </div>
 
@@ -81,7 +80,7 @@ export default function Pricing() {
                   <span className="text-4xl font-extrabold text-white">R$ 49,90</span>
                   <span className="mb-1 text-sm text-[#9F9FA3]">/ano</span>
                 </div>
-                <p className="mt-1 text-xs text-[#58585F]">Renovação automática · Cancele quando quiser</p>
+                <p className="mt-1 text-xs text-[#9F9FA3]">≈ R$ 4,15/mês · Cancele quando quiser</p>
               </div>
 
               <button
@@ -108,7 +107,7 @@ export default function Pricing() {
               <div className="pointer-events-none absolute inset-0 rounded-2xl bg-iris-700/5" />
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                 <span className="rounded-full bg-gradient-to-r from-iris-700 to-iris-500 px-4 py-1 text-xs font-bold text-white shadow-lg shadow-iris-700/30">
-                  Mais popular
+                  Melhor custo-benefício
                 </span>
               </div>
 
@@ -117,7 +116,7 @@ export default function Pricing() {
                 <div className="mt-4 flex items-end gap-1">
                   <span className="text-4xl font-extrabold text-white">R$ 110,99</span>
                 </div>
-                <p className="mt-1 text-xs text-[#58585F]">Pagamento único · Sem renovações</p>
+                <p className="mt-1 text-xs text-[#9F9FA3]">Pagamento único · Equivale a 2 anos e meio</p>
               </div>
 
               <button
@@ -137,11 +136,18 @@ export default function Pricing() {
             </div>
           </div>
 
-          <p className="mt-10 text-center text-sm text-[#58585F]">
-            🔒 Pagamento seguro via Asaas &nbsp;·&nbsp; Garantia de 7 dias &nbsp;·&nbsp; PIX, Cartão ou Boleto
+          {/* Guarantee */}
+          <div className="mt-10 mx-auto max-w-xl rounded-2xl border border-white/5 bg-[#19191E] px-8 py-5 text-center">
+            <p className="text-sm font-semibold text-white">Garantia de 7 dias</p>
+            <p className="mt-1 text-sm text-[#9F9FA3]">
+              Não gostou? Manda um email e devolvemos 100% do valor — sem perguntas, sem formulário.
+            </p>
+          </div>
+
+          <p className="mt-6 text-center text-sm text-[#58585F]">
+            Pagamento seguro via Cakto &nbsp;·&nbsp; PIX, Cartão de crédito ou Boleto
           </p>
 
-          {/* Link portal */}
           <p className="mt-4 text-center text-xs text-[#3a3a45]">
             Já tem uma licença?{" "}
             <a href="/minha-licenca" className="text-iris-600/70 hover:text-iris-400 transition-colors">

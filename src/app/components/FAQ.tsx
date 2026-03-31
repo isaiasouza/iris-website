@@ -4,49 +4,54 @@ import { useState } from "react";
 
 const faqs = [
   {
-    question: "O que é o Iris Downloader?",
+    question: "Posso testar antes de pagar?",
     answer:
-      "É um app nativo para macOS que permite baixar e enviar arquivos do Google Drive diretamente, sem precisar compactar pastas em ZIP. Interface limpa, múltiplas contas Google e sem dependências externas.",
+      "Sim. Você pode baixar o app gratuitamente e testar todas as funcionalidades. A licença é necessária para continuar usando depois do período de avaliação.",
+  },
+  {
+    question: "E se eu não gostar? Tem reembolso?",
+    answer:
+      "Sim. Garantia de 7 dias. Se por qualquer motivo o app não atendeu o que você esperava, manda um email e devolvemos 100% do valor. Sem formulário, sem demora.",
   },
   {
     question: "Qual a diferença entre o plano Anual e o Vitalício?",
     answer:
-      "O plano Anual (R$ 49,90/ano) é renovado automaticamente todo ano e você pode cancelar quando quiser. O plano Vitalício (R$ 110,99) é um pagamento único, sem renovações, e inclui todas as atualizações da linha V2 para sempre.",
+      "O Anual (R$ 49,90/ano) se renova automaticamente todo ano — cancele quando quiser. O Vitalício (R$ 110,99) é pagamento único: você paga uma vez e usa para sempre, incluindo todas as atualizações futuras da linha V2.",
   },
   {
     question: "O plano Vitalício inclui atualizações futuras?",
     answer:
-      "Sim. O plano Vitalício inclui todas as atualizações da linha V2 do Iris Downloader. Você paga uma vez e recebe tudo que vier pela frente.",
+      "Sim. Você paga uma vez e recebe todas as atualizações da linha V2 do Iris Downloader para sempre. Sem custo adicional.",
   },
   {
     question: "Posso usar em mais de um Mac?",
     answer:
-      "Sim. A licença é vinculada à sua conta, não ao dispositivo. Você pode usar o Iris Downloader em quantos Macs quiser com a mesma conta.",
+      "Sim. A licença é vinculada à sua conta, não ao dispositivo. Você pode ativar o Iris em quantos Macs quiser com a mesma licença.",
   },
   {
     question: "O que acontece se eu não renovar o plano Anual?",
     answer:
-      "O app continua instalado e funcionando, mas deixa de receber atualizações. Você pode renovar a qualquer momento para voltar a receber as atualizações.",
+      "O app continua instalado, mas fica bloqueado até você renovar. Você não perde seus dados. Pode renovar a qualquer momento para voltar a usar normalmente.",
   },
   {
-    question: "Funciona em Macs Intel?",
+    question: "Funciona em Macs com chip Intel?",
     answer:
-      "Sim. O Iris Downloader V2 é compilado como universal binary, compatível com Apple Silicon (M1, M2, M3, M4) e Intel.",
+      "Sim. O Iris V2 é universal — roda nativamente tanto em Apple Silicon (M1, M2, M3, M4) quanto em Intel.",
   },
   {
-    question: "Meus dados estão seguros?",
+    question: "O macOS travou na abertura. O que faço?",
     answer:
-      "Sim. O app se comunica diretamente com a API oficial do Google Drive. Seus dados nunca passam por servidores de terceiros. A autenticação é feita via OAuth e os tokens ficam seguros no Keychain do macOS.",
+      'É o Gatekeeper na primeira abertura. Clique com o botão direito no app → "Abrir" → "Abrir" novamente. Acontece uma vez só. O app é assinado com Developer ID da Apple.',
   },
   {
-    question: "O macOS bloqueou a abertura do app. O que faço?",
+    question: "Meus arquivos ficam em algum servidor externo?",
     answer:
-      'O Iris Downloader é assinado com Developer ID. Se o Gatekeeper bloquear na primeira abertura, clique com o botão direito no app → "Abrir" → "Abrir" novamente na janela de confirmação.',
+      "Não. O app se comunica diretamente com a API oficial do Google Drive. Seus arquivos vão do Drive para o seu Mac — sem passar por nenhum servidor nosso ou de terceiros.",
   },
   {
-    question: "Como funciona a garantia?",
+    question: "O que é o Iris Downloader?",
     answer:
-      "7 dias. Se por qualquer motivo você não ficar satisfeito, basta entrar em contato e faremos o reembolso integral sem perguntas.",
+      "Um app nativo para macOS que resolve um problema específico: baixar e enviar arquivos do Google Drive sem precisar compactar em ZIP. Interface limpa, múltiplas contas Google, e sem dependências externas.",
   },
 ];
 

@@ -4,11 +4,11 @@ import { useState } from "react";
 import Image from "next/image";
 
 const tabs = [
-  { id: "files",     label: "Arquivos" },
-  { id: "downloads", label: "Downloads" },
-  { id: "grid",      label: "Grade" },
-  { id: "settings",  label: "Settings" },
-  { id: "accounts",  label: "Contas" },
+  { id: "files",     label: "Navegando no Drive" },
+  { id: "downloads", label: "Baixando sem ZIP" },
+  { id: "grid",      label: "Vista em grade" },
+  { id: "accounts",  label: "Múltiplas contas" },
+  { id: "settings",  label: "Configurações" },
 ];
 
 export default function Screenshots() {
@@ -23,13 +23,13 @@ export default function Screenshots() {
       <div className="relative mx-auto max-w-6xl px-6">
         <div className="text-center">
           <span className="text-sm font-semibold uppercase tracking-widest text-iris-400">
-            Screenshots
+            O app
           </span>
           <h2 className="mt-3 text-3xl font-bold text-white md:text-4xl">
-            Veja o app em ação
+            Interface nativa, sem gambiarras
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-[#9F9FA3]">
-            Interface limpa e intuitiva, construída nativamente para macOS.
+            Construído especificamente para macOS. Não é um app web embrulhado em Electron.
           </p>
         </div>
 

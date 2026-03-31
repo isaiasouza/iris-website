@@ -1,21 +1,21 @@
 const steps = [
   {
     number: "01",
-    title: "Instale com um clique",
+    title: "Baixe e instale",
     description:
-      "Baixe o DMG, abra e arraste para /Applications. Tudo incluso, sem terminal, sem dependências externas.",
+      "Abra o DMG, arraste para a pasta Aplicativos. Pronto. Nenhum terminal, nenhuma dependência extra, nenhum Homebrew.",
   },
   {
     number: "02",
     title: "Conecte sua conta Google",
     description:
-      "Adicione sua conta do Google Drive diretamente no app. A autenticação é feita via OAuth, com tokens seguros no Keychain do macOS.",
+      "Clique em \"Adicionar conta\", faça login com o Google no navegador e autorize o acesso. O Iris salva as credenciais de forma segura no seu Mac — você não precisa fazer isso de novo.",
   },
   {
     number: "03",
-    title: "Navegue e baixe",
+    title: "Navegue e baixe sem ZIP",
     description:
-      "Browse pelo Drive, selecione arquivos ou pastas e baixe sem ZIP. Upload com drag-and-drop direto para qualquer pasta.",
+      "Escolha qualquer arquivo ou pasta no seu Drive e clique em baixar. Cada arquivo vai direto para o seu Mac, na mesma estrutura de pastas do Drive — sem compactar, sem esperar, sem travar.",
   },
 ];
 
