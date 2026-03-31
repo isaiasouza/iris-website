@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Iris Downloader</title>
+    <link>https://www.irisdownloader.com.br/appcast.xml</link>
+    <description>Atualizações do Iris Downloader</description>
+    <language>pt-BR</language>
+
+    <item>
+      <title>Versão 2.0.0</title>
+      <sparkle:releaseNotesLink>https://www.irisdownloader.com.br/notas-da-versao</sparkle:releaseNotesLink>
+      <pubDate>Mon, 30 Mar 2026 22:00:00 +0000</pubDate>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:version>1</sparkle:version>
+      <sparkle:shortVersionString>2.0.0</sparkle:shortVersionString>
+      <enclosure
+        url="https://www.irisdownloader.com.br/Iris%20Downloader.dmg"
+        sparkle:edSignature="cJ81Iq2UJ37NIFq08TnXuzVWEPaLHZXBdcXTChEIyVuwyp0en+ovgvM+tA/u2TfaqypbrkAboZuEsJcC1/6UDA=="
+        length="3564223"
+        type="application/x-apple-diskimage"
+      />
+    </item>
+  </channel>
+</rss>

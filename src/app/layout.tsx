@@ -19,11 +19,28 @@ export const metadata: Metadata = {
     "Intel",
     "sem ZIP",
   ],
+  metadataBase: new URL("https://www.irisdownloader.com.br"),
   openGraph: {
     title: "Iris Downloader — Google Drive para Mac, do jeito certo",
     description:
       "Baixe pastas do Google Drive sem compactar. App nativo para macOS. Planos a partir de R$ 49,90/ano.",
     type: "website",
+    url: "https://www.irisdownloader.com.br",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Iris Downloader — Google Drive para Mac",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Iris Downloader — Google Drive para Mac, do jeito certo",
+    description:
+      "Baixe pastas do Google Drive sem compactar. App nativo para macOS. Planos a partir de R$ 49,90/ano.",
+    images: ["/opengraph-image"],
   },
 };
 
