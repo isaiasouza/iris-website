@@ -7,16 +7,16 @@
     <language>pt-BR</language>
 
     <item>
-      <title>Versão 2.0.0</title>
-      <sparkle:releaseNotesLink>https://www.irisdownloader.com.br/notas-da-versao</sparkle:releaseNotesLink>
-      <pubDate>Mon, 30 Mar 2026 22:00:00 +0000</pubDate>
+      <title>Versão 2.1.0</title>
+      <sparkle:releaseNotesLink>https://www.irisdownloader.com.br</sparkle:releaseNotesLink>
+      <pubDate>Mon, 30 Mar 2026 23:00:00 +0000</pubDate>
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-      <sparkle:version>1</sparkle:version>
-      <sparkle:shortVersionString>2.0.0</sparkle:shortVersionString>
+      <sparkle:version>2</sparkle:version>
+      <sparkle:shortVersionString>2.1.0</sparkle:shortVersionString>
       <enclosure
         url="https://www.irisdownloader.com.br/Iris%20Downloader.dmg"
-        sparkle:edSignature="cJ81Iq2UJ37NIFq08TnXuzVWEPaLHZXBdcXTChEIyVuwyp0en+ovgvM+tA/u2TfaqypbrkAboZuEsJcC1/6UDA=="
-        length="3564223"
+        sparkle:edSignature="UWTpVv30Utz30MUH8D31o4qRPT74Nyabb0Hnlwbd/wQ8UrMXqXTGrUM+HSfh93tmOjX/PPd3/HI2Lf9O9N47Bg=="
+        length="3564415"
         type="application/x-apple-diskimage"
       />
     </item>
