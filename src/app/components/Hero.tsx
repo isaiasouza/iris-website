@@ -18,7 +18,7 @@ export default function Hero() {
         </div>
 
         {/* Heading */}
-        <h1 className="mx-auto max-w-4xl text-4xl font-extrabold leading-tight tracking-tight text-white md:text-6xl lg:text-7xl animate-fade-up animate-delay-100">
+        <h1 className="mx-auto max-w-4xl text-[2rem] font-extrabold leading-tight tracking-tight text-white sm:text-4xl md:text-6xl lg:text-7xl animate-fade-up animate-delay-100">
           O Google Drive te obriga{" "}
           <br className="hidden md:block" />
           a baixar em ZIP.{" "}
@@ -64,7 +64,7 @@ export default function Hero() {
               alt="Iris Downloader — baixando pastas do Google Drive no Mac"
               width={1200}
               height={750}
-              className="w-full"
+              className="w-full max-h-[240px] object-cover object-top sm:max-h-[380px] md:max-h-none"
               priority
             />
           </div>

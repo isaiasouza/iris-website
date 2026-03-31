@@ -10,11 +10,11 @@ export default function SocialProof() {
   return (
     <div className="border-y border-white/5 py-6">
       <div className="mx-auto max-w-6xl px-6">
-        <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+        <div className="grid grid-cols-3 gap-4 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-x-10 sm:gap-y-4">
           {stats.map((stat, i) => (
             <div key={i} className="flex flex-col items-center gap-0.5">
-              <span className="text-lg font-bold text-white">{stat.value}</span>
-              <span className="text-xs text-[#9F9FA3]">{stat.label}</span>
+              <span className="text-base font-bold text-white sm:text-lg">{stat.value}</span>
+              <span className="text-[11px] text-[#9F9FA3] sm:text-xs">{stat.label}</span>
             </div>
           ))}
         </div>

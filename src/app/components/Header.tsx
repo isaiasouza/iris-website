@@ -21,7 +21,7 @@ export default function Header() {
 
       <nav className="relative mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <a href="#" className="flex items-center gap-3">
-          <Image src="/logo.png" alt="Iris Downloader" width={36} height={36} className="rounded-xl" />
+          <Image src="/logo-web.png" alt="Iris Downloader" width={36} height={36} className="rounded-xl" priority />
           <span className="text-lg font-bold text-white">Iris Downloader</span>
         </a>
 

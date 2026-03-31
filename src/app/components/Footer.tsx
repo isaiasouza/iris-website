@@ -10,7 +10,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-3">
-              <Image src="/logo.png" alt="Iris Downloader" width={32} height={32} className="rounded-lg" />
+              <Image src="/logo-web.png" alt="Iris Downloader" width={32} height={32} className="rounded-lg" />
               <span className="font-semibold text-white">Iris Downloader</span>
             </div>
             <p className="mt-3 text-sm text-[#58585F]">
