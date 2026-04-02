@@ -9,7 +9,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
   const [{ data: license, error }, { data: devices }, { data: events }] = await Promise.all([
     supabaseAdmin.from("licenses").select("*").eq("id", id).single(),
-    supabaseAdmin.from("license_devices").select("*").eq("license_id", id).order("activated_at", { ascending: false }),
+    supabaseAdmin.from("devices").select("*").eq("license_id", id).order("activated_at", { ascending: false }),
     supabaseAdmin.from("license_events").select("*").eq("license_id", id).order("created_at", { ascending: false }).limit(50),
   ]);
 

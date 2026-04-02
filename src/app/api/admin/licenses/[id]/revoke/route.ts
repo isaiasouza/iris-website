@@ -9,7 +9,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
   await Promise.all([
     supabaseAdmin.from("licenses").update({ status: "cancelled", updated_at: new Date().toISOString() }).eq("id", id),
-    supabaseAdmin.from("license_devices").update({ is_active: false }).eq("license_id", id),
+    supabaseAdmin.from("devices").update({ is_active: false }).eq("license_id", id),
   ]);
 
   await supabaseAdmin.from("license_events").insert({

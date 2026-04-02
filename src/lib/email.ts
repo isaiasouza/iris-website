@@ -19,7 +19,7 @@ export async function sendLicenseEmail(params: {
   const planLabel = params.plan === "lifetime" ? "Vitalício" : "Anual";
   const portalUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/minha-licenca`;
 
-  const downloadUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/Iris%20Downloader.dmg`;
+  const downloadUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/IrisDownloader_v2.2.0.dmg`;
 
   await getResend().emails.send({
     from: FROM,

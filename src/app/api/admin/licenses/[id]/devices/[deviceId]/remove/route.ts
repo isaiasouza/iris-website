@@ -11,7 +11,7 @@ export async function POST(
   const { id, deviceId } = await params;
 
   await supabaseAdmin
-    .from("license_devices")
+    .from("devices")
     .update({ is_active: false })
     .eq("id", deviceId)
     .eq("license_id", id);

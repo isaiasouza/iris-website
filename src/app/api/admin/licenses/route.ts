@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
   let deviceCounts: Record<string, number> = {};
   if (ids.length > 0) {
     const { data: devices } = await supabaseAdmin
-      .from("license_devices")
+      .from("devices")
       .select("license_id")
       .in("license_id", ids)
       .eq("is_active", true);

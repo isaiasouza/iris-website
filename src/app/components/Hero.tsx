@@ -42,7 +42,7 @@ export default function Hero() {
             Ver planos — a partir de R$ 49,90
           </a>
           <a
-            href="https://www.irisdownloader.com.br/Iris%20Downloader.dmg"
+            href="https://www.irisdownloader.com.br/IrisDownloader_v2.2.0.dmg"
             className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-medium text-[#9F9FA3] transition-all hover:border-white/20 hover:text-white"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
