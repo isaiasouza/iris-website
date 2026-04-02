@@ -7,16 +7,26 @@
     <language>pt-BR</language>
 
     <item>
-      <title>Versão 2.1.0</title>
+      <title>Versão 2.1.1 — Correção de Downloads do YouTube</title>
       <sparkle:releaseNotesLink>https://www.irisdownloader.com.br</sparkle:releaseNotesLink>
-      <pubDate>Mon, 30 Mar 2026 23:00:00 +0000</pubDate>
+      <pubDate>Thu, 02 Apr 2026 04:00:00 +0000</pubDate>
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-      <sparkle:version>2</sparkle:version>
-      <sparkle:shortVersionString>2.1.0</sparkle:shortVersionString>
+      <sparkle:version>3</sparkle:version>
+      <sparkle:shortVersionString>2.1.1</sparkle:shortVersionString>
+      <sparkle:releaseNotesLink>https://www.irisdownloader.com.br</sparkle:releaseNotesLink>
+      <description><![CDATA[
+        <h3>Novidades na versão 2.1.1</h3>
+        <ul>
+          <li>✅ Correção de travamento na busca de informações de vídeos do YouTube</li>
+          <li>✅ Correção de download de vídeos do YouTube (incluindo 1080p)</li>
+          <li>✅ Atualização automática do yt-dlp em background (1x por dia)</li>
+          <li>✅ ffmpeg incluído no app — não precisa instalar nada no Mac</li>
+        </ul>
+      ]]></description>
       <enclosure
         url="https://www.irisdownloader.com.br/Iris%20Downloader.dmg"
-        sparkle:edSignature="UWTpVv30Utz30MUH8D31o4qRPT74Nyabb0Hnlwbd/wQ8UrMXqXTGrUM+HSfh93tmOjX/PPd3/HI2Lf9O9N47Bg=="
-        length="3564415"
+        sparkle:edSignature="pSfLfhlrf3UVacfwEegei9dUsMLXbz2peTIdYCCdoipI/9qIQjUOE1Yr7hIukTYM4u1L6DRTlwNo13nuFxHQDw=="
+        length="6518693"
         type="application/x-apple-diskimage"
       />
     </item>

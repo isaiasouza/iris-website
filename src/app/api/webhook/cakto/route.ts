@@ -57,6 +57,7 @@ async function handlePurchaseApproved(data: {
   id: string;
   customer: { name: string; email: string };
   amount: number;
+  offer?: { id: string };
   paymentMethod?: string;
   subscription?: { id: string };
 }) {
@@ -71,9 +72,12 @@ async function handlePurchaseApproved(data: {
   const email = data.customer.email;
   const name  = data.customer.name ?? "Cliente";
 
-  // Determina plano pelo valor (anual < R$100, vitalício >= R$100)
+  // Determina plano pelo valor ou pelo ID da oferta da Cakto
   const amount = data.amount ?? 0;
-  const plan: "annual" | "lifetime" = amount >= 100 ? "lifetime" : "annual";
+  const lifetimeId = process.env.NEXT_PUBLIC_CAKTO_LIFETIME_ID || "";
+  // Se o offer.id da Cakto estiver dentro do NEXT_PUBLIC_CAKTO_LIFETIME_ID (ex: tqxh73a), ou o valor for maior que 100
+  const isLifetimeOffer = data.offer?.id && lifetimeId.includes(data.offer.id);
+  const plan: "annual" | "lifetime" = (isLifetimeOffer || amount >= 100) ? "lifetime" : "annual";
   const max_devices = plan === "lifetime" ? 3 : 1;
   const expires_at  = plan === "annual"
     ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
