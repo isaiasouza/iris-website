@@ -11,7 +11,7 @@
       <sparkle:releaseNotesLink>https://www.irisdownloader.com.br</sparkle:releaseNotesLink>
       <pubDate>Wed, 02 Apr 2026 12:00:00 +0000</pubDate>
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-      <sparkle:version>5</sparkle:version>
+      <sparkle:version>6</sparkle:version>
       <sparkle:shortVersionString>2.2.0</sparkle:shortVersionString>
       <description><![CDATA[
         <h3>Novidades na versão 2.2.0 (Atualizado)</h3>
@@ -23,8 +23,8 @@
       ]]></description>
       <enclosure
         url="https://www.irisdownloader.com.br/Iris%20Downloader.dmg"
-        sparkle:edSignature="payKecGDTEmCAVFYw3prI1/iQsvvCYMaT/IhZ5mlWz2eXsnOyIRQnvH7/6gP5dpe6NuMzUH31QQP9GXYbWzKAQ=="
-        length="6885701"
+        sparkle:edSignature="GK5rKLxqFSDRIi2NhbW3O9SCZI2cZfuByJFXDL8Q5pyXSfr847CzcflsI2vWn0B+ooYVIu9DoKODg/TEDKVvAg=="
+        length="5871101"
         type="application/x-apple-diskimage"
       />
     </item>
