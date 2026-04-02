@@ -7,26 +7,24 @@
     <language>pt-BR</language>
 
     <item>
-      <title>Versão 2.1.1 — Correção de Downloads do YouTube</title>
+      <title>Versão 2.2.0 (Build 5)</title>
       <sparkle:releaseNotesLink>https://www.irisdownloader.com.br</sparkle:releaseNotesLink>
-      <pubDate>Thu, 02 Apr 2026 04:00:00 +0000</pubDate>
+      <pubDate>Wed, 02 Apr 2026 12:00:00 +0000</pubDate>
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-      <sparkle:version>3</sparkle:version>
-      <sparkle:shortVersionString>2.1.1</sparkle:shortVersionString>
-      <sparkle:releaseNotesLink>https://www.irisdownloader.com.br</sparkle:releaseNotesLink>
+      <sparkle:version>5</sparkle:version>
+      <sparkle:shortVersionString>2.2.0</sparkle:shortVersionString>
       <description><![CDATA[
-        <h3>Novidades na versão 2.1.1</h3>
+        <h3>Novidades na versão 2.2.0 (Atualizado)</h3>
         <ul>
-          <li>✅ Correção de travamento na busca de informações de vídeos do YouTube</li>
-          <li>✅ Correção de download de vídeos do YouTube (incluindo 1080p)</li>
-          <li>✅ Atualização automática do yt-dlp em background (1x por dia)</li>
-          <li>✅ ffmpeg incluído no app — não precisa instalar nada no Mac</li>
+          <li>✅ <strong>Nova função de Auto-Reparo:</strong> Adicionada na aba Sobre. Corrige permissões de arquivos quebrados e força a atualização do instalador interno facilmente!</li>
+          <li>✅ Correção de download de vídeos do YouTube (incluindo 1080p) e bugs nas buscas de informações.</li>
+          <li>✅ ffmpeg nativo embutido — zero necessidade de ferramentas de terceiros via terminal.</li>
         </ul>
       ]]></description>
       <enclosure
         url="https://www.irisdownloader.com.br/Iris%20Downloader.dmg"
-        sparkle:edSignature="pSfLfhlrf3UVacfwEegei9dUsMLXbz2peTIdYCCdoipI/9qIQjUOE1Yr7hIukTYM4u1L6DRTlwNo13nuFxHQDw=="
-        length="6518693"
+        sparkle:edSignature="payKecGDTEmCAVFYw3prI1/iQsvvCYMaT/IhZ5mlWz2eXsnOyIRQnvH7/6gP5dpe6NuMzUH31QQP9GXYbWzKAQ=="
+        length="6885701"
         type="application/x-apple-diskimage"
       />
     </item>
