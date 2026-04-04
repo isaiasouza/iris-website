@@ -1,25 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getStripe } from "@/lib/stripe";
+import { findOrCreateCustomer, createPayment, createSubscription } from "@/lib/asaas";
 
 const PLANS = {
   annual: {
-    name: "Iris Downloader — Plano Anual",
-    amount: 4990, // R$ 49,90 em centavos
-    mode: "subscription" as const,
+    label: "Iris Downloader — Plano Anual",
+    value: 49.90,
   },
   lifetime: {
-    name: "Iris Downloader — Plano Vitalício",
-    amount: 11099, // R$ 110,99 em centavos
-    mode: "payment" as const,
+    label: "Iris Downloader — Plano Vitalício",
+    value: 110.99,
   },
 } as const;
 
 export async function POST(req: NextRequest) {
   try {
-    const { plan, name, email } = await req.json() as {
+    const { plan, name, email, cpfCnpj } = await req.json() as {
       plan: "annual" | "lifetime";
       name: string;
       email: string;
+      cpfCnpj?: string;
     };
 
     if (!plan || !name || !email) {
@@ -31,53 +30,17 @@ export async function POST(req: NextRequest) {
     }
 
     const cfg = PLANS[plan];
-    const stripe = getStripe();
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
-    const commonParams = {
-      customer_email: email,
-      locale: "pt-BR" as const,
-      payment_method_types: ["card"] as ("card")[],
-      success_url: `${siteUrl}/sucesso?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${siteUrl}/#pricing`,
-      metadata: { plan, name, email },
-    };
+    const customer = await findOrCreateCustomer({ name, email, cpfCnpj });
 
-    const lineItem = {
-      price_data: {
-        currency: "brl",
-        product_data: { name: cfg.name },
-        unit_amount: cfg.amount,
-      },
-      quantity: 1,
-    };
+    const result = plan === "lifetime"
+      ? await createPayment({ customerId: customer.id, value: cfg.value, description: cfg.label })
+      : await createSubscription({ customerId: customer.id, value: cfg.value, description: cfg.label });
 
-    const session = await (cfg.mode === "payment"
-      ? stripe.checkout.sessions.create({
-          ...commonParams,
-          mode: "payment",
-          line_items: [{ ...lineItem }],
-        })
-      : stripe.checkout.sessions.create({
-          ...commonParams,
-          mode: "subscription",
-          line_items: [
-            {
-              price_data: {
-                currency: "brl",
-                product_data: { name: cfg.name },
-                unit_amount: cfg.amount,
-                recurring: { interval: "year" },
-              },
-              quantity: 1,
-            },
-          ],
-        }));
-
-    return NextResponse.json({ checkoutUrl: session.url });
+    return NextResponse.json({ checkoutUrl: result.invoiceUrl });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    console.error("[checkout]", message);
+    console.error("[checkout/asaas]", message);
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
