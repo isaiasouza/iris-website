@@ -1,76 +1,167 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useRef } from "react";
+import { motion } from "motion/react";
+import { ArrowRight } from "lucide-react";
+import Hls from "hls.js";
+
+const videoSrc =
+  "https://stream.mux.com/T6oQJQ02cQ6N01TR6iHwZkKFkbepS34dkkIc9iukgy400g.m3u8";
+
+const posterSrc =
+  "https://images.unsplash.com/photo-1647356191320-d7a1f80ca777?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGRhcmslMjB0ZWNobm9sb2d5JTIwbmV1cmFsJTIwbmV0d29ya3xlbnwxfHx8fDE3Njg5NzIyNTV8MA&ixlib=rb-4.1.0&q=80&w=1080";
 
 export default function Hero() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(videoSrc);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play().catch((e) => console.log("Auto-play prevented:", e));
+      });
+      return () => {
+        hls.destroy();
+      };
+    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = videoSrc;
+      video.addEventListener("loadedmetadata", () => {
+        video.play().catch((e) => console.log("Auto-play prevented:", e));
+      });
+    }
+  }, []);
+
   return (
-    <section className="relative overflow-hidden pt-28 pb-0 md:pt-40">
-      {/* Background glow */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-iris-700/12 blur-[130px]" />
-      </div>
+    <section className="relative w-full min-h-screen overflow-hidden bg-black text-white">
+      {/* Background video */}
+      <video
+        ref={videoRef}
+        muted
+        loop
+        playsInline
+        poster={posterSrc}
+        className="absolute inset-0 w-full h-full object-cover opacity-60"
+      />
 
-      <div className="relative mx-auto max-w-6xl px-6 text-center">
-        {/* Badge */}
-        <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-iris-500/25 bg-iris-600/10 px-4 py-1.5 animate-fade-in">
-          <span className="h-2 w-2 rounded-full bg-iris-400 animate-pulse-glow" />
-          <span className="text-sm font-medium text-iris-300">
-            v2.1.0 · Novo motor, 3× mais rápido
-          </span>
-        </div>
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
 
-        {/* Heading */}
-        <h1 className="mx-auto max-w-4xl text-[2rem] font-extrabold leading-tight tracking-tight text-white sm:text-4xl md:text-6xl lg:text-7xl animate-fade-up animate-delay-100">
-          O Google Drive te obriga{" "}
-          <br className="hidden md:block" />
-          a baixar em ZIP.{" "}
-          <span className="bg-gradient-to-r from-iris-400 to-iris-500 bg-clip-text text-transparent">
-            O Iris não.
-          </span>
-        </h1>
+      {/* Decorative gradients */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          top: "-20%",
+          left: "20%",
+          width: 600,
+          height: 600,
+          background: "rgba(30,58,138,0.20)",
+          filter: "blur(120px)",
+          mixBlendMode: "screen",
+          borderRadius: "50%",
+        }}
+      />
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          bottom: "-10%",
+          right: "20%",
+          width: 500,
+          height: 500,
+          background: "rgba(49,46,129,0.20)",
+          filter: "blur(120px)",
+          mixBlendMode: "screen",
+          borderRadius: "50%",
+        }}
+      />
 
-        {/* Subtitle */}
-        <p className="mx-auto mt-6 max-w-2xl text-lg text-[#9F9FA3] md:text-xl animate-fade-up animate-delay-200">
-          Baixe pastas inteiras, arquivos grandes, várias contas Google — tudo direto
+      {/* Content */}
+      <div className="relative z-10 mx-auto max-w-5xl px-6 flex flex-col items-center text-center mt-20 space-y-12 pb-24 pt-20">
+        {/* Pre-headline */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-3xl sm:text-5xl lg:text-[48px] leading-[1.1] text-white"
+          style={{ fontFamily: "'Instrument Serif', serif" }}
+        >
+          O Google Drive te obriga a baixar em ZIP.
+        </motion.p>
+
+        {/* Main headline */}
+        <motion.h1
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="text-6xl sm:text-8xl lg:text-[136px] leading-[0.9] tracking-tighter font-semibold bg-gradient-to-b from-white via-white to-[#b4c0ff] bg-clip-text text-transparent"
+          style={{ fontFamily: "'Instrument Sans', sans-serif" }}
+        >
+          O Iris não.
+        </motion.h1>
+
+        {/* Subheadline */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.7 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+          className="max-w-xl text-lg sm:text-[20px] leading-[1.65] text-white"
+          style={{ fontFamily: "'Instrument Sans', sans-serif" }}
+        >
+          Baixe pastas inteiras, arquivos grandes e várias contas Google — tudo direto
           no Mac, sem compactar, sem travar, sem abrir o navegador.
-        </p>
+        </motion.p>
 
-        {/* CTA buttons */}
-        <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row animate-fade-up animate-delay-300">
+        {/* CTA Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.5 }}
+          className="flex flex-col sm:flex-row items-center gap-6"
+        >
+          {/* Primary */}
           <a
             href="#pricing"
-            className="group flex items-center gap-2 rounded-full bg-gradient-to-r from-iris-600 to-iris-500 px-8 py-3.5 text-base font-semibold text-white shadow-xl shadow-iris-700/25 transition-all hover:shadow-2xl hover:shadow-iris-600/35 hover:brightness-110"
+            className="group flex items-center pl-6 pr-2 py-2 rounded-full bg-white transition-all hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:scale-105"
+            style={{ fontFamily: "'Instrument Sans', sans-serif" }}
           >
-            Ver planos — a partir de R$ 49,90
+            <span className="text-lg font-medium mr-4" style={{ color: "#0a0400" }}>
+              Ver planos — a partir de R$&nbsp;49,90
+            </span>
+            <span
+              className="flex items-center justify-center w-10 h-10 rounded-full transition-colors"
+              style={{ background: "#3054ff" }}
+              onMouseEnter={(e) =>
+                ((e.currentTarget as HTMLElement).style.background = "#2040e0")
+              }
+              onMouseLeave={(e) =>
+                ((e.currentTarget as HTMLElement).style.background = "#3054ff")
+              }
+            >
+              <ArrowRight className="w-5 h-5 text-white" />
+            </span>
           </a>
+
+          {/* Secondary */}
           <a
             href="https://www.irisdownloader.com.br/IrisDownloader_v2.2.0.dmg"
-            className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-medium text-[#9F9FA3] transition-all hover:border-white/20 hover:text-white"
+            className="group flex items-center gap-2 px-4 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 backdrop-blur-sm transition-all"
+            style={{ fontFamily: "'Instrument Sans', sans-serif" }}
           >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-            </svg>
             Baixar grátis para testar
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </a>
-        </div>
+        </motion.div>
 
-        <p className="mt-5 text-sm text-[#58585F] animate-fade-up animate-delay-400">
-          macOS 14+ &middot; Apple Silicon + Intel &middot; Sem dependências
+        <p
+          className="text-sm mt-2"
+          style={{ color: "rgba(255,255,255,0.35)", fontFamily: "'Instrument Sans', sans-serif" }}
+        >
+          macOS 14+ · Apple Silicon + Intel · Sem dependências
         </p>
-
-        {/* Real screenshot */}
-        <div className="relative mx-auto mt-14 max-w-5xl animate-fade-up animate-delay-500">
-          <div className="rounded-xl overflow-hidden border border-white/8 shadow-2xl shadow-iris-950/50">
-            <Image
-              src="/screenshots/downloads.png"
-              alt="Iris Downloader — baixando pastas do Google Drive no Mac"
-              width={1200}
-              height={750}
-              className="w-full max-h-[240px] object-cover object-top sm:max-h-[380px] md:max-h-none"
-              priority
-            />
-          </div>
-          {/* Fade out at bottom */}
-          <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#13131A] to-transparent" />
-        </div>
       </div>
     </section>
   );
