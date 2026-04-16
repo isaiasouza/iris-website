@@ -1,32 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
-  <channel>
-    <title>Iris Downloader</title>
-    <link>https://www.irisdownloader.com.br/appcast.xml</link>
-    <description>Atualizações do Iris Downloader</description>
-    <language>pt-BR</language>
-
-    <item>
-      <title>Versão 2.2.0 (Build 5)</title>
-      <sparkle:releaseNotesLink>https://www.irisdownloader.com.br</sparkle:releaseNotesLink>
-      <pubDate>Wed, 02 Apr 2026 12:00:00 +0000</pubDate>
-      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-      <sparkle:version>6</sparkle:version>
-      <sparkle:shortVersionString>2.2.0</sparkle:shortVersionString>
-      <description><![CDATA[
-        <h3>Novidades na versão 2.2.0 (Atualizado)</h3>
-        <ul>
-          <li>✅ <strong>Nova função de Auto-Reparo:</strong> Adicionada na aba Sobre. Corrige permissões de arquivos quebrados e força a atualização do instalador interno facilmente!</li>
-          <li>✅ Correção de download de vídeos do YouTube (incluindo 1080p) e bugs nas buscas de informações.</li>
-          <li>✅ ffmpeg nativo embutido — zero necessidade de ferramentas de terceiros via terminal.</li>
-        </ul>
-      ]]></description>
-      <enclosure
-        url="https://www.irisdownloader.com.br/IrisDownloader_v2.2.0.dmg"
-        sparkle:edSignature="GK5rKLxqFSDRIi2NhbW3O9SCZI2cZfuByJFXDL8Q5pyXSfr847CzcflsI2vWn0B+ooYVIu9DoKODg/TEDKVvAg=="
-        length="5871101"
-        type="application/x-apple-diskimage"
-      />
-    </item>
-  </channel>
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>Iris Downloader</title>
+        <item>
+            <title>2.4.0</title>
+            <pubDate>Wed, 16 Apr 2026 00:20:00 -0300</pubDate>
+            <sparkle:version>6</sparkle:version>
+            <sparkle:shortVersionString>2.4.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://www.irisdownloader.com.br/Iris%20Downloader%202.4.0.zip" length="7426177" type="application/octet-stream" sparkle:edSignature="qP+6hjEG5L1ZwNRqeetUsDoqTrRpLAHbw+DGodW5r58LWEAxMQMSSoly8iPrk9Ptnf28isQbLPiYQja3mwGRAA=="/>
+        </item>
+    </channel>
 </rss>
