@@ -4,11 +4,11 @@
         <title>Iris Downloader</title>
         <item>
             <title>2.4.2</title>
-            <pubDate>Wed, 16 Apr 2026 02:00:00 -0300</pubDate>
+            <pubDate>Wed, 16 Apr 2026 18:30:00 -0300</pubDate>
             <sparkle:version>8</sparkle:version>
             <sparkle:shortVersionString>2.4.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://www.irisdownloader.com.br/Iris%20Downloader%202.4.2.zip" length="5379627" type="application/octet-stream" sparkle:edSignature="IevowlgXNEgDn24spVxfAtp2yRajaU/Pr03SXZNiyymsjKP2ZidiG2Xr1ViGzs44HdNRmG2/kJZ8uxRtsU/WBw=="/>
+            <enclosure url="https://www.irisdownloader.com.br/Iris%20Downloader%202.4.2.zip" length="5401559" type="application/octet-stream" sparkle:edSignature="a7j9nlulTtpiOPCbhneDem7N+uKrlKB9LHDFD35JJxGoqSZUrIL1a2Q3BTZboHO3+ZbtTo9TjlCNYbKjl8QWBA=="/>
         </item>
     </channel>
 </rss>
