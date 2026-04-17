@@ -1,47 +1,27 @@
 "use client";
 
-import { useState } from "react";
-
-interface CheckoutModalProps {
-  plan: "annual" | "lifetime";
-  onClose: () => void;
-}
+const CAKTO_URLS = {
+  annual:   `https://pay.cakto.com.br/${process.env.NEXT_PUBLIC_CAKTO_ANNUAL_ID}`,
+  lifetime: `https://pay.cakto.com.br/${process.env.NEXT_PUBLIC_CAKTO_LIFETIME_ID}`,
+};
 
 const PLAN_INFO = {
   annual:   { label: "Plano Anual",     price: "R$ 49,90/ano", description: "Renovação automática anual." },
   lifetime: { label: "Plano Vitalício", price: "R$ 110,99",    description: "Pagamento único, sem renovações." },
 };
 
+interface CheckoutModalProps {
+  plan: "annual" | "lifetime";
+  onClose: () => void;
+}
+
 export default function CheckoutModal({ plan, onClose }: CheckoutModalProps) {
-  const [name, setName]     = useState("");
-  const [email, setEmail]   = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError]   = useState<string | null>(null);
   const info = PLAN_INFO[plan];
+  const url  = CAKTO_URLS[plan];
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan, name, email }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok || !data.checkoutUrl) {
-        throw new Error(data.error ?? "Erro ao gerar link de pagamento.");
-      }
-
-      window.location.href = data.checkoutUrl;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro inesperado.");
-      setLoading(false);
-    }
+  function handleCheckout() {
+    window.open(url, "_blank", "noopener,noreferrer");
+    onClose();
   }
 
   return (
@@ -63,49 +43,23 @@ export default function CheckoutModal({ plan, onClose }: CheckoutModalProps) {
           </button>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
-          <div>
-            <label className="block text-sm text-[#9F9FA3] mb-1.5">Nome completo</label>
-            <input
-              type="text"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Seu nome"
-              className="w-full bg-[#13131A] border border-white/8 rounded-xl px-4 py-2.5 text-white text-sm placeholder:text-[#3a3a45] focus:outline-none focus:border-iris-500/50 transition-colors"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm text-[#9F9FA3] mb-1.5">Email</label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="seu@email.com"
-              className="w-full bg-[#13131A] border border-white/8 rounded-xl px-4 py-2.5 text-white text-sm placeholder:text-[#3a3a45] focus:outline-none focus:border-iris-500/50 transition-colors"
-            />
-            <p className="text-xs text-[#58585F] mt-1">Sua chave de licença será enviada para este email.</p>
-          </div>
-
-          {error && (
-            <p className="text-sm text-red-400 text-center">{error}</p>
-          )}
+        {/* Body */}
+        <div className="px-6 py-6 space-y-5">
+          <p className="text-sm text-[#9F9FA3] text-center">
+            Você será redirecionado para a página de pagamento seguro.
+          </p>
 
           <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-gradient-to-r from-iris-700 to-iris-500 text-white font-semibold py-3 rounded-xl transition-all hover:brightness-110 hover:shadow-lg hover:shadow-iris-700/30 mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
+            onClick={handleCheckout}
+            className="w-full bg-gradient-to-r from-iris-700 to-iris-500 text-white font-semibold py-3 rounded-xl transition-all hover:brightness-110 hover:shadow-lg hover:shadow-iris-700/30"
           >
-            {loading ? "Gerando link..." : "Ir para o pagamento →"}
+            Ir para o pagamento →
           </button>
 
           <p className="text-center text-xs text-[#58585F]">
-            Pagamento seguro via Asaas · PIX · Cartão · Boleto
+            Pagamento seguro via Cakto · PIX · Cartão · Boleto
           </p>
-        </form>
+        </div>
       </div>
     </div>
   );
