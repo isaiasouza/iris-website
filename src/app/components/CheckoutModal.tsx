@@ -1,8 +1,8 @@
 "use client";
 
 const CAKTO_URLS = {
-  annual:   `https://pay.cakto.com.br/${process.env.NEXT_PUBLIC_CAKTO_ANNUAL_ID}`,
-  lifetime: `https://pay.cakto.com.br/${process.env.NEXT_PUBLIC_CAKTO_LIFETIME_ID}`,
+  annual:   "https://pay.cakto.com.br/38zibpa_825842",
+  lifetime: "https://pay.cakto.com.br/tqxh73a_825801",
 };
 
 const PLAN_INFO = {
