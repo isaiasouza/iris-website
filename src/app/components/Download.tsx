@@ -35,7 +35,7 @@ export default function Download() {
 
           {/* Download button */}
           <a
-            href="https://www.irisdownloader.com.br/IrisDownloader_v2.2.0.dmg"
+            href="/download"
             className="mt-8 inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-iris-600 to-iris-500 px-10 py-4 text-lg font-semibold text-white shadow-xl shadow-iris-600/25 transition-all hover:shadow-2xl hover:shadow-iris-600/30 hover:brightness-110"
           >
             <svg

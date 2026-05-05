@@ -17,7 +17,7 @@ export default function Footer() {
               Google Drive para Mac, do jeito certo.
             </p>
             <a
-              href="/IrisDownloader_v2.2.0.dmg"
+              href="/download"
               className="mt-4 inline-flex items-center gap-2 text-sm text-[#58585F] transition-colors hover:text-[#9F9FA3]"
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
