@@ -10,6 +10,19 @@ function getResend() {
 }
 const FROM = "Iris Downloader <team@irisdownloader.com.br>";
 
+async function getLatestDownloadUrl(): Promise<string> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/appcast.xml`, { cache: "no-store" });
+    const xml = await res.text();
+    const match = xml.match(/sparkle:shortVersionString>([^<]+)</);
+    if (match?.[1]) {
+      const version = match[1].trim();
+      return `${process.env.NEXT_PUBLIC_SITE_URL}/Iris%20Downloader%20${encodeURIComponent(version)}.zip`;
+    }
+  } catch {}
+  return `${process.env.NEXT_PUBLIC_SITE_URL}/Iris%20Downloader%202.7.2.zip`;
+}
+
 export async function sendLicenseEmail(params: {
   to: string;
   name: string;
@@ -19,7 +32,7 @@ export async function sendLicenseEmail(params: {
   const planLabel = params.plan === "lifetime" ? "Vitalício" : "Anual";
   const portalUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/minha-licenca`;
 
-  const downloadUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/Iris%20Downloader%202.7.2.zip`;
+  const downloadUrl = await getLatestDownloadUrl();
 
   await getResend().emails.send({
     from: FROM,
