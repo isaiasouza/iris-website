@@ -1,21 +1,19 @@
 import { NextResponse } from "next/server";
 
-// Always redirects to the latest version zip by reading appcast.xml
+// Redirects to the latest download URL by reading the enclosure URL from appcast.xml
 export async function GET() {
   try {
     const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.irisdownloader.com.br";
     const res = await fetch(`${base}/appcast.xml`, { cache: "no-store" });
     const xml = await res.text();
-    const match = xml.match(/<sparkle:shortVersionString>([^<]+)<\/sparkle:shortVersionString>/);
+    const match = xml.match(/url="([^"]+)"/);
     if (match?.[1]) {
-      const version = match[1].trim();
-      const zip = `${base}/Iris%20Downloader%20${encodeURIComponent(version)}.zip`;
-      return NextResponse.redirect(zip, { status: 302 });
+      return NextResponse.redirect(match[1], { status: 302 });
     }
   } catch {}
   // Fallback to latest known version
   return NextResponse.redirect(
-    "https://www.irisdownloader.com.br/Iris%20Downloader%202.7.3.zip",
+    "https://www.irisdownloader.com.br/IrisDownloader_v2.8.3.dmg",
     { status: 302 }
   );
 }

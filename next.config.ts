@@ -6,14 +6,9 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      // Legado — qualquer link antigo do DMG vai para a rota /download
+      // Legado — versão específica antiga redireciona para /download
       {
         source: "/IrisDownloader_v2.2.0.dmg",
-        destination: "/download",
-        permanent: false,
-      },
-      {
-        source: "/IrisDownloader_v:version.dmg",
         destination: "/download",
         permanent: false,
       },
