@@ -3,15 +3,15 @@
     <channel>
         <title>Iris Downloader</title>
         <item>
-            <title>2.10.1</title>
-            <pubDate>Wed, 10 Jun 2026 11:39:30 -0400</pubDate>
-            <sparkle:version>52</sparkle:version>
-            <sparkle:shortVersionString>2.10.1</sparkle:shortVersionString>
+            <title>2.10.2</title>
+            <pubDate>Wed, 10 Jun 2026 12:12:46 -0400</pubDate>
+            <sparkle:version>53</sparkle:version>
+            <sparkle:shortVersionString>2.10.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://www.irisdownloader.com.br/IrisDownloader_v2.10.1.dmg"
-                       length="6999268"
+            <enclosure url="https://www.irisdownloader.com.br/IrisDownloader_v2.10.2.dmg"
+                       length="6988242"
                        type="application/octet-stream"
-                       sparkle:edSignature="FRp7+TLT5+Dumz1tKFgMTUHBhTEWWls8yuBPACGzRCD3Kof/AzvtGq0OpF+OPaLPar54+cGhb5k+6n7DhV5vDQ=="/>
+                       sparkle:edSignature="X0GA0k9PT6kF7DibUmYqixknmHdfoXthljg+VbUKrmbmdrwmenCek6gzGJkGl3mlx3bjhX9lowTca5u00kqlAQ=="/>
         </item>
     </channel>
 </rss>
