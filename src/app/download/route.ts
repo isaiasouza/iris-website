@@ -13,7 +13,7 @@ export async function GET() {
   } catch {}
   // Fallback to latest known version
   return NextResponse.redirect(
-    "https://www.irisdownloader.com.br/IrisDownloader_v3.0.1.dmg",
+    "https://www.irisdownloader.com.br/IrisDownloader_v3.0.2.dmg",
     { status: 302 }
   );
 }
