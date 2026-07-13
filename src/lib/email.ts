@@ -164,6 +164,56 @@ export async function sendPaymentFailedEmail(params: {
   });
 }
 
+export async function sendLicenseRecoveryEmail(params: {
+  to: string;
+  name: string;
+  licenses: Array<{
+    licenseKey: string;
+    plan: "annual" | "lifetime";
+    status: string;
+    expiresAt: string | null;
+    devicesUsed: number;
+    devicesMax: number;
+  }>;
+}) {
+  const portalUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/minha-licenca`;
+  const rows = params.licenses.map((license) => {
+    const planLabel = license.plan === "lifetime" ? "Vitalício" : "Anual";
+    const expires = license.expiresAt
+      ? new Date(license.expiresAt).toLocaleDateString("pt-BR")
+      : "Sem expiração";
+
+    return `
+      <tr>
+        <td style="padding:16px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 8px;color:#c4b5fd;font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:700;letter-spacing:2px;">${license.licenseKey}</p>
+          <p style="margin:0;color:#9F9FA3;font-size:12px;">Plano ${planLabel} · ${license.status} · ${license.devicesUsed}/${license.devicesMax} dispositivos · ${expires}</p>
+        </td>
+      </tr>`;
+  }).join("");
+
+  await getResend().emails.send({
+    from: FROM,
+    to: params.to,
+    subject: "Iris Downloader — suas licenças",
+    html: `
+<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;max-width:560px;margin:40px auto;padding:0;background:#19191E;border-radius:16px;color:#e4e4e7;overflow:hidden;border:1px solid rgba(255,255,255,0.06);">
+  <div style="padding:32px;text-align:center;background:linear-gradient(135deg,#1E1440 0%,#13131A 100%);">
+    <img src="https://www.irisdownloader.com.br/logo-email.png" width="64" height="64" alt="Iris Downloader" style="border-radius:14px;margin-bottom:14px;" />
+    <h1 style="margin:0;color:#fff;font-size:22px;">Suas licenças Iris Downloader</h1>
+    <p style="margin:8px 0 0;color:#9F9FA3;font-size:14px;">Olá ${params.name}, encontramos as licenças vinculadas a este email.</p>
+  </div>
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#19191E;">
+    ${rows}
+  </table>
+  <div style="padding:28px 32px;text-align:center;">
+    <a href="${portalUrl}" style="display:inline-block;background:#5A3ED4;color:#fff;text-align:center;padding:14px 22px;border-radius:10px;text-decoration:none;font-weight:700;">Gerenciar dispositivos</a>
+    <p style="margin:16px 0 0;color:#58585F;font-size:12px;line-height:1.5;">Cole a chave no portal para ver seus dispositivos ativos e liberar uma ativação quando trocar de Mac.</p>
+  </div>
+</div>`,
+  });
+}
+
 export async function sendDeviceRemovedEmail(params: {
   to: string;
   deviceName: string;
