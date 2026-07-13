@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { supabaseAdmin } from "@/lib/supabase";
 
 let _resend: Resend | null = null;
 function getResend() {
@@ -9,6 +10,74 @@ function getResend() {
   return _resend;
 }
 const FROM = "Iris Downloader <team@irisdownloader.com.br>";
+
+type EmailType = "license_created" | "payment_failed" | "license_recovery" | "device_removed";
+
+interface SendTrackedEmailParams {
+  to: string;
+  subject: string;
+  html: string;
+  type: EmailType;
+  metadata?: Record<string, unknown>;
+}
+
+async function logEmailEvent(params: {
+  to: string;
+  subject: string;
+  type: EmailType;
+  status: "sent" | "failed";
+  providerId?: string | null;
+  errorMessage?: string | null;
+  metadata?: Record<string, unknown>;
+}) {
+  try {
+    await supabaseAdmin.from("email_events").insert({
+      to_email: params.to.toLowerCase(),
+      subject: params.subject,
+      type: params.type,
+      status: params.status,
+      provider: "resend",
+      provider_id: params.providerId ?? null,
+      error_message: params.errorMessage ?? null,
+      metadata: params.metadata ?? {},
+    });
+  } catch (error) {
+    console.error("[email_events]", error);
+  }
+}
+
+async function sendTrackedEmail(params: SendTrackedEmailParams) {
+  try {
+    const result = await getResend().emails.send({
+      from: FROM,
+      to: params.to,
+      subject: params.subject,
+      html: params.html,
+    });
+
+    await logEmailEvent({
+      to: params.to,
+      subject: params.subject,
+      type: params.type,
+      status: "sent",
+      providerId: result.data?.id ?? null,
+      metadata: params.metadata,
+    });
+
+    return result;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    await logEmailEvent({
+      to: params.to,
+      subject: params.subject,
+      type: params.type,
+      status: "failed",
+      errorMessage: message,
+      metadata: params.metadata,
+    });
+    throw error;
+  }
+}
 
 async function getLatestDownloadUrl(): Promise<string> {
   try {
@@ -34,10 +103,12 @@ export async function sendLicenseEmail(params: {
 
   const downloadUrl = await getLatestDownloadUrl();
 
-  await getResend().emails.send({
-    from: FROM,
+  const subject = "🔑 Iris Downloader — Sua licença está pronta";
+  await sendTrackedEmail({
     to: params.to,
-    subject: "🔑 Iris Downloader — Sua licença está pronta",
+    subject,
+    type: "license_created",
+    metadata: { plan: params.plan, license_key: params.licenseKey },
     html: `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -150,10 +221,11 @@ export async function sendPaymentFailedEmail(params: {
   name: string;
   portalUrl: string;
 }) {
-  await getResend().emails.send({
-    from: FROM,
+  await sendTrackedEmail({
     to: params.to,
     subject: "⚠️ Problema no pagamento — Iris Downloader",
+    type: "payment_failed",
+    metadata: { portal_url: params.portalUrl },
     html: `
 <div style="font-family:sans-serif;max-width:480px;margin:40px auto;padding:32px;background:#19191E;border-radius:16px;color:#e4e4e7;">
   <h2 style="color:#fff;">Problema no pagamento</h2>
@@ -192,10 +264,14 @@ export async function sendLicenseRecoveryEmail(params: {
       </tr>`;
   }).join("");
 
-  await getResend().emails.send({
-    from: FROM,
+  await sendTrackedEmail({
     to: params.to,
     subject: "Iris Downloader — suas licenças",
+    type: "license_recovery",
+    metadata: {
+      licenses_count: params.licenses.length,
+      license_keys: params.licenses.map((license) => license.licenseKey),
+    },
     html: `
 <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;max-width:560px;margin:40px auto;padding:0;background:#19191E;border-radius:16px;color:#e4e4e7;overflow:hidden;border:1px solid rgba(255,255,255,0.06);">
   <div style="padding:32px;text-align:center;background:linear-gradient(135deg,#1E1440 0%,#13131A 100%);">
@@ -218,10 +294,11 @@ export async function sendDeviceRemovedEmail(params: {
   to: string;
   deviceName: string;
 }) {
-  await getResend().emails.send({
-    from: FROM,
+  await sendTrackedEmail({
     to: params.to,
     subject: "🔒 Dispositivo removido — Iris Downloader",
+    type: "device_removed",
+    metadata: { device_name: params.deviceName },
     html: `
 <div style="font-family:sans-serif;max-width:480px;margin:40px auto;padding:32px;background:#19191E;border-radius:16px;color:#e4e4e7;">
   <h2 style="color:#fff;">Dispositivo removido</h2>
