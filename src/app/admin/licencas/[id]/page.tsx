@@ -21,6 +21,8 @@ interface License {
   updated_at: string;
   cakto_transaction_id: string | null;
   cakto_subscription_id: string | null;
+  abacatepay_checkout_id: string | null;
+  abacatepay_subscription_id: string | null;
   internal_note: string | null;
 }
 
@@ -155,6 +157,12 @@ export default function LicenseDetailPage() {
                 <div className="rounded-lg border border-white/5 bg-[#13131A] px-4 py-3 sm:col-span-2">
                   <p className="text-xs text-[#58585F]">Cakto Transaction ID</p>
                   <p className="mt-1 font-mono text-xs text-[#9F9FA3]">{license.cakto_transaction_id}</p>
+                </div>
+              )}
+              {license.abacatepay_checkout_id && (
+                <div className="rounded-lg border border-white/5 bg-[#13131A] px-4 py-3 sm:col-span-2">
+                  <p className="text-xs text-[#58585F]">AbacatePay Checkout ID</p>
+                  <p className="mt-1 font-mono text-xs text-[#9F9FA3]">{license.abacatepay_checkout_id}</p>
                 </div>
               )}
             </div>
@@ -297,7 +305,7 @@ export default function LicenseDetailPage() {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-[#58585F]">Origem</span>
-                <span>{license.cakto_transaction_id ? "Cakto" : "Manual"}</span>
+                <span>{license.abacatepay_checkout_id ? "AbacatePay" : license.cakto_transaction_id ? "Cakto" : "Manual"}</span>
               </div>
             </div>
           </div>

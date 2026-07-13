@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { findOrCreateCustomer, createPayment, createSubscription } from "@/lib/asaas";
+import { createAbacateCheckout } from "@/lib/abacatepay";
 
 const PLANS = {
   annual: {
     label: "Iris Downloader — Plano Anual",
-    value: 49.90,
+    value: 4990,
   },
   lifetime: {
     label: "Iris Downloader — Plano Vitalício",
-    value: 110.99,
+    value: 11099,
   },
 } as const;
 
@@ -30,17 +30,12 @@ export async function POST(req: NextRequest) {
     }
 
     const cfg = PLANS[plan];
+    const checkoutUrl = await createAbacateCheckout({ plan, name, email, taxId: cpfCnpj });
 
-    const customer = await findOrCreateCustomer({ name, email, cpfCnpj });
-
-    const result = plan === "lifetime"
-      ? await createPayment({ customerId: customer.id, value: cfg.value, description: cfg.label })
-      : await createSubscription({ customerId: customer.id, value: cfg.value, description: cfg.label });
-
-    return NextResponse.json({ checkoutUrl: result.invoiceUrl });
+    return NextResponse.json({ checkoutUrl, plan, label: cfg.label, amount: cfg.value });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    console.error("[checkout/asaas]", message);
+    console.error("[checkout/abacatepay]", message);
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

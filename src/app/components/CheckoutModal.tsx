@@ -1,9 +1,6 @@
 "use client";
 
-const CAKTO_URLS = {
-  annual:   "https://pay.cakto.com.br/38zibpa_825842",
-  lifetime: "https://pay.cakto.com.br/tqxh73a_825801",
-};
+import { useState } from "react";
 
 const PLAN_INFO = {
   annual:   { label: "Plano Anual",     price: "R$ 49,90/ano", description: "Renovação automática anual." },
@@ -17,11 +14,42 @@ interface CheckoutModalProps {
 
 export default function CheckoutModal({ plan, onClose }: CheckoutModalProps) {
   const info = PLAN_INFO[plan];
-  const url  = CAKTO_URLS[plan];
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [cpfCnpj, setCpfCnpj] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleCheckout() {
-    window.open(url, "_blank", "noopener,noreferrer");
-    onClose();
+  async function handleCheckout() {
+    setError("");
+    if (!name.trim() || !email.trim()) {
+      setError("Informe nome e email para receber sua licença.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          plan,
+          name: name.trim(),
+          email: email.trim(),
+          cpfCnpj: cpfCnpj.trim() || undefined,
+        }),
+      });
+
+      const json = await res.json();
+      if (!res.ok || !json.checkoutUrl) {
+        throw new Error(json.error ?? "Não foi possível iniciar o pagamento.");
+      }
+
+      window.location.href = json.checkoutUrl;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Não foi possível iniciar o pagamento.");
+      setLoading(false);
+    }
   }
 
   return (
@@ -49,15 +77,58 @@ export default function CheckoutModal({ plan, onClose }: CheckoutModalProps) {
             Você será redirecionado para a página de pagamento seguro.
           </p>
 
+          <div className="space-y-3">
+            <label className="block">
+              <span className="mb-1 block text-xs font-medium text-[#9F9FA3]">Nome</span>
+              <input
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                autoComplete="name"
+                className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-[#58585F] focus:border-iris-500"
+                placeholder="Seu nome"
+              />
+            </label>
+
+            <label className="block">
+              <span className="mb-1 block text-xs font-medium text-[#9F9FA3]">Email</span>
+              <input
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                type="email"
+                autoComplete="email"
+                className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-[#58585F] focus:border-iris-500"
+                placeholder="voce@email.com"
+              />
+            </label>
+
+            <label className="block">
+              <span className="mb-1 block text-xs font-medium text-[#9F9FA3]">CPF/CNPJ</span>
+              <input
+                value={cpfCnpj}
+                onChange={(event) => setCpfCnpj(event.target.value)}
+                autoComplete="off"
+                className="w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-[#58585F] focus:border-iris-500"
+                placeholder="Opcional"
+              />
+            </label>
+          </div>
+
+          {error && (
+            <p className="rounded-xl border border-red-500/20 bg-red-500/10 px-3 py-2 text-center text-xs text-red-200">
+              {error}
+            </p>
+          )}
+
           <button
             onClick={handleCheckout}
+            disabled={loading}
             className="w-full bg-gradient-to-r from-iris-700 to-iris-500 text-white font-semibold py-3 rounded-xl transition-all hover:brightness-110 hover:shadow-lg hover:shadow-iris-700/30"
           >
-            Ir para o pagamento →
+            {loading ? "Abrindo pagamento..." : "Ir para o pagamento →"}
           </button>
 
           <p className="text-center text-xs text-[#58585F]">
-            Pagamento seguro via Cakto · PIX · Cartão · Boleto
+            Pagamento seguro via AbacatePay · PIX · Cartão
           </p>
         </div>
       </div>

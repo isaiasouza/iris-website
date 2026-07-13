@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
 
   let query = supabaseAdmin
     .from("licenses")
-    .select("id,license_key,name,email,plan,status,max_devices,expires_at,created_at,cakto_transaction_id,internal_note", { count: "exact" });
+    .select("id,license_key,name,email,plan,status,max_devices,expires_at,created_at,cakto_transaction_id,abacatepay_checkout_id,internal_note", { count: "exact" });
 
   if (status !== "all") query = query.eq("status", status);
   if (plan !== "all") query = query.eq("plan", plan);

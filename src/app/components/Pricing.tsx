@@ -145,7 +145,7 @@ export default function Pricing() {
           </div>
 
           <p className="mt-6 text-center text-sm text-[#58585F]">
-            Pagamento seguro via Asaas &nbsp;·&nbsp; PIX, Cartão de crédito ou Boleto
+            Pagamento seguro via AbacatePay &nbsp;·&nbsp; PIX ou Cartão de crédito
           </p>
 
           <p className="mt-4 text-center text-xs text-[#3a3a45]">

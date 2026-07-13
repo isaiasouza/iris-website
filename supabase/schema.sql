@@ -20,6 +20,9 @@ CREATE TABLE IF NOT EXISTS licenses (
   asaas_customer_id      TEXT,
   asaas_subscription_id  TEXT,
   asaas_payment_id       TEXT UNIQUE,
+  abacatepay_checkout_id TEXT UNIQUE,
+  abacatepay_subscription_id TEXT UNIQUE,
+  abacatepay_event_id    TEXT,
   max_devices            INT NOT NULL DEFAULT 1,
   expires_at             TIMESTAMPTZ,
   created_at             TIMESTAMPTZ DEFAULT now(),
@@ -29,6 +32,12 @@ CREATE TABLE IF NOT EXISTS licenses (
 CREATE INDEX IF NOT EXISTS idx_licenses_email      ON licenses(email);
 CREATE INDEX IF NOT EXISTS idx_licenses_status     ON licenses(status);
 CREATE INDEX IF NOT EXISTS idx_licenses_payment_id ON licenses(asaas_payment_id);
+CREATE INDEX IF NOT EXISTS idx_licenses_abacatepay_checkout_id ON licenses(abacatepay_checkout_id);
+CREATE INDEX IF NOT EXISTS idx_licenses_abacatepay_subscription_id ON licenses(abacatepay_subscription_id);
+
+ALTER TABLE licenses ADD COLUMN IF NOT EXISTS abacatepay_checkout_id TEXT UNIQUE;
+ALTER TABLE licenses ADD COLUMN IF NOT EXISTS abacatepay_subscription_id TEXT UNIQUE;
+ALTER TABLE licenses ADD COLUMN IF NOT EXISTS abacatepay_event_id TEXT;
 
 -- ============================================================
 -- DEVICES

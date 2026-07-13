@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { cancelSubscription } from "@/lib/asaas";
+import { cancelAbacateSubscription } from "@/lib/abacatepay";
 
 export async function POST(req: NextRequest) {
   let body: { license_key: string; email: string };
@@ -31,6 +32,10 @@ export async function POST(req: NextRequest) {
     await cancelSubscription(license.asaas_subscription_id);
   }
 
+  if (license.abacatepay_subscription_id) {
+    await cancelAbacateSubscription(license.abacatepay_subscription_id);
+  }
+
   await supabaseAdmin
     .from("licenses")
     .update({ status: "cancelled" })
@@ -39,7 +44,7 @@ export async function POST(req: NextRequest) {
   await supabaseAdmin.from("license_events").insert({
     license_id: license.id,
     event: "cancelled",
-    metadata: { reason: "user_request" },
+    metadata: { reason: "user_request", source: license.abacatepay_subscription_id ? "abacatepay" : "legacy" },
   });
 
   return NextResponse.json({ ok: true });

@@ -33,6 +33,9 @@ export interface License {
   asaas_customer_id: string | null;
   asaas_subscription_id: string | null;
   asaas_payment_id: string | null;
+  abacatepay_checkout_id: string | null;
+  abacatepay_subscription_id: string | null;
+  abacatepay_event_id: string | null;
   max_devices: number;
   expires_at: string | null;
   created_at: string;
