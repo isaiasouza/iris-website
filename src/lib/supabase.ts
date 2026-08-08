@@ -1,4 +1,5 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import { createHmac, randomInt } from "node:crypto";
 
 // Lazy singleton — só inicializa quando chamado, não no build
 let _client: SupabaseClient | null = null;
@@ -55,7 +56,16 @@ export function generateLicenseKey(): string {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   const block = () =>
     Array.from({ length: 4 }, () =>
-      chars[Math.floor(Math.random() * chars.length)]
+      chars[randomInt(chars.length)]
     ).join("");
   return `IRIS-${block()}-${block()}-${block()}-${block()}`;
+}
+
+export function generateIdempotentLicenseKey(requestId: string): string {
+  const secret = process.env.ADMIN_JWT_SECRET;
+  if (!secret) throw new Error("ADMIN_JWT_SECRET not set");
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  const digest = createHmac("sha256", secret).update(requestId).digest();
+  const value = Array.from(digest.subarray(0, 16), (byte) => chars[byte % chars.length]).join("");
+  return `IRIS-${value.slice(0, 4)}-${value.slice(4, 8)}-${value.slice(8, 12)}-${value.slice(12, 16)}`;
 }

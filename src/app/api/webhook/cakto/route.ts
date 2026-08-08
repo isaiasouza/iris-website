@@ -99,7 +99,11 @@ async function handlePurchaseApproved(data: {
 
   if (error) throw new Error(`Supabase insert: ${error.message}`);
 
-  await sendLicenseEmail({ to: email, name, licenseKey: license_key, plan });
+  try {
+    await sendLicenseEmail({ to: email, name, licenseKey: license_key, plan });
+  } catch (emailError) {
+    console.error("Cakto license created but email failed", emailError instanceof Error ? emailError.message : "unknown");
+  }
 }
 
 async function handleCancelled(data: { id: string; subscription?: { id: string } }) {

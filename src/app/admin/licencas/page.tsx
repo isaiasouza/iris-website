@@ -43,16 +43,26 @@ function LicensasContent() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [modal, setModal] = useState<ModalState>(null);
   const [search, setSearch] = useState(q);
+  const [loadError, setLoadError] = useState("");
 
   const load = useCallback(() => {
+    setLoadError("");
     const sp = new URLSearchParams();
     if (status !== "all") sp.set("status", status);
     if (plan !== "all") sp.set("plan", plan);
     if (q) sp.set("q", q);
     sp.set("page", String(page));
     fetch(`/api/admin/licenses?${sp}`)
-      .then((r) => r.json())
-      .then(setData);
+      .then(async (response) => {
+        if (response.status === 401) {
+          window.location.replace(`/admin/login?from=${encodeURIComponent(`/admin/licencas?${sp}`)}`);
+          return null;
+        }
+        if (!response.ok) throw new Error("Não foi possível carregar as licenças.");
+        return response.json();
+      })
+      .then((result) => { if (result) setData(result); })
+      .catch((error) => setLoadError(error instanceof Error ? error.message : "Não foi possível carregar as licenças."));
   }, [status, plan, q, page]);
 
   useEffect(() => { load(); }, [load]);
@@ -114,6 +124,7 @@ function LicensasContent() {
       </div>
 
       {/* Filters */}
+      {loadError && <p className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">{loadError}</p>}
       <div className="flex flex-wrap gap-2">
         <input
           type="text"

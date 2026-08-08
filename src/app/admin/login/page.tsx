@@ -1,14 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { Suspense } from "react";
 
 function LoginForm() {
-  const router = useRouter();
   const params = useSearchParams();
-  const from = params.get("from") ?? "/admin";
+  const requestedDestination = params.get("from");
+  const destination = requestedDestination?.startsWith("/admin")
+    && !requestedDestination.startsWith("//")
+    && !requestedDestination.startsWith("/admin/login")
+    ? requestedDestination
+    : "/admin";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,16 +24,32 @@ function LoginForm() {
     setError("");
     setLoading(true);
 
-    const res = await fetch("/api/admin/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const res = await fetch("/api/admin/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), password }),
+      });
+      const json = await res.json().catch(() => null);
 
-    if (res.ok) {
-      router.push(from);
-    } else {
-      setError("Email ou senha incorretos.");
+      if (res.ok) {
+        window.location.replace(destination);
+        return;
+      }
+
+      if (res.status === 429) {
+        setError("Muitas tentativas. Aguarde 15 minutos e tente novamente.");
+      } else if (res.status >= 500) {
+        setError("O acesso administrativo está indisponível no momento.");
+      } else {
+        const remaining = json?.remaining_attempts;
+        setError(remaining > 0
+          ? `Email ou senha incorretos. Restam ${remaining} tentativa(s).`
+          : "Email ou senha incorretos.");
+      }
+    } catch {
+      setError("Não foi possível conectar. Verifique sua internet e tente novamente.");
+    } finally {
       setLoading(false);
     }
   }

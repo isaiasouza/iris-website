@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 const navItems = [
   {
@@ -37,13 +37,17 @@ const navItems = [
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   async function handleLogout() {
-    await fetch("/api/admin/auth/logout", { method: "POST" });
-    router.push("/admin/login");
+    try {
+      await fetch("/api/admin/auth/logout", { method: "POST" });
+    } finally {
+      window.location.replace("/admin/login");
+    }
   }
+
+  if (pathname === "/admin/login") return <>{children}</>;
 
   const Sidebar = () => (
     <div className="flex h-full flex-col">

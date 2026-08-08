@@ -34,12 +34,25 @@ function fmt(date: string) {
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetch("/api/admin/dashboard/stats")
-      .then((r) => r.json())
-      .then(setStats);
+      .then(async (response) => {
+        if (response.status === 401) {
+          window.location.replace("/admin/login?from=%2Fadmin");
+          return null;
+        }
+        if (!response.ok) throw new Error("Não foi possível carregar o painel.");
+        return response.json() as Promise<Stats>;
+      })
+      .then((data) => { if (data) setStats(data); })
+      .catch((loadError) => setError(loadError instanceof Error ? loadError.message : "Não foi possível carregar o painel."));
   }, []);
+
+  if (error) {
+    return <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400">{error} Atualize a página para tentar novamente.</div>;
+  }
 
   if (!stats) {
     return (

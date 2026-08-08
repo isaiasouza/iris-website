@@ -1,12 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
-import { jwtVerify } from "jose";
-
-const COOKIE_NAME = "iris_admin_session";
+import { ADMIN_COOKIE_NAME, verifyAdminSession } from "@/lib/adminSession";
 const LOGIN_PATH = "/admin/login";
 
-function getSecret(): Uint8Array {
-  const secret = process.env.ADMIN_JWT_SECRET ?? "";
-  return new TextEncoder().encode(secret);
+function redirectToLogin(req: NextRequest, clearCookie = false) {
+  const url = req.nextUrl.clone();
+  url.pathname = LOGIN_PATH;
+  url.search = "";
+  url.searchParams.set("from", `${req.nextUrl.pathname}${req.nextUrl.search}`);
+  const response = NextResponse.redirect(url);
+  if (clearCookie) {
+    response.cookies.set(ADMIN_COOKIE_NAME, "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 0,
+      path: "/",
+    });
+  }
+  return response;
 }
 
 export async function middleware(req: NextRequest) {
@@ -17,23 +28,17 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const cookie = req.cookies.get(COOKIE_NAME);
+  const cookie = req.cookies.get(ADMIN_COOKIE_NAME);
 
   if (!cookie?.value) {
-    const url = req.nextUrl.clone();
-    url.pathname = LOGIN_PATH;
-    url.searchParams.set("from", pathname);
-    return NextResponse.redirect(url);
+    return redirectToLogin(req);
   }
 
   try {
-    await jwtVerify(cookie.value, getSecret());
+    await verifyAdminSession(cookie.value);
     return NextResponse.next();
   } catch {
-    const url = req.nextUrl.clone();
-    url.pathname = LOGIN_PATH;
-    url.searchParams.set("from", pathname);
-    return NextResponse.redirect(url);
+    return redirectToLogin(req, true);
   }
 }
 

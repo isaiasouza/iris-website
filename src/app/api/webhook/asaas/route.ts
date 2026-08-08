@@ -60,7 +60,11 @@ async function handlePaymentConfirmed(payment: AsaasPayment) {
   });
 
   // Enviar email com a chave
-  await sendLicenseEmail({ to: email, name, licenseKey: license_key, plan });
+  try {
+    await sendLicenseEmail({ to: email, name, licenseKey: license_key, plan });
+  } catch (emailError) {
+    console.error("Asaas license created but email failed", emailError instanceof Error ? emailError.message : "unknown");
+  }
 }
 
 // Renova licença anual

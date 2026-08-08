@@ -110,7 +110,11 @@ async function handleCheckoutCompleted(session: {
 
   if (error) throw new Error(`Supabase insert: ${error.message}`);
 
-  await sendLicenseEmail({ to: email, name, licenseKey: license_key, plan });
+  try {
+    await sendLicenseEmail({ to: email, name, licenseKey: license_key, plan });
+  } catch (emailError) {
+    console.error("Stripe license created but email failed", emailError instanceof Error ? emailError.message : "unknown");
+  }
 }
 
 async function handleSubscriptionRenewed(invoice: { subscription?: string | null }) {
