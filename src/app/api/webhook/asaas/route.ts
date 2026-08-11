@@ -2,11 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin, generateLicenseKey } from "@/lib/supabase";
 import { sendLicenseEmail, sendPaymentFailedEmail } from "@/lib/email";
 import { cancelSubscription, getCustomer } from "@/lib/asaas";
+import { getAsaasEnv } from "@/lib/env";
 
 // Verificação do token de segurança do webhook Asaas
-function verifyWebhookToken(req: NextRequest): boolean {
+function verifyWebhookToken(req: NextRequest, expectedToken: string): boolean {
   const token = req.headers.get("asaas-webhook-token");
-  return token === process.env.ASAAS_WEBHOOK_TOKEN;
+  return token === expectedToken;
+}
+
+function safeErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : "unknown";
 }
 
 // Cria licença após pagamento confirmado — idempotente
@@ -140,7 +145,18 @@ interface AsaasPayment {
 }
 
 export async function POST(req: NextRequest) {
-  if (!verifyWebhookToken(req)) {
+  let asaasEnv;
+  try {
+    asaasEnv = getAsaasEnv();
+  } catch (error) {
+    console.error("[webhook/asaas] provider unavailable", safeErrorMessage(error));
+    return NextResponse.json(
+      { error: "PAYMENT_PROVIDER_UNAVAILABLE" },
+      { status: 503 }
+    );
+  }
+
+  if (!verifyWebhookToken(req, asaasEnv.ASAAS_WEBHOOK_TOKEN)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -180,7 +196,11 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error("[webhook/asaas]", event, err);
+    console.error("[webhook/asaas]", {
+      event,
+      transactionId: payment?.id,
+      error: safeErrorMessage(err),
+    });
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
 }

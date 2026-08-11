@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { findOrCreateCustomer, createPayment, createSubscription } from "@/lib/asaas";
+import { getAsaasEnv } from "@/lib/env";
 
 const PLANS = {
   annual: {
@@ -13,6 +14,19 @@ const PLANS = {
 } as const;
 
 export async function POST(req: NextRequest) {
+  try {
+    getAsaasEnv();
+  } catch (error) {
+    console.error(
+      "[checkout/asaas] provider unavailable",
+      error instanceof Error ? error.message : "unknown"
+    );
+    return NextResponse.json(
+      { error: "PAYMENT_PROVIDER_UNAVAILABLE" },
+      { status: 503 }
+    );
+  }
+
   try {
     const { plan, name, email, cpfCnpj } = await req.json() as {
       plan: "annual" | "lifetime";

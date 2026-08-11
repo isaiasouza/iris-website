@@ -1,4 +1,9 @@
 import type { NextConfig } from "next";
+import { register as validateEnvironment } from "./src/instrumentation";
+
+// O Next não executa instrumentation.register() durante `next build`.
+// Delegar ao mesmo ponto mantém uma única rotina explícita de validação.
+validateEnvironment();
 
 const nextConfig: NextConfig = {
   images: {

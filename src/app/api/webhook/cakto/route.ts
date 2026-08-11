@@ -1,6 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createHash, timingSafeEqual } from "node:crypto";
 import { supabaseAdmin, generateLicenseKey } from "@/lib/supabase";
 import { sendLicenseEmail, sendPaymentFailedEmail } from "@/lib/email";
+import { getCoreEnv } from "@/lib/env";
+
+function secretDigest(value: string): Buffer {
+  return createHash("sha256").update(value, "utf8").digest();
+}
+
+function isValidWebhookSecret(value: unknown, expected: string): boolean {
+  const provided = typeof value === "string" ? value : "";
+  const matches = timingSafeEqual(
+    secretDigest(provided),
+    secretDigest(expected)
+  );
+  return typeof value === "string" && matches;
+}
+
+function safeErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : "unknown";
+}
 
 export async function POST(req: NextRequest) {
   let body: {
@@ -21,8 +40,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  // Validar secret
-  if (body.secret !== process.env.CAKTO_WEBHOOK_SECRET) {
+  const coreEnv = getCoreEnv();
+  if (!isValidWebhookSecret(body.secret, coreEnv.CAKTO_WEBHOOK_SECRET)) {
     console.error("[webhook/cakto] secret inválido");
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -33,7 +52,10 @@ export async function POST(req: NextRequest) {
   try {
     switch (event) {
       case "purchase_approved":
-        await handlePurchaseApproved(data);
+        await handlePurchaseApproved(
+          data,
+          coreEnv.NEXT_PUBLIC_CAKTO_LIFETIME_ID
+        );
         break;
 
       case "refund":
@@ -48,7 +70,11 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error("[webhook/cakto]", event, err);
+    console.error("[webhook/cakto]", {
+      event,
+      transactionId: data?.id,
+      error: safeErrorMessage(err),
+    });
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
 }
@@ -60,7 +86,7 @@ async function handlePurchaseApproved(data: {
   offer?: { id: string };
   paymentMethod?: string;
   subscription?: { id: string };
-}) {
+}, lifetimeId: string) {
   // Idempotência
   const { data: existing } = await supabaseAdmin
     .from("licenses")
@@ -74,7 +100,6 @@ async function handlePurchaseApproved(data: {
 
   // Determina plano pelo valor ou pelo ID da oferta da Cakto
   const amount = data.amount ?? 0;
-  const lifetimeId = process.env.NEXT_PUBLIC_CAKTO_LIFETIME_ID || "";
   // Se o offer.id da Cakto estiver dentro do NEXT_PUBLIC_CAKTO_LIFETIME_ID (ex: tqxh73a), ou o valor for maior que 100
   const isLifetimeOffer = data.offer?.id && lifetimeId.includes(data.offer.id);
   const plan: "annual" | "lifetime" = (isLifetimeOffer || amount >= 100) ? "lifetime" : "annual";

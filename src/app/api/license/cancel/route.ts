@@ -1,8 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { cancelSubscription } from "@/lib/asaas";
+import { getAsaasEnv } from "@/lib/env";
 
 export async function POST(req: NextRequest) {
+  try {
+    getAsaasEnv();
+  } catch (error) {
+    console.error(
+      "[license/cancel] Asaas unavailable",
+      error instanceof Error ? error.message : "unknown"
+    );
+    return NextResponse.json(
+      { error: "PAYMENT_PROVIDER_UNAVAILABLE" },
+      { status: 503 }
+    );
+  }
+
   let body: { license_key: string; email: string };
   try {
     body = await req.json();

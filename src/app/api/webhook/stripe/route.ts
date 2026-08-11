@@ -2,20 +2,36 @@ import { NextRequest, NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { supabaseAdmin, generateLicenseKey } from "@/lib/supabase";
 import { sendLicenseEmail, sendPaymentFailedEmail } from "@/lib/email";
+import { getStripeEnv } from "@/lib/env";
 
 export async function POST(req: NextRequest) {
+  let stripeEnv;
+  try {
+    stripeEnv = getStripeEnv();
+  } catch {
+    console.error("[webhook/stripe] provider unavailable");
+    return NextResponse.json(
+      { error: "PAYMENT_PROVIDER_UNAVAILABLE" },
+      { status: 503 }
+    );
+  }
+
   const body = await req.text();
   const sig = req.headers.get("stripe-signature");
 
-  if (!sig || !process.env.STRIPE_WEBHOOK_SECRET) {
+  if (!sig) {
     return NextResponse.json({ error: "Missing signature" }, { status: 400 });
   }
 
   let event;
   try {
-    event = getStripe().webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET);
-  } catch (err) {
-    console.error("[webhook/stripe] signature error", err);
+    event = getStripe().webhooks.constructEvent(
+      body,
+      sig,
+      stripeEnv.STRIPE_WEBHOOK_SECRET
+    );
+  } catch {
+    console.error("[webhook/stripe] signature validation failed");
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
@@ -63,7 +79,11 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error("[webhook/stripe]", event.type, err);
+    console.error("[webhook/stripe]", {
+      eventType: event.type,
+      eventId: event.id,
+      error: err instanceof Error ? err.message : "unknown",
+    });
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
 }

@@ -1,10 +1,11 @@
 import { SignJWT, jwtVerify } from "jose";
-
-const SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET ?? "change-me-in-production-please"
-);
+import { getCoreEnv } from "@/lib/env";
 
 const TTL_HOURS = 72;
+
+function getJwtSecret(): Uint8Array {
+  return new TextEncoder().encode(getCoreEnv().JWT_SECRET);
+}
 
 export interface ValidationPayload {
   license_id: string;
@@ -21,14 +22,14 @@ export async function signValidationToken(
     .setIssuedAt()
     .setExpirationTime(`${TTL_HOURS}h`)
     .setIssuer("iris-downloader")
-    .sign(SECRET);
+    .sign(getJwtSecret());
 }
 
 export async function verifyValidationToken(
   token: string
 ): Promise<ValidationPayload | null> {
   try {
-    const { payload } = await jwtVerify(token, SECRET, {
+    const { payload } = await jwtVerify(token, getJwtSecret(), {
       issuer: "iris-downloader",
     });
     return payload as unknown as ValidationPayload;
