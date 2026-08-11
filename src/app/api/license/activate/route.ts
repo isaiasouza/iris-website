@@ -136,6 +136,8 @@ export async function POST(req: NextRequest) {
     token_expires_at: expiresAt.toISOString(),
     devices_used: finalCount ?? 1,
     devices_max: license.max_devices,
+    license_expires_at: license.expires_at,
+    // deprecated: remover só após 30 dias sem contrato < 2 e EOL dos clientes antigos; ver DEPLOY-P2.md
     expires_at: license.expires_at,
   });
 }
