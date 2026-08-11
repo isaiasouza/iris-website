@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { signValidationToken, tokenExpiresAt } from "@/lib/jwt";
+import { licenseClientMetadata } from "@/lib/license-contract";
 
 export async function POST(req: NextRequest) {
   const ip = req.headers.get("x-forwarded-for") ?? "unknown";
@@ -10,6 +11,8 @@ export async function POST(req: NextRequest) {
     hardware_id: string;
     device_name?: string;
     os_version?: string;
+    app_version?: unknown;
+    license_contract_version?: unknown;
   };
 
   try {
@@ -19,6 +22,7 @@ export async function POST(req: NextRequest) {
   }
 
   const { license_key, hardware_id, device_name, os_version } = body;
+  const clientMetadata = licenseClientMetadata(body);
 
   if (!license_key || !hardware_id) {
     return NextResponse.json(
@@ -126,7 +130,7 @@ export async function POST(req: NextRequest) {
     event: "activated",
     hardware_id,
     ip_address: ip,
-    metadata: { device_name, os_version },
+    metadata: { device_name, os_version, ...clientMetadata },
   });
 
   return NextResponse.json({

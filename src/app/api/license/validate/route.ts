@@ -1,11 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { signValidationToken, tokenExpiresAt } from "@/lib/jwt";
+import { licenseClientMetadata } from "@/lib/license-contract";
 
 export async function POST(req: NextRequest) {
   const ip = req.headers.get("x-forwarded-for") ?? "unknown";
 
-  let body: { license_key: string; hardware_id: string };
+  let body: {
+    license_key: string;
+    hardware_id: string;
+    app_version?: unknown;
+    license_contract_version?: unknown;
+  };
   try {
     body = await req.json();
   } catch {
@@ -13,6 +19,7 @@ export async function POST(req: NextRequest) {
   }
 
   const { license_key, hardware_id } = body;
+  const clientMetadata = licenseClientMetadata(body);
   if (!license_key || !hardware_id) {
     return NextResponse.json({ error: "INVALID_REQUEST" }, { status: 400 });
   }
@@ -81,6 +88,7 @@ export async function POST(req: NextRequest) {
     event: "validated",
     hardware_id,
     ip_address: ip,
+    metadata: clientMetadata,
   });
 
   return NextResponse.json({
