@@ -18,6 +18,9 @@
 # production
 /build
 
+# legacy packaged app builds (archived outside the repository)
+/public/Iris Downloader *.zip
+
 # misc
 .DS_Store
 *.pem
