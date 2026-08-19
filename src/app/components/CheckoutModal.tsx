@@ -44,31 +44,31 @@ export default function CheckoutModal({ plan, onClose }: CheckoutModalProps) {
 
   return (
     <Dialog open onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="dark max-w-md gap-0 overflow-hidden border-white/10 bg-[#0c151e] p-0 text-white shadow-[0_32px_100px_rgba(0,0,0,.55)]">
-        <DialogHeader className="border-b border-white/8 bg-white/[0.025] p-6 pr-14">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200/70">{info.label}</p>
+      <DialogContent className="dark max-w-md gap-0 overflow-hidden rounded-md border-[#404040] bg-[#262626] p-0 text-white shadow-2xl">
+        <DialogHeader className="border-b border-[#404040] bg-[#1f1f1f] p-6 pr-14">
+          <p className="font-mono text-[10px] font-semibold uppercase text-blue-400">{info.label}</p>
           <DialogTitle className="text-2xl font-semibold tracking-tight text-white">{info.price}</DialogTitle>
-          <DialogDescription className="leading-6 text-white/48">{info.description}</DialogDescription>
+          <DialogDescription className="leading-6 text-neutral-400">{info.description}</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-5 p-6">
-          <div className="grid grid-cols-2 gap-3 text-xs text-white/55">
-            <div className="rounded-xl border border-white/8 bg-white/[0.025] p-3">
+          <div className="grid grid-cols-2 gap-3 text-xs text-neutral-400">
+            <div className="rounded-md border border-[#404040] bg-[#1f1f1f] p-3">
               <ShieldCheck className="mb-2 h-4 w-4 text-emerald-300" />
               7 dias de garantia
             </div>
-            <div className="rounded-xl border border-white/8 bg-white/[0.025] p-3">
-              <CreditCard className="mb-2 h-4 w-4 text-cyan-200" />
+            <div className="rounded-md border border-[#404040] bg-[#1f1f1f] p-3">
+              <CreditCard className="mb-2 h-4 w-4 text-blue-400" />
               PIX, cartão ou boleto
             </div>
           </div>
 
-          <Button type="button" onClick={handleCheckout} className="h-12 w-full rounded-xl bg-cyan-100 font-semibold text-[#071018] hover:bg-white">
+          <Button type="button" onClick={handleCheckout} className="h-12 w-full rounded-md bg-blue-500 font-semibold text-white hover:bg-blue-400">
             Continuar no checkout seguro
             <ArrowUpRight data-icon="inline-end" />
           </Button>
 
-          <p className="text-center text-xs leading-5 text-white/35">
+          <p className="text-center text-xs leading-5 text-neutral-500">
             Você será direcionado para o checkout seguro da Cakto.
           </p>
         </div>

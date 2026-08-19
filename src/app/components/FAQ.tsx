@@ -62,7 +62,7 @@ export default function FAQ() {
     <section id="faq" className="relative py-24 md:py-32">
       <div className="mx-auto max-w-3xl px-6">
         <div className="text-center">
-          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200/70">Dúvidas finais</span>
+          <span className="font-mono text-[10px] font-semibold uppercase text-blue-400">Dúvidas finais</span>
           <h2 className="mt-3 text-3xl font-medium tracking-tight text-white md:text-4xl">
             O que falta saber antes de baixar
           </h2>
@@ -72,7 +72,7 @@ export default function FAQ() {
           {faqs.map((faq, i) => (
             <div
               key={i}
-              className="rounded-xl border border-white/5 bg-[#19191E] transition-all hover:border-iris-500/15"
+              className="rounded-md border border-[#404040] bg-[#262626] transition-colors hover:border-neutral-500"
             >
               <button
                 className="flex w-full items-center justify-between px-6 py-5 text-left"
@@ -80,7 +80,7 @@ export default function FAQ() {
               >
                 <span className="pr-4 font-medium text-white">{faq.question}</span>
                 <svg
-                  className={`h-5 w-5 shrink-0 text-[#9F9FA3] transition-transform ${
+                  className={`h-5 w-5 shrink-0 text-neutral-400 transition-transform ${
                     openIndex === i ? "rotate-180" : ""
                   }`}
                   fill="none"
@@ -93,7 +93,7 @@ export default function FAQ() {
               </button>
               {openIndex === i && (
                 <div className="px-6 pb-5">
-                  <p className="text-sm leading-relaxed text-[#9F9FA3]">{faq.answer}</p>
+                  <p className="text-sm leading-relaxed text-neutral-400">{faq.answer}</p>
                 </div>
               )}
             </div>

@@ -24,17 +24,17 @@ export default function Objections() {
     <section className="relative py-20 sm:py-24" aria-labelledby="objections-title">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="max-w-2xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200/70">Antes de instalar</p>
+          <p className="font-mono text-[10px] font-semibold uppercase text-blue-400">Antes de instalar</p>
           <h2 id="objections-title" className="mt-3 text-3xl font-medium tracking-tight text-white sm:text-4xl">
             As três dúvidas que mais atrasam o primeiro download
           </h2>
         </div>
         <div className="mt-10 grid gap-4 lg:grid-cols-3">
           {objections.map(({ icon: Icon, question, answer }) => (
-            <Card key={question} className="gap-0 rounded-2xl border border-white/8 bg-card p-6 py-6">
-              <Icon className="h-6 w-6 text-cyan-200" />
+            <Card key={question} className="gap-0 rounded-md border border-[#404040] bg-[#262626] p-6 py-6">
+              <Icon className="h-6 w-6 text-blue-400" />
               <h3 className="mt-5 text-base font-medium leading-6 text-white">{question}</h3>
-              <p className="mt-3 text-sm leading-6 text-white/52">{answer}</p>
+              <p className="mt-3 text-sm leading-6 text-neutral-400">{answer}</p>
             </Card>
           ))}
         </div>

@@ -108,13 +108,13 @@ export default function Features() {
     <section id="features" ref={sectionRef} className="relative py-24 md:py-32">
       <div className="mx-auto max-w-6xl px-6">
         <div className="text-center">
-          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200/70">
+          <span className="font-mono text-[10px] font-semibold uppercase text-blue-400">
             O que muda
           </span>
           <h2 className="mt-3 text-3xl font-medium tracking-tight text-white md:text-4xl">
             O fluxo do Drive, sem sair do Mac
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-[#9F9FA3]">
+          <p className="mx-auto mt-4 max-w-xl text-neutral-400">
             Não é sincronização automática nem navegador disfarçado. É download e upload sob seu controle.
           </p>
         </div>
@@ -124,19 +124,19 @@ export default function Features() {
           {mainFeatures.map((f, i) => (
             <div
               key={i}
-              className="fade-up-hidden rounded-2xl border border-iris-500/15 bg-[#19191E] p-8 transition-all hover:border-iris-500/30 hover:bg-[#1E1E23]"
+              className="fade-up-hidden rounded-md border border-[#404040] bg-[#262626] p-8 transition-colors hover:border-neutral-500"
               style={{ transitionDelay: `${i * 80}ms` }}
             >
-              <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-iris-700/20 text-iris-400">
+              <div className="flex h-12 w-12 items-center justify-center rounded-md border border-[#404040] bg-[#1f1f1f] text-blue-400">
                 {f.icon}
               </div>
               <div className="mt-3">
-                <span className="rounded-full bg-iris-700/20 px-3 py-1 text-xs font-semibold text-iris-300">
+                <span className="font-mono text-[10px] font-semibold uppercase text-blue-400">
                   {f.badge}
                 </span>
               </div>
-              <h3 className="mt-4 text-xl font-bold text-white">{f.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-[#9F9FA3]">{f.description}</p>
+              <h3 className="mt-4 text-xl font-semibold text-white">{f.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-neutral-400">{f.description}</p>
             </div>
           ))}
         </div>
@@ -146,15 +146,15 @@ export default function Features() {
           {sideFeatures.map((f, i) => (
             <div
               key={i}
-              className="fade-up-hidden flex gap-4 rounded-xl border border-white/5 bg-[#19191E] p-5 transition-all hover:border-iris-500/15 hover:bg-[#1E1E23]"
+              className="fade-up-hidden flex gap-4 rounded-md border border-[#404040] bg-[#262626] p-5 transition-colors hover:border-neutral-500"
               style={{ transitionDelay: `${(i % 3) * 60}ms` }}
             >
-              <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-iris-700/15 text-iris-400">
+              <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-[#1f1f1f] text-blue-400">
                 {f.icon}
               </div>
               <div>
                 <h3 className="font-semibold text-white">{f.title}</h3>
-                <p className="mt-1 text-sm text-[#9F9FA3]">{f.description}</p>
+                <p className="mt-1 text-sm text-neutral-400">{f.description}</p>
               </div>
             </div>
           ))}
