@@ -20,7 +20,7 @@ function redirectToLogin(req: NextRequest, clearCookie = false) {
   return response;
 }
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // Deixa a página de login passar sem verificação
