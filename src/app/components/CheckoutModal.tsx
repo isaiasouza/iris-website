@@ -1,13 +1,31 @@
 "use client";
 
+import { ArrowUpRight, CreditCard, ShieldCheck } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+
 const CAKTO_URLS = {
-  annual:   "https://pay.cakto.com.br/38zibpa_825842",
+  annual: "https://pay.cakto.com.br/38zibpa_825842",
   lifetime: "https://pay.cakto.com.br/tqxh73a_825801",
 };
 
 const PLAN_INFO = {
-  annual:   { label: "Plano Anual",     price: "R$ 49,90/ano", description: "Renovação automática anual." },
-  lifetime: { label: "Plano Vitalício", price: "R$ 110,99",    description: "Pagamento único, sem renovações." },
+  annual: {
+    label: "Plano Anual",
+    price: "R$ 49,90/ano",
+    description: "1 ano de acesso completo e atualizações durante o plano.",
+  },
+  lifetime: {
+    label: "Plano Vitalício",
+    price: "R$ 110,99",
+    description: "Pagamento único e atualizações futuras da linha V2.",
+  },
 };
 
 interface CheckoutModalProps {
@@ -17,7 +35,7 @@ interface CheckoutModalProps {
 
 export default function CheckoutModal({ plan, onClose }: CheckoutModalProps) {
   const info = PLAN_INFO[plan];
-  const url  = CAKTO_URLS[plan];
+  const url = CAKTO_URLS[plan];
 
   function handleCheckout() {
     window.open(url, "_blank", "noopener,noreferrer");
@@ -25,42 +43,36 @@ export default function CheckoutModal({ plan, onClose }: CheckoutModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/70 backdrop-blur-sm">
-      <div className="w-full max-w-md bg-[#19191E] border border-white/8 rounded-2xl shadow-2xl shadow-iris-950/50">
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-white/5">
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-widest text-iris-400 mb-0.5">
-              {info.label}
+    <Dialog open onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="dark max-w-md gap-0 overflow-hidden border-white/10 bg-[#0c151e] p-0 text-white shadow-[0_32px_100px_rgba(0,0,0,.55)]">
+        <DialogHeader className="border-b border-white/8 bg-white/[0.025] p-6 pr-14">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200/70">{info.label}</p>
+          <DialogTitle className="text-2xl font-semibold tracking-tight text-white">{info.price}</DialogTitle>
+          <DialogDescription className="leading-6 text-white/48">{info.description}</DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-5 p-6">
+          <div className="grid grid-cols-2 gap-3 text-xs text-white/55">
+            <div className="rounded-xl border border-white/8 bg-white/[0.025] p-3">
+              <ShieldCheck className="mb-2 h-4 w-4 text-emerald-300" />
+              7 dias de garantia
             </div>
-            <div className="text-xl font-bold text-white">{info.price}</div>
-            <div className="text-xs text-[#58585F] mt-0.5">{info.description}</div>
+            <div className="rounded-xl border border-white/8 bg-white/[0.025] p-3">
+              <CreditCard className="mb-2 h-4 w-4 text-cyan-200" />
+              PIX, cartão ou boleto
+            </div>
           </div>
-          <button onClick={onClose} className="text-[#58585F] hover:text-white transition-colors p-1" aria-label="Fechar">
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
 
-        {/* Body */}
-        <div className="px-6 py-6 space-y-5">
-          <p className="text-sm text-[#9F9FA3] text-center">
-            Você será redirecionado para a página de pagamento seguro.
-          </p>
+          <Button type="button" onClick={handleCheckout} className="h-12 w-full rounded-xl bg-cyan-100 font-semibold text-[#071018] hover:bg-white">
+            Continuar no checkout seguro
+            <ArrowUpRight data-icon="inline-end" />
+          </Button>
 
-          <button
-            onClick={handleCheckout}
-            className="w-full bg-gradient-to-r from-iris-700 to-iris-500 text-white font-semibold py-3 rounded-xl transition-all hover:brightness-110 hover:shadow-lg hover:shadow-iris-700/30"
-          >
-            Ir para o pagamento →
-          </button>
-
-          <p className="text-center text-xs text-[#58585F]">
-            Pagamento seguro via Cakto · PIX · Cartão · Boleto
+          <p className="text-center text-xs leading-5 text-white/35">
+            Você será direcionado para o checkout seguro da Cakto.
           </p>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

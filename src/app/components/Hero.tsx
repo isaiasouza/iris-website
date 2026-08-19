@@ -1,191 +1,122 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { motion } from "motion/react";
-import { ArrowRight, Download } from "lucide-react";
 import Image from "next/image";
-import Hls from "hls.js";
+import { motion } from "motion/react";
+import { ArrowRight, CheckCircle2, Download, FolderDown, ShieldCheck } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
-const videoSrc =
-  "https://stream.mux.com/T6oQJQ02cQ6N01TR6iHwZkKFkbepS34dkkIc9iukgy400g.m3u8";
+const proof = [
+  "2.000+ downloads",
+  "Assinado pela Apple",
+  "API oficial do Google",
+];
 
 export default function Hero() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    if (Hls.isSupported()) {
-      const hls = new Hls();
-      hls.loadSource(videoSrc);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        video.play().catch(() => {});
-      });
-      return () => hls.destroy();
-    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      video.src = videoSrc;
-      video.addEventListener("loadedmetadata", () => {
-        video.play().catch(() => {});
-      });
-    }
-  }, []);
-
   return (
-    <section className="relative w-full min-h-screen overflow-hidden bg-black text-white">
-      {/* Background video — sem poster para não mostrar imagem estranha */}
-      <video
-        ref={videoRef}
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-40"
-      />
+    <section className="relative overflow-hidden bg-[#071018] pb-12 pt-24 text-white sm:pb-20 sm:pt-32 lg:min-h-[760px] lg:pt-36">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_25%,rgba(56,189,248,.2),transparent_30%),linear-gradient(120deg,#071018_0%,#081723_54%,#071018_100%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#13131A] to-transparent" />
 
-      {/* Overlay escuro */}
-      <div className="absolute inset-0 bg-black/70" />
-
-      {/* Gradiente inferior para transição suave com a próxima seção */}
-      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#13131A] to-transparent pointer-events-none z-20" />
-
-      {/* Glow decorativo topo */}
-      <div
-        className="absolute pointer-events-none z-0"
-        style={{
-          top: "-10%",
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: 900,
-          height: 500,
-          background: "radial-gradient(ellipse, rgba(90,62,212,0.25) 0%, transparent 70%)",
-          filter: "blur(60px)",
-        }}
-      />
-
-      {/* Conteúdo */}
-      <div className="relative z-10 mx-auto max-w-5xl px-6 flex flex-col items-center text-center pt-36 pb-16">
-
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 backdrop-blur-sm"
-        >
-          <span className="h-1.5 w-1.5 rounded-full bg-iris-400" style={{ background: "#8B6EF8" }} />
-          <span className="text-sm font-medium text-white/70" style={{ fontFamily: "'Instrument Sans', sans-serif" }}>
-            v2.7.3 · Download de vídeos do Drive
-          </span>
-        </motion.div>
-
-        {/* Pre-headline */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-2xl sm:text-3xl lg:text-[36px] leading-[1.2] text-white/60 mb-4"
-          style={{ fontFamily: "'Instrument Serif', serif" }}
-        >
-          O Google Drive te obriga a baixar em ZIP.
-        </motion.p>
-
-        {/* Main headline */}
-        <motion.h1
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2, duration: 0.7 }}
-          className="text-[72px] sm:text-[100px] lg:text-[128px] leading-[0.9] tracking-tighter font-semibold bg-gradient-to-b from-white via-white to-[#b4c0ff] bg-clip-text text-transparent mb-8"
-          style={{ fontFamily: "'Instrument Sans', sans-serif" }}
-        >
-          O Iris não.
-        </motion.h1>
-
-        {/* Subheadline */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-          className="max-w-lg text-lg sm:text-xl leading-[1.65] text-white/55 mb-10"
-          style={{ fontFamily: "'Instrument Sans', sans-serif" }}
-        >
-          Baixe pastas inteiras, arquivos grandes e múltiplas contas Google —
-          direto no Mac, sem ZIP, sem travar, sem abrir o navegador.
-        </motion.p>
-
-        {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.55, duration: 0.5 }}
-          className="flex flex-col sm:flex-row items-center gap-4 mb-5"
-        >
-          {/* Primário */}
-          <a
-            href="#pricing"
-            className="group flex items-center gap-0 pl-6 pr-2 py-2 rounded-full bg-white transition-all duration-200 hover:shadow-[0_0_30px_rgba(139,110,248,0.4)] hover:scale-[1.02]"
-            style={{ fontFamily: "'Instrument Sans', sans-serif" }}
+      <div className="relative z-10 mx-auto grid max-w-6xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-[1.04fr_.96fr] lg:gap-16">
+        <div className="max-w-2xl">
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-3 sm:mb-4"
           >
-            <span className="text-base font-semibold mr-4" style={{ color: "#0a0010" }}>
-              Ver planos — a partir de R$&nbsp;49,90
-            </span>
-            <span className="flex items-center justify-center w-10 h-10 rounded-full bg-[#5A3ED4] group-hover:bg-[#4430B0] transition-colors">
-              <ArrowRight className="w-4 h-4 text-white" />
-            </span>
-          </a>
+            <Badge variant="outline" className="h-6 max-w-full border-cyan-200/18 bg-cyan-200/6 px-2.5 text-[10px] uppercase tracking-[0.12em] text-cyan-100 sm:text-xs sm:tracking-[0.16em]">
+              <span className="sm:hidden">Para profissionais criativos no Mac</span>
+              <span className="hidden sm:inline">Para designers, editores e videomakers no Mac</span>
+            </Badge>
+          </motion.div>
 
-          {/* Secundário */}
-          <a
-            href="/download"
-            className="group flex items-center gap-2 px-5 py-3 rounded-full border border-white/10 text-white/60 hover:text-white hover:border-white/20 hover:bg-white/5 transition-all duration-200"
-            style={{ fontFamily: "'Instrument Sans', sans-serif", fontSize: "0.95rem" }}
+          <motion.h1
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.08 }}
+            className="max-w-[820px] text-[34px] font-semibold leading-[0.98] tracking-[-0.045em] text-white sm:text-6xl lg:text-[72px]"
           >
-            <Download className="w-4 h-4" />
-            Baixar grátis
-            <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
-          </a>
-        </motion.div>
+            Baixe pastas de 10, 50 ou 100 GB do Drive.{" "}
+            <span className="text-cyan-200">Sem esperar o ZIP.</span>
+          </motion.h1>
 
-        {/* Meta info */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.7, duration: 0.5 }}
-          className="text-xs text-white/25 mb-16"
-          style={{ fontFamily: "'Instrument Sans', sans-serif" }}
-        >
-          macOS 14+ · Apple Silicon + Intel · Sem dependências
-        </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.16 }}
+            className="mt-4 max-w-xl text-sm leading-5 text-white/68 sm:mt-5 sm:text-lg sm:leading-7"
+          >
+            O Iris baixa cada arquivo direto no Mac, preserva a estrutura das pastas e reúne suas contas Google em um único app nativo.
+          </motion.p>
 
-        {/* Screenshot do app */}
+          <motion.ul
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.24 }}
+            className="mt-4 grid grid-cols-3 gap-2 text-[10px] leading-4 text-white/58 sm:mt-5 sm:flex sm:flex-wrap sm:gap-x-5 sm:gap-y-2 sm:text-sm"
+            aria-label="Provas de confiança"
+          >
+            {proof.map((item) => (
+              <li key={item} className="flex items-start gap-1">
+                <CheckCircle2 className="mt-0.5 h-3 w-3 shrink-0 text-cyan-300 sm:h-4 sm:w-4" />
+                {item}
+              </li>
+            ))}
+          </motion.ul>
+
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="mt-5 flex flex-col gap-3 sm:mt-7 sm:flex-row"
+          >
+            <Button asChild size="lg" className="group h-13 min-w-0 max-w-full rounded-xl bg-white px-5 text-base font-semibold text-[#081018] shadow-[0_16px_45px_rgba(113,223,255,.2)] hover:-translate-y-0.5 hover:bg-cyan-50 sm:w-auto sm:px-6">
+              <a href="/download">
+                <Download className="h-5 w-5" />
+                <span className="sm:hidden">Baixar grátis</span>
+                <span className="hidden sm:inline">Baixar grátis para Mac</span>
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </a>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="h-13 w-full rounded-xl border-white/15 bg-white/6 px-5 text-sm font-medium text-white/80 backdrop-blur hover:border-white/30 hover:bg-white/10 hover:text-white sm:w-auto">
+              <a href="#pricing">Ver licença a partir de R$ 49,90</a>
+            </Button>
+          </motion.div>
+
+          <p className="mt-3 text-center text-xs text-white/42 sm:text-left">
+            Teste antes de pagar · sem cartão · macOS 14+
+          </p>
+        </div>
+
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.8 }}
-          className="relative w-full max-w-4xl mx-auto"
+          initial={{ opacity: 0, x: 24 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.22, duration: 0.65 }}
+          className="relative mx-auto w-full max-w-xl"
         >
-          {/* Glow atrás da imagem */}
-          <div
-            className="absolute -inset-4 rounded-2xl pointer-events-none"
-            style={{
-              background: "radial-gradient(ellipse, rgba(90,62,212,0.3) 0%, transparent 70%)",
-              filter: "blur(30px)",
-            }}
-          />
-          <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-black/60">
+          <div className="absolute -inset-10 bg-cyan-300/12 blur-3xl" />
+          <div className="relative overflow-hidden rounded-2xl border border-white/14 bg-[#101824]/90 p-2 shadow-[0_30px_100px_rgba(0,0,0,.55)]">
             <Image
               src="/screenshots/downloads.png"
-              alt="Iris Downloader — downloads direto do Google Drive no Mac"
+              alt="Fila de downloads do Iris Downloader preservando pastas do Google Drive"
               width={1200}
               height={750}
-              className="w-full object-cover object-top"
+              className="w-full rounded-xl"
               priority
             />
-            {/* Fade inferior */}
-            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/80 to-transparent" />
+            <div className="absolute bottom-5 left-5 right-5 flex items-center gap-3 rounded-xl border border-cyan-200/15 bg-[#06121c]/92 p-3 backdrop-blur">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-cyan-300/12 text-cyan-200">
+                <FolderDown className="h-5 w-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium text-white">Projeto_cliente_2026</p>
+                <p className="text-xs text-white/45">Estrutura original preservada</p>
+              </div>
+              <ShieldCheck className="h-5 w-5 shrink-0 text-emerald-300" />
+            </div>
           </div>
         </motion.div>
-
       </div>
     </section>
   );

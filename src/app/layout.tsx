@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Iris Downloader — Baixe pastas do Google Drive sem ZIP no Mac",
+  title: "Iris Downloader — Baixe pastas grandes do Drive sem ZIP",
   description:
-    "Pare de sofrer com ZIP corrompido. O Iris baixa pastas inteiras do Google Drive direto no seu Mac, sem compactar. App nativo para macOS. A partir de R$ 49,90/ano.",
+    "Baixe pastas de 10, 50 ou 100 GB do Google Drive direto no Mac. Sem esperar o ZIP, sem perder a estrutura e com múltiplas contas. Teste grátis.",
   keywords: [
     "Google Drive download Mac",
     "baixar pasta Google Drive sem ZIP",
@@ -20,9 +20,9 @@ export const metadata: Metadata = {
     canonical: "https://www.irisdownloader.com.br",
   },
   openGraph: {
-    title: "Iris Downloader — Baixe do Google Drive sem ZIP",
+    title: "Baixe pastas grandes do Google Drive sem esperar o ZIP",
     description:
-      "Baixe pastas inteiras do Google Drive direto no Mac. Sem compactar, sem travar, sem ZIP corrompido. A partir de R$ 49,90/ano.",
+      "App nativo para designers, editores e videomakers baixarem pastas grandes do Drive direto no Mac. Teste grátis.",
     type: "website",
     url: "https://www.irisdownloader.com.br",
     siteName: "Iris Downloader",
@@ -38,9 +38,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Iris Downloader — Baixe do Google Drive sem ZIP",
+    title: "Baixe pastas grandes do Google Drive sem esperar o ZIP",
     description:
-      "Baixe pastas inteiras do Google Drive direto no Mac. Sem ZIP, sem travar. A partir de R$ 49,90/ano.",
+      "App nativo para baixar pastas grandes do Drive direto no Mac. Sem ZIP e com múltiplas contas.",
     images: ["/opengraph-image"],
   },
   robots: {
@@ -60,7 +60,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" className="dark">
       <head>
         <link rel="icon" href="/logo.png" type="image/png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />

@@ -22,11 +22,11 @@ export default function Screenshots() {
 
       <div className="relative mx-auto max-w-6xl px-6">
         <div className="text-center">
-          <span className="text-sm font-semibold uppercase tracking-widest text-iris-400">
+          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200/70">
             O app
           </span>
-          <h2 className="mt-3 text-3xl font-bold text-white md:text-4xl">
-            Interface nativa, sem gambiarras
+          <h2 className="mt-3 text-3xl font-medium tracking-tight text-white md:text-4xl">
+            Veja o arquivo andar, não uma barra de ZIP parada
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-[#9F9FA3]">
             Construído especificamente para macOS. Não é um app web embrulhado em Electron.

@@ -28,11 +28,11 @@ export default function HowItWorks() {
 
       <div className="relative mx-auto max-w-6xl px-6">
         <div className="text-center">
-          <span className="text-sm font-semibold uppercase tracking-widest text-iris-400">
+          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200/70">
             Como funciona
           </span>
-          <h2 className="mt-3 text-3xl font-bold text-white md:text-4xl">
-            Pronto em 3 passos
+          <h2 className="mt-3 text-3xl font-medium tracking-tight text-white md:text-4xl">
+            Do DMG ao primeiro download em 3 passos
           </h2>
         </div>
 

@@ -2,30 +2,39 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import { Check, CreditCard, ShieldCheck, Sparkles } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 const CheckoutModal = dynamic(() => import("./CheckoutModal"), { ssr: false });
 
 const annualFeatures = [
-  "Acesso completo ao app",
-  "Todas as atualizações do ano",
-  "Suporte por email",
+  "Downloads e uploads sem limite",
   "Múltiplas contas Google",
-  "Sem limite de downloads",
+  "Pausar e retomar transferências",
+  "Atualizações durante o plano",
+  "Uso em 1 Mac",
 ];
 
 const lifetimeFeatures = [
-  "Tudo do plano Anual",
-  "Atualizações para sempre",
+  "Tudo do plano anual",
+  "Pagamento único",
+  "Atualizações futuras da linha V2",
   "Suporte prioritário",
-  "Acesso a versões futuras",
-  "Paga uma vez, usa para sempre",
+  "Uso em até 3 Macs",
 ];
 
-function CheckIcon() {
+function FeatureList({ items }: { items: string[] }) {
   return (
-    <svg className="h-4 w-4 shrink-0 text-iris-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-    </svg>
+    <ul className="mt-7 space-y-3">
+      {items.map((item) => (
+        <li key={item} className="flex items-start gap-2.5 text-sm text-white/58">
+          <Check className="mt-0.5 h-4 w-4 shrink-0 text-cyan-200" strokeWidth={2.5} />
+          {item}
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -35,131 +44,109 @@ export default function Pricing() {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("in-view");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
+      (entries) => entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view");
+          observer.unobserve(entry.target);
+        }
+      }),
       { threshold: 0.1 }
     );
-    const targets = sectionRef.current?.querySelectorAll(".fade-up-hidden");
-    targets?.forEach((t) => observer.observe(t));
+    sectionRef.current?.querySelectorAll(".fade-up-hidden").forEach((target) => observer.observe(target));
     return () => observer.disconnect();
   }, []);
 
   return (
     <>
-      <section id="pricing" ref={sectionRef} className="relative py-24 md:py-32">
+      <section id="pricing" ref={sectionRef} className="relative py-20 sm:py-28">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-1/4 h-[500px] w-[700px] -translate-x-1/2 rounded-full bg-iris-800/8 blur-[130px]" />
+          <div className="absolute left-1/2 top-1/4 h-[420px] w-[720px] max-w-full -translate-x-1/2 rounded-full bg-cyan-400/6 blur-[130px]" />
         </div>
 
-        <div className="relative mx-auto max-w-6xl px-6">
-          <div className="text-center">
-            <span className="text-sm font-semibold uppercase tracking-widest text-iris-400">Preços</span>
-            <h2 className="mt-3 text-3xl font-bold text-white md:text-4xl">
-              Simples. Sem pegadinha.
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200/70">Escolha sua licença</p>
+            <h2 className="mt-3 text-3xl font-medium tracking-tight text-white sm:text-4xl">
+              Custa menos que refazer um download grande
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-[#9F9FA3]">
-              Anual ou pague uma vez e acabou. Sem renovação surpresa, sem cobrança escondida.
+            <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-white/48 sm:text-base">
+              Comece no anual por R$ 49,90 ou pague uma vez para usar a linha V2 sem renovação.
             </p>
           </div>
 
-          <div className="mt-16 grid gap-6 md:grid-cols-2 md:items-start max-w-3xl mx-auto">
-            {/* Annual card */}
-            <div
-              className="fade-up-hidden rounded-2xl border border-white/10 bg-[#19191E] p-8 flex flex-col"
-              style={{ transitionDelay: "0ms" }}
-            >
+          <div className="mx-auto mt-12 grid max-w-3xl gap-5 md:grid-cols-2 md:items-stretch">
+            <Card className="fade-up-hidden flex flex-col gap-0 rounded-2xl border-white/10 bg-card p-6 py-6 sm:p-8 sm:py-8">
               <div>
-                <h3 className="text-lg font-semibold text-white">Anual</h3>
-                <div className="mt-4 flex items-end gap-1">
-                  <span className="text-4xl font-extrabold text-white">R$ 49,90</span>
-                  <span className="mb-1 text-sm text-[#9F9FA3]">/ano</span>
+                <p className="text-sm font-medium text-white/65">Anual</p>
+                <div className="mt-3 flex items-end gap-1.5">
+                  <span className="text-4xl font-semibold tracking-tight text-white">R$ 49,90</span>
+                  <span className="mb-1 text-sm text-white/42">/ano</span>
                 </div>
-                <p className="mt-1 text-xs text-[#9F9FA3]">≈ R$ 4,15/mês · Cancele quando quiser</p>
+                <p className="mt-2 text-xs text-white/40">Equivale a R$ 4,15/mês · cancele quando quiser</p>
               </div>
-
-              <button
+              <Button
+                type="button"
+                variant="outline"
                 onClick={() => setModal("annual")}
-                className="mt-8 block rounded-full border border-iris-500/40 px-6 py-3 text-center text-sm font-semibold text-iris-300 transition-all hover:border-iris-500/70 hover:bg-iris-700/10 hover:text-white cursor-pointer"
+                className="mt-7 h-12 w-full rounded-xl border-cyan-200/30 bg-cyan-200/7 px-5 text-sm font-semibold text-cyan-100 hover:border-cyan-100/60 hover:bg-cyan-100/12 hover:text-cyan-50"
               >
-                Assinar agora
-              </button>
+                Começar por R$ 49,90
+              </Button>
+              <p className="mt-2 text-center text-[11px] text-white/35">1 ano de acesso completo</p>
+              <FeatureList items={annualFeatures} />
+            </Card>
 
-              <ul className="mt-8 space-y-3">
-                {annualFeatures.map((f, i) => (
-                  <li key={i} className="flex items-center gap-3 text-sm text-[#9F9FA3]">
-                    <CheckIcon />{f}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Lifetime card */}
-            <div
-              className="fade-up-hidden relative rounded-2xl border border-iris-500/40 bg-[#19191E] p-8 flex flex-col shadow-xl shadow-iris-800/15"
+            <Card
+              className="fade-up-hidden relative flex flex-col gap-0 rounded-2xl border-cyan-200/35 bg-[linear-gradient(160deg,#19222c,#0c151e_62%)] p-6 py-6 shadow-[0_24px_80px_rgba(34,211,238,.08)] sm:p-8 sm:py-8"
               style={{ transitionDelay: "100ms" }}
             >
-              <div className="pointer-events-none absolute inset-0 rounded-2xl bg-iris-700/5" />
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <span className="rounded-full bg-gradient-to-r from-iris-700 to-iris-500 px-4 py-1 text-xs font-bold text-white shadow-lg shadow-iris-700/30">
-                  Melhor custo-benefício
-                </span>
-              </div>
-
-              <div className="relative">
-                <h3 className="text-lg font-semibold text-white">Vitalício</h3>
-                <div className="mt-4 flex items-end gap-1">
-                  <span className="text-4xl font-extrabold text-white">R$ 110,99</span>
+              <Badge className="absolute right-5 top-5 gap-1.5 rounded-full bg-cyan-100 px-3 py-1 text-[11px] font-semibold text-[#071018] hover:bg-cyan-100">
+                <Sparkles className="h-3.5 w-3.5" />
+                Sem renovação
+              </Badge>
+              <div>
+                <p className="text-sm font-medium text-white/65">Vitalício</p>
+                <div className="mt-3">
+                  <span className="text-4xl font-semibold tracking-tight text-white">R$ 110,99</span>
                 </div>
-                <p className="mt-1 text-xs text-[#9F9FA3]">Pagamento único · Equivale a 2 anos e meio</p>
+                <p className="mt-2 text-xs text-white/40">Pagamento único · atualizações da linha V2</p>
               </div>
-
-              <button
+              <Button
+                type="button"
                 onClick={() => setModal("lifetime")}
-                className="relative mt-8 block rounded-full bg-gradient-to-r from-iris-700 to-iris-500 px-6 py-3 text-center text-sm font-semibold text-white shadow-lg shadow-iris-700/25 transition-all hover:brightness-110 hover:shadow-xl hover:shadow-iris-700/35 cursor-pointer"
+                className="mt-7 h-12 w-full rounded-xl bg-white px-5 text-sm font-semibold text-[#081018] shadow-[0_12px_35px_rgba(255,255,255,.1)] hover:bg-cyan-50"
               >
-                Comprar agora
-              </button>
-
-              <ul className="relative mt-8 space-y-3">
-                {lifetimeFeatures.map((f, i) => (
-                  <li key={i} className="flex items-center gap-3 text-sm text-[#9F9FA3]">
-                    <CheckIcon />{f}
-                  </li>
-                ))}
-              </ul>
-            </div>
+                Comprar uma vez e usar
+              </Button>
+              <p className="mt-2 text-center text-[11px] text-white/35">Sem cobrança anual</p>
+              <FeatureList items={lifetimeFeatures} />
+            </Card>
           </div>
 
-          {/* Guarantee */}
-          <div className="mt-10 mx-auto max-w-xl rounded-2xl border border-white/5 bg-[#19191E] px-8 py-5 text-center">
-            <p className="text-sm font-semibold text-white">Garantia de 7 dias</p>
-            <p className="mt-1 text-sm text-[#9F9FA3]">
-              Não gostou? Manda um email e devolvemos 100% do valor — sem perguntas, sem formulário.
-            </p>
+          <div className="mx-auto mt-8 grid max-w-3xl gap-3 sm:grid-cols-3">
+            {[
+              { icon: ShieldCheck, title: "7 dias de garantia", text: "Reembolso de 100% se não servir." },
+              { icon: CreditCard, title: "Checkout Cakto", text: "PIX, cartão ou boleto." },
+              { icon: Check, title: "2.000+ downloads", text: "App assinado com Developer ID." },
+            ].map(({ icon: Icon, title, text }) => (
+              <Card key={title} className="gap-0 rounded-xl border-white/7 bg-white/[0.025] p-4 py-4 text-center">
+                <Icon className="mx-auto h-5 w-5 text-cyan-200" />
+                <p className="mt-2 text-sm font-medium text-white">{title}</p>
+                <p className="mt-1 text-xs leading-5 text-white/40">{text}</p>
+              </Card>
+            ))}
           </div>
 
-          <p className="mt-6 text-center text-sm text-[#58585F]">
-            Pagamento seguro via Asaas &nbsp;·&nbsp; PIX, Cartão de crédito ou Boleto
-          </p>
-
-          <p className="mt-4 text-center text-xs text-[#3a3a45]">
+          <p className="mt-6 text-center text-xs text-white/30">
             Já tem uma licença?{" "}
-            <a href="/minha-licenca" className="text-iris-600/70 hover:text-iris-400 transition-colors">
+            <a href="/minha-licenca" className="text-cyan-200/70 transition hover:text-cyan-100">
               Acessar minha licença →
             </a>
           </p>
         </div>
       </section>
 
-      {modal && (
-        <CheckoutModal plan={modal} onClose={() => setModal(null)} />
-      )}
+      {modal && <CheckoutModal plan={modal} onClose={() => setModal(null)} />}
     </>
   );
 }

@@ -26,7 +26,7 @@ const faqs = [
   {
     question: "Posso usar em mais de um Mac?",
     answer:
-      "Sim. A licença é vinculada à sua conta, não ao dispositivo. Você pode ativar o Iris em quantos Macs quiser com a mesma licença.",
+      "O plano Anual permite 1 Mac. O plano Vitalício permite até 3 Macs ativos com a mesma licença.",
   },
   {
     question: "O que acontece se eu não renovar o plano Anual?",
@@ -62,9 +62,9 @@ export default function FAQ() {
     <section id="faq" className="relative py-24 md:py-32">
       <div className="mx-auto max-w-3xl px-6">
         <div className="text-center">
-          <span className="text-sm font-semibold uppercase tracking-widest text-iris-400">FAQ</span>
-          <h2 className="mt-3 text-3xl font-bold text-white md:text-4xl">
-            Perguntas frequentes
+          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200/70">Dúvidas finais</span>
+          <h2 className="mt-3 text-3xl font-medium tracking-tight text-white md:text-4xl">
+            O que falta saber antes de baixar
           </h2>
         </div>
 

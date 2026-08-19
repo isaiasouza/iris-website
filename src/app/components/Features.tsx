@@ -108,14 +108,14 @@ export default function Features() {
     <section id="features" ref={sectionRef} className="relative py-24 md:py-32">
       <div className="mx-auto max-w-6xl px-6">
         <div className="text-center">
-          <span className="text-sm font-semibold uppercase tracking-widest text-iris-400">
+          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200/70">
             O que muda
           </span>
-          <h2 className="mt-3 text-3xl font-bold text-white md:text-4xl">
-            Feito para quem usa o Drive de verdade
+          <h2 className="mt-3 text-3xl font-medium tracking-tight text-white md:text-4xl">
+            O fluxo do Drive, sem sair do Mac
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-[#9F9FA3]">
-            Não é um cliente de sincronização. É uma ferramenta de download e upload — rápida, nativa, sem fresco.
+            Não é sincronização automática nem navegador disfarçado. É download e upload sob seu controle.
           </p>
         </div>
 
