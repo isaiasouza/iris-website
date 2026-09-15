@@ -1,13 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createHash, timingSafeEqual } from "node:crypto";
 import { supabaseAdmin, generateLicenseKey } from "@/lib/supabase";
 import { sendLicenseEmail, sendPaymentFailedEmail } from "@/lib/email";
 import { cancelSubscription, getCustomer } from "@/lib/asaas";
 import { getAsaasEnv } from "@/lib/env";
 
-// Verificação do token de segurança do webhook Asaas
+// Verificação do token de segurança do webhook Asaas.
+// Comparação em tempo constante, igual à do webhook da Cakto: comparar
+// segredos com `===` sai mais cedo no primeiro byte diferente e deixa o
+// tempo de resposta revelar o token caractere a caractere.
+function secretDigest(value: string): Buffer {
+  return createHash("sha256").update(value, "utf8").digest();
+}
+
 function verifyWebhookToken(req: NextRequest, expectedToken: string): boolean {
   const token = req.headers.get("asaas-webhook-token");
-  return token === expectedToken;
+  if (typeof token !== "string") return false;
+  return timingSafeEqual(secretDigest(token), secretDigest(expectedToken));
 }
 
 function safeErrorMessage(error: unknown): string {
