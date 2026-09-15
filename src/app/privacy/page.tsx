@@ -22,7 +22,7 @@ export default function PrivacyPage() {
       <div className="mx-auto max-w-3xl px-6 py-16">
         <p className="text-xs font-semibold uppercase tracking-widest text-iris-400">Legal</p>
         <h1 className="mt-3 text-3xl font-extrabold text-white md:text-4xl">Política de Privacidade</h1>
-        <p className="mt-3 text-sm text-[#58585F]">Última atualização: 30 de março de 2026</p>
+        <p className="mt-3 text-sm text-[#58585F]">Última atualização: 15 de setembro de 2026</p>
 
         <div className="mt-12 space-y-10 text-[#9F9FA3] [&_h2]:mb-4 [&_h2]:mt-0 [&_h2]:text-lg [&_h2]:font-bold [&_h2]:text-white [&_p]:leading-relaxed [&_ul]:mt-3 [&_ul]:space-y-2 [&_ul]:pl-5 [&_ul_li]:list-disc [&_table]:w-full [&_table]:text-sm [&_th]:text-left [&_th]:text-white [&_th]:pb-2 [&_td]:py-2 [&_td]:align-top [&_tr]:border-b [&_tr]:border-white/5">
 
@@ -96,7 +96,77 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2>4. Compartilhamento de dados</h2>
+            <h2>4. Dados do Google Drive e Uso Limitado</h2>
+            <p>
+              O Iris Downloader solicita acesso ao seu Google Drive exclusivamente para executar as
+              ações que você comanda dentro do Aplicativo: listar suas pastas e arquivos, baixá-los
+              para o seu computador e enviar arquivos do seu computador para o Drive.
+            </p>
+            <p className="mt-3">
+              <strong className="text-white">O conteúdo dos seus arquivos nunca passa pelos nossos servidores.</strong>{" "}
+              As transferências ocorrem diretamente entre o seu computador e os servidores do Google. A
+              Iris Media não armazena, não lê e não tem acesso ao conteúdo do seu Drive. As credenciais
+              de acesso ficam guardadas apenas no Keychain do seu Mac.
+            </p>
+            <p className="mt-3">
+              O uso e a transferência, pelo Iris Downloader, de informações recebidas de APIs do Google
+              obedecem à{" "}
+              <a
+                href="https://developers.google.com/terms/api-services-user-data-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-iris-400 hover:text-iris-300 transition-colors"
+              >
+                Política de Dados do Usuário dos Serviços de API do Google
+              </a>{" "}
+              , incluindo os requisitos de Uso Limitado. Especificamente:
+            </p>
+            <ul>
+              <li>
+                usamos esses dados apenas para oferecer e aprimorar funções visíveis ao usuário dentro
+                do Aplicativo;
+              </li>
+              <li>
+                não transferimos esses dados a terceiros, salvo quando necessário para segurança, para
+                cumprir lei aplicável ou em decorrência de operação societária, sempre com aviso prévio;
+              </li>
+              <li>
+                não usamos esses dados para publicidade, nem para treinar modelos de inteligência artificial;
+              </li>
+              <li>
+                nenhum ser humano lê esses dados, exceto mediante seu consentimento explícito, por
+                motivo de segurança, ou para cumprir obrigação legal.
+              </li>
+            </ul>
+            <p className="mt-3 text-sm italic text-[#58585F]">
+              Iris Downloader&apos;s use and transfer of information received from Google APIs to any
+              other app will adhere to the{" "}
+              <a
+                href="https://developers.google.com/terms/api-services-user-data-policy#additional_requirements_for_specific_api_scopes"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-iris-400 hover:text-iris-300 transition-colors"
+              >
+                Google API Services User Data Policy
+              </a>
+              , including the Limited Use requirements.
+            </p>
+            <p className="mt-3">
+              Você pode revogar o acesso do Iris Downloader ao seu Google Drive a qualquer momento em{" "}
+              <a
+                href="https://myaccount.google.com/permissions"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-iris-400 hover:text-iris-300 transition-colors"
+              >
+                myaccount.google.com/permissions
+              </a>
+              .
+            </p>
+          </section>
+
+          <section>
+            <h2>5. Compartilhamento de dados</h2>
             <p>Seus dados podem ser compartilhados com:</p>
             <ul>
               <li><strong className="text-white">Processadores de pagamento</strong> (Stripe, Cakto, Asaas) — para processar transações financeiras, sob seus próprios termos e políticas;</li>
@@ -111,7 +181,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2>5. Retenção de dados</h2>
+            <h2>6. Retenção de dados</h2>
             <ul>
               <li><strong className="text-white">Dados de licença:</strong> mantidos enquanto a licença estiver ativa e por até 5 anos após o encerramento, para fins fiscais e legais;</li>
               <li><strong className="text-white">Dados de pagamento:</strong> retidos conforme exigência legal (5 anos) e pelas políticas dos processadores de pagamento;</li>
@@ -120,7 +190,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2>6. Seus direitos (LGPD)</h2>
+            <h2>7. Seus direitos (LGPD)</h2>
             <p>Conforme a LGPD, você tem direito a:</p>
             <ul>
               <li><strong className="text-white">Acesso:</strong> saber quais dados temos sobre você;</li>
@@ -138,7 +208,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2>7. Segurança</h2>
+            <h2>8. Segurança</h2>
             <p>
               Adotamos medidas técnicas e organizacionais para proteger seus dados, incluindo:
             </p>
@@ -151,7 +221,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2>8. Cookies e rastreamento</h2>
+            <h2>9. Cookies e rastreamento</h2>
             <p>
               O site irisdownloader.com.br é uma aplicação estática e não utiliza cookies de
               rastreamento, pixels de remarketing ou ferramentas de analytics de terceiros.
@@ -160,7 +230,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2>9. Menores de idade</h2>
+            <h2>10. Menores de idade</h2>
             <p>
               O Iris Downloader não é direcionado a menores de 18 anos. Não coletamos intencionalmente
               dados de menores. Se identificarmos que coletamos dados de um menor sem consentimento dos
@@ -169,7 +239,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2>10. Alterações nesta Política</h2>
+            <h2>11. Alterações nesta Política</h2>
             <p>
               Podemos atualizar esta Política periodicamente. A data de "Última atualização" no topo
               indica quando ocorreu a revisão mais recente. Alterações significativas serão comunicadas
@@ -178,7 +248,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2>11. Contato e reclamações</h2>
+            <h2>12. Contato e reclamações</h2>
             <p>
               Para questões de privacidade:{" "}
               <a href="mailto:contato@irisdownloader.com.br" className="text-iris-400 hover:text-iris-300 transition-colors">
