@@ -70,7 +70,7 @@ export default function TermsPage() {
           <section>
             <h2>5. Pagamentos e Reembolso</h2>
             <ul>
-              <li>Os pagamentos são processados por plataformas terceiras (Stripe, Cakto, Asaas). A Iris Media não armazena dados de cartão de crédito.</li>
+              <li>Os pagamentos são processados por plataforma terceira (AbacatePay). A Iris Media não armazena dados de cartão de crédito.</li>
               <li>O plano Anual é cobrado antecipadamente e renovado automaticamente ao final de cada período, salvo cancelamento prévio pelo usuário.</li>
               <li>Garantia de reembolso integral de 7 (sete) dias corridos a partir da data da compra, mediante solicitação por email para <a href="mailto:contato@irisdownloader.com.br" className="text-iris-400 hover:text-iris-300">contato@irisdownloader.com.br</a>.</li>
               <li>Após o período de garantia, não há reembolso proporcional pelo tempo restante de assinatura.</li>

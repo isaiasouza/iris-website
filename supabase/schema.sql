@@ -20,6 +20,9 @@ CREATE TABLE IF NOT EXISTS licenses (
   asaas_customer_id      TEXT,
   asaas_subscription_id  TEXT,
   asaas_payment_id       TEXT UNIQUE,
+  abacatepay_checkout_id TEXT UNIQUE,
+  abacatepay_subscription_id TEXT UNIQUE,
+  abacatepay_event_id    TEXT,
   max_devices            INT NOT NULL DEFAULT 1,
   expires_at             TIMESTAMPTZ,
   created_at             TIMESTAMPTZ DEFAULT now(),
@@ -29,6 +32,33 @@ CREATE TABLE IF NOT EXISTS licenses (
 CREATE INDEX IF NOT EXISTS idx_licenses_email      ON licenses(email);
 CREATE INDEX IF NOT EXISTS idx_licenses_status     ON licenses(status);
 CREATE INDEX IF NOT EXISTS idx_licenses_payment_id ON licenses(asaas_payment_id);
+CREATE INDEX IF NOT EXISTS idx_licenses_abacatepay_checkout_id ON licenses(abacatepay_checkout_id);
+CREATE INDEX IF NOT EXISTS idx_licenses_abacatepay_subscription_id ON licenses(abacatepay_subscription_id);
+
+ALTER TABLE licenses ADD COLUMN IF NOT EXISTS abacatepay_checkout_id TEXT UNIQUE;
+ALTER TABLE licenses ADD COLUMN IF NOT EXISTS abacatepay_subscription_id TEXT UNIQUE;
+ALTER TABLE licenses ADD COLUMN IF NOT EXISTS abacatepay_event_id TEXT;
+
+-- ============================================================
+-- EMAIL EVENTS
+-- ============================================================
+CREATE TABLE IF NOT EXISTS email_events (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  to_email TEXT NOT NULL,
+  subject TEXT NOT NULL,
+  type TEXT NOT NULL,
+  status TEXT NOT NULL CHECK (status IN ('sent', 'failed')),
+  provider TEXT NOT NULL DEFAULT 'resend',
+  provider_id TEXT,
+  error_message TEXT,
+  metadata JSONB DEFAULT '{}'::jsonb,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_email_events_created_at ON email_events(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_email_events_to_email ON email_events(to_email);
+CREATE INDEX IF NOT EXISTS idx_email_events_status ON email_events(status);
+CREATE INDEX IF NOT EXISTS idx_email_events_type ON email_events(type);
 
 -- ============================================================
 -- DEVICES

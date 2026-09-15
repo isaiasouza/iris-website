@@ -61,7 +61,7 @@ export default function PrivacyPage() {
                 </tr>
                 <tr>
                   <td>Dados de pagamento</td>
-                  <td>Processamento financeiro (via Stripe/Cakto/Asaas)</td>
+                  <td>Processamento financeiro (via AbacatePay)</td>
                   <td>Execução de contrato</td>
                 </tr>
                 <tr>
@@ -99,7 +99,7 @@ export default function PrivacyPage() {
             <h2>4. Compartilhamento de dados</h2>
             <p>Seus dados podem ser compartilhados com:</p>
             <ul>
-              <li><strong className="text-white">Processadores de pagamento</strong> (Stripe, Cakto, Asaas) — para processar transações financeiras, sob seus próprios termos e políticas;</li>
+              <li><strong className="text-white">Processadores de pagamento</strong> (AbacatePay) — para processar transações financeiras, sob seus próprios termos e políticas;</li>
               <li><strong className="text-white">Supabase</strong> — banco de dados onde licenças são armazenadas, hospedado em infraestrutura segura;</li>
               <li><strong className="text-white">Resend</strong> — plataforma de envio de email transacional;</li>
               <li><strong className="text-white">Google LLC</strong> — para autenticação OAuth e acesso ao Google Drive, conforme autorização explícita do usuário.</li>

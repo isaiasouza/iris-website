@@ -47,6 +47,8 @@ export default function MinhaLicenca() {
   const [email, setEmail] = useState("");
   const [licenseKey, setLicenseKey] = useState("");
   const [loading, setLoading] = useState(false);
+  const [recoverLoading, setRecoverLoading] = useState(false);
+  const [recoverSent, setRecoverSent] = useState(false);
   const [error, setError] = useState("");
   const [licenseData, setLicenseData] = useState<LicenseData | null>(null);
   const [copied, setCopied] = useState(false);
@@ -81,6 +83,30 @@ export default function MinhaLicenca() {
       setError("Erro de conexão. Tente novamente.");
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleRecoverLicense() {
+    setError("");
+    setRecoverSent(false);
+
+    if (!email.trim()) {
+      setError("Digite o email usado na compra para receber sua licença.");
+      return;
+    }
+
+    setRecoverLoading(true);
+    try {
+      await fetch("/api/license/recover", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      setRecoverSent(true);
+    } catch {
+      setError("Erro de conexão. Tente novamente.");
+    } finally {
+      setRecoverLoading(false);
     }
   }
 
@@ -160,7 +186,7 @@ export default function MinhaLicenca() {
             <Image src="/logo.png" alt="Iris Downloader" width={56} height={56} className="rounded-2xl mx-auto mb-4" />
             <h1 className="text-2xl font-bold text-white">Minha Licença</h1>
             <p className="text-[#9F9FA3] mt-2 text-sm">
-              Digite seu email e chave de licença para acessar
+              Receba sua chave por email ou gerencie seus dispositivos
             </p>
           </div>
 
@@ -176,6 +202,34 @@ export default function MinhaLicenca() {
                 className="w-full bg-[#13131A] border border-white/8 rounded-xl px-4 py-3 text-white text-sm placeholder:text-[#3a3a45] focus:outline-none focus:border-iris-500/50 transition-colors"
               />
             </div>
+
+            <div className="rounded-xl border border-iris-500/15 bg-iris-500/8 p-4">
+              <div className="flex items-start gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-iris-500/15 text-iris-300">
+                  ✉
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium text-white">Não lembra sua chave?</p>
+                  <p className="mt-1 text-xs leading-5 text-[#9F9FA3]">
+                    Enviamos todas as licenças encontradas para o email da compra.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleRecoverLicense}
+                    disabled={recoverLoading}
+                    className="mt-3 rounded-lg border border-iris-500/25 px-3 py-2 text-xs font-medium text-iris-300 transition-colors hover:bg-iris-500/10 disabled:opacity-60"
+                  >
+                    {recoverLoading ? "Enviando..." : "Receber licença por email"}
+                  </button>
+                </div>
+              </div>
+              {recoverSent && (
+                <p className="mt-3 rounded-lg border border-green-500/20 bg-green-500/10 px-3 py-2 text-xs text-green-300">
+                  Se existir uma licença nesse email, ela chegará em alguns minutos.
+                </p>
+              )}
+            </div>
+
             <div>
               <label className="block text-sm text-[#9F9FA3] mb-2">Chave de licença</label>
               <input
@@ -201,6 +255,10 @@ export default function MinhaLicenca() {
             >
               {loading ? "Verificando..." : "Acessar minha licença →"}
             </button>
+
+            <p className="text-center text-xs text-[#58585F]">
+              A licença pode ser usada em até 3 dispositivos, conforme seu plano. Remova Macs antigos pelo painel.
+            </p>
 
             <p className="text-center text-xs text-[#58585F]">
               Não tem uma licença?{" "}
@@ -303,10 +361,13 @@ export default function MinhaLicenca() {
         <div className="bg-[#19191E] border border-white/6 rounded-2xl p-6 mb-4">
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-base font-semibold text-white">Dispositivos</h2>
-            <span className="text-sm text-[#58585F]">
-              {licenseData.devices_used}/{licenseData.devices_max} usados
-            </span>
-          </div>
+              <span className="text-sm text-[#58585F]">
+                {licenseData.devices_used}/{licenseData.devices_max} usados
+              </span>
+            </div>
+            <p className="-mt-3 mb-5 text-xs text-[#58585F]">
+              Trocou de Mac ou atingiu o limite? Remova um dispositivo antigo para liberar uma nova ativação.
+            </p>
 
           {/* Barra de uso */}
           <div className="h-1.5 bg-[#2a2a35] rounded-full overflow-hidden mb-5">

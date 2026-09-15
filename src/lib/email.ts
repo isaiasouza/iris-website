@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { supabaseAdmin } from "@/lib/supabase";
 
 let _resend: Resend | null = null;
 function getResend() {
@@ -10,10 +11,91 @@ function getResend() {
 }
 const FROM = "Iris Downloader <team@irisdownloader.com.br>";
 
-function getSiteUrl() {
-  return (process.env.NEXT_PUBLIC_SITE_URL || "https://www.irisdownloader.com.br").replace(/\/$/, "");
+type EmailType = "license_created" | "payment_failed" | "license_recovery" | "device_removed";
+
+interface SendTrackedEmailParams {
+  to: string;
+  subject: string;
+  html: string;
+  type: EmailType;
+  metadata?: Record<string, unknown>;
 }
 
+async function logEmailEvent(params: {
+  to: string;
+  subject: string;
+  type: EmailType;
+  status: "sent" | "failed";
+  providerId?: string | null;
+  errorMessage?: string | null;
+  metadata?: Record<string, unknown>;
+}) {
+  try {
+    await supabaseAdmin.from("email_events").insert({
+      to_email: params.to.toLowerCase(),
+      subject: params.subject,
+      type: params.type,
+      status: params.status,
+      provider: "resend",
+      provider_id: params.providerId ?? null,
+      error_message: params.errorMessage ?? null,
+      metadata: params.metadata ?? {},
+    });
+  } catch (error) {
+    console.error("[email_events]", error);
+  }
+}
+
+async function sendTrackedEmail(params: SendTrackedEmailParams) {
+  try {
+    const result = await getResend().emails.send({
+      from: FROM,
+      to: params.to,
+      subject: params.subject,
+      html: params.html,
+    });
+
+    await logEmailEvent({
+      to: params.to,
+      subject: params.subject,
+      type: params.type,
+      status: "sent",
+      providerId: result.data?.id ?? null,
+      metadata: params.metadata,
+    });
+
+    return result;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    await logEmailEvent({
+      to: params.to,
+      subject: params.subject,
+      type: params.type,
+      status: "failed",
+      errorMessage: message,
+      metadata: params.metadata,
+    });
+    throw error;
+  }
+}
+
+async function getLatestDownloadUrl(): Promise<string> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/appcast.xml`, { cache: "no-store" });
+    const xml = await res.text();
+    const match = xml.match(/sparkle:shortVersionString>([^<]+)</);
+    if (match?.[1]) {
+      const version = match[1].trim();
+      return `${process.env.NEXT_PUBLIC_SITE_URL}/Iris%20Downloader%20${encodeURIComponent(version)}.zip`;
+    }
+  } catch {}
+  return `${process.env.NEXT_PUBLIC_SITE_URL}/Iris%20Downloader%202.7.2.zip`;
+}
+
+// Dados vindos do comprador (nome, chave, dispositivo) entram no HTML do
+// e-mail. Sem escapar, um nome com marcação injeta conteúdo na mensagem.
+// Esta proteção veio do lado local e é reaplicada sobre a versão do remoto,
+// que traz o registro de entrega mas não escapava nada.
 function escapeHtml(value: string) {
   const entities: Record<string, string> = {
     "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;",
@@ -28,17 +110,16 @@ export async function sendLicenseEmail(params: {
   plan: "annual" | "lifetime";
 }) {
   const planLabel = params.plan === "lifetime" ? "Vitalício" : "Anual";
-  const siteUrl = getSiteUrl();
-  const portalUrl = `${siteUrl}/minha-licenca`;
-  const downloadUrl = `${siteUrl}/download`;
-  const safeName = escapeHtml(params.name);
-  const safeLicenseKey = escapeHtml(params.licenseKey);
+  const portalUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/minha-licenca`;
 
-  const { error } = await getResend().emails.send({
-    from: FROM,
+  const downloadUrl = await getLatestDownloadUrl();
+
+  const subject = "🔑 Iris Downloader — Sua licença está pronta";
+  await sendTrackedEmail({
     to: params.to,
-    subject: "🔑 Iris Downloader — Sua licença está pronta",
-    text: `Olá ${params.name},\n\nSua licença Iris Downloader (${planLabel}) está pronta.\n\nChave: ${params.licenseKey}\nDownload: ${downloadUrl}\nGerenciar licença: ${portalUrl}\n\nAbra o aplicativo, cole a chave na tela de licença e clique em Ativar.`,
+    subject,
+    type: "license_created",
+    metadata: { plan: params.plan, license_key: params.licenseKey },
     html: `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -55,7 +136,7 @@ export async function sendLicenseEmail(params: {
       <tr><td style="background:linear-gradient(135deg,#1E1440 0%,#13131A 100%);border-radius:16px 16px 0 0;padding:36px 32px;text-align:center;border:1px solid rgba(126,96,248,0.2);border-bottom:none;">
         <img src="https://www.irisdownloader.com.br/logo-email.png" width="72" height="72" alt="Iris Downloader" style="border-radius:16px;display:block;margin:0 auto 16px;" />
         <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:700;letter-spacing:-0.3px;">Seu acesso está pronto! 🎉</h1>
-        <p style="margin:8px 0 0;color:#9F9FA3;font-size:14px;">Obrigado pela sua compra, <strong style="color:#c4b5fd;">${safeName}</strong></p>
+        <p style="margin:8px 0 0;color:#9F9FA3;font-size:14px;">Obrigado pela sua compra, <strong style="color:#c4b5fd;">${escapeHtml(params.name)}</strong></p>
       </td></tr>
 
       <!-- PLAN BADGE -->
@@ -70,7 +151,7 @@ export async function sendLicenseEmail(params: {
         <table width="100%" cellpadding="0" cellspacing="0" style="background:#13131A;border:1px solid rgba(126,96,248,0.3);border-radius:12px;">
           <tr><td style="padding:20px;text-align:center;">
             <p style="margin:0 0 8px;color:#9F9FA3;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;font-weight:600;">Sua chave de licença</p>
-            <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:20px;font-weight:700;color:#c4b5fd;letter-spacing:3px;">${safeLicenseKey}</p>
+            <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:20px;font-weight:700;color:#c4b5fd;letter-spacing:3px;">${escapeHtml(params.licenseKey)}</p>
             <p style="margin:12px 0 0;color:#58585F;font-size:11px;">Guarde esta chave — você precisará dela para ativar o app</p>
           </td></tr>
         </table>
@@ -117,7 +198,7 @@ export async function sendLicenseEmail(params: {
             </td>
             <td style="padding-left:12px;vertical-align:top;">
               <p style="margin:0;color:#e4e4e7;font-size:13px;font-weight:600;line-height:26px;">Ative sua licença</p>
-              <p style="margin:2px 0 0;color:#9F9FA3;font-size:12px;">Abra o Iris Downloader, cole a chave acima na tela de licença e clique em Ativar</p>
+              <p style="margin:2px 0 0;color:#9F9FA3;font-size:12px;">Vá em <strong style="color:#c4b5fd;">Configurações → Licença</strong>, cole a chave acima e clique em Ativar</p>
             </td>
           </tr>
         </table>
@@ -144,7 +225,6 @@ export async function sendLicenseEmail(params: {
 </body>
 </html>`,
   });
-  if (error) throw new Error(`Falha no envio da licença: ${error.message}`);
 }
 
 export async function sendPaymentFailedEmail(params: {
@@ -152,10 +232,11 @@ export async function sendPaymentFailedEmail(params: {
   name: string;
   portalUrl: string;
 }) {
-  const { error } = await getResend().emails.send({
-    from: FROM,
+  await sendTrackedEmail({
     to: params.to,
     subject: "⚠️ Problema no pagamento — Iris Downloader",
+    type: "payment_failed",
+    metadata: { portal_url: params.portalUrl },
     html: `
 <div style="font-family:sans-serif;max-width:480px;margin:40px auto;padding:32px;background:#19191E;border-radius:16px;color:#e4e4e7;">
   <h2 style="color:#fff;">Problema no pagamento</h2>
@@ -164,24 +245,77 @@ export async function sendPaymentFailedEmail(params: {
   <a href="${escapeHtml(params.portalUrl)}" style="display:block;background:#5A3ED4;color:#fff;text-align:center;padding:14px;border-radius:10px;text-decoration:none;font-weight:600;margin-top:24px;">Atualizar pagamento →</a>
 </div>`,
   });
-  if (error) throw new Error(`Falha no envio de cobrança: ${error.message}`);
+}
+
+export async function sendLicenseRecoveryEmail(params: {
+  to: string;
+  name: string;
+  licenses: Array<{
+    licenseKey: string;
+    plan: "annual" | "lifetime";
+    status: string;
+    expiresAt: string | null;
+    devicesUsed: number;
+    devicesMax: number;
+  }>;
+}) {
+  const portalUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/minha-licenca`;
+  const rows = params.licenses.map((license) => {
+    const planLabel = license.plan === "lifetime" ? "Vitalício" : "Anual";
+    const expires = license.expiresAt
+      ? new Date(license.expiresAt).toLocaleDateString("pt-BR")
+      : "Sem expiração";
+
+    return `
+      <tr>
+        <td style="padding:16px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <p style="margin:0 0 8px;color:#c4b5fd;font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:700;letter-spacing:2px;">${license.licenseKey}</p>
+          <p style="margin:0;color:#9F9FA3;font-size:12px;">Plano ${planLabel} · ${license.status} · ${license.devicesUsed}/${license.devicesMax} dispositivos · ${expires}</p>
+        </td>
+      </tr>`;
+  }).join("");
+
+  await sendTrackedEmail({
+    to: params.to,
+    subject: "Iris Downloader — suas licenças",
+    type: "license_recovery",
+    metadata: {
+      licenses_count: params.licenses.length,
+      license_keys: params.licenses.map((license) => license.licenseKey),
+    },
+    html: `
+<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;max-width:560px;margin:40px auto;padding:0;background:#19191E;border-radius:16px;color:#e4e4e7;overflow:hidden;border:1px solid rgba(255,255,255,0.06);">
+  <div style="padding:32px;text-align:center;background:linear-gradient(135deg,#1E1440 0%,#13131A 100%);">
+    <img src="https://www.irisdownloader.com.br/logo-email.png" width="64" height="64" alt="Iris Downloader" style="border-radius:14px;margin-bottom:14px;" />
+    <h1 style="margin:0;color:#fff;font-size:22px;">Suas licenças Iris Downloader</h1>
+    <p style="margin:8px 0 0;color:#9F9FA3;font-size:14px;">Olá ${escapeHtml(params.name)}, encontramos as licenças vinculadas a este email.</p>
+  </div>
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#19191E;">
+    ${rows}
+  </table>
+  <div style="padding:28px 32px;text-align:center;">
+    <a href="${portalUrl}" style="display:inline-block;background:#5A3ED4;color:#fff;text-align:center;padding:14px 22px;border-radius:10px;text-decoration:none;font-weight:700;">Gerenciar dispositivos</a>
+    <p style="margin:16px 0 0;color:#58585F;font-size:12px;line-height:1.5;">Cole a chave no portal para ver seus dispositivos ativos e liberar uma ativação quando trocar de Mac.</p>
+  </div>
+</div>`,
+  });
 }
 
 export async function sendDeviceRemovedEmail(params: {
   to: string;
   deviceName: string;
 }) {
-  const { error } = await getResend().emails.send({
-    from: FROM,
+  await sendTrackedEmail({
     to: params.to,
     subject: "🔒 Dispositivo removido — Iris Downloader",
+    type: "device_removed",
+    metadata: { device_name: params.deviceName },
     html: `
 <div style="font-family:sans-serif;max-width:480px;margin:40px auto;padding:32px;background:#19191E;border-radius:16px;color:#e4e4e7;">
   <h2 style="color:#fff;">Dispositivo removido</h2>
   <p style="color:#9F9FA3;">O dispositivo <strong>${escapeHtml(params.deviceName)}</strong> foi removido da sua licença Iris Downloader.</p>
   <p style="color:#9F9FA3;">Se você não reconhece essa ação, acesse o portal imediatamente.</p>
-  <a href="${getSiteUrl()}/minha-licenca" style="display:block;background:#5A3ED4;color:#fff;text-align:center;padding:14px;border-radius:10px;text-decoration:none;font-weight:600;margin-top:24px;">Acessar portal →</a>
+  <a href="${process.env.NEXT_PUBLIC_SITE_URL}/minha-licenca" style="display:block;background:#5A3ED4;color:#fff;text-align:center;padding:14px;border-radius:10px;text-decoration:none;font-weight:600;margin-top:24px;">Acessar portal →</a>
 </div>`,
   });
-  if (error) throw new Error(`Falha no envio de dispositivo removido: ${error.message}`);
 }
