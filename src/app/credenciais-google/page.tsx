@@ -48,12 +48,9 @@ export default function CustomGoogleCredentialsPage() {
               pertence a você.
             </p>
             <p className="mt-3">
-              Credenciais próprias apenas fazem o login usar o seu client OAuth. Elas não removem
-              as regras de verificação nem as restrições do escopo completo do Google Drive
-              (<code>drive</code>). Esse caminho é mais adequado para uso pessoal ou para poucas
-              pessoas conhecidas por você; distribuição ampla pode exigir verificação do Google.
-              Consulte os requisitos de{" "}
-              <External href="https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification">verificação de escopos restritos</External>.
+              Com credenciais próprias, a autorização de acesso ao seu Drive é concedida ao
+              <em> seu</em> projeto. Você é o único usuário dele, e ele não depende da verificação
+              do app pelo Google.
             </p>
           </section>
 
@@ -145,22 +142,19 @@ export default function CustomGoogleCredentialsPage() {
               </li>
             </ol>
             <p className="mt-3">
-              O Google pode exibir o aviso <strong className="text-white">app não verificado</strong>.
-              Só continue se reconhecer o nome do projeto e confiar nele. Se o projeto estiver em
-              modo de teste, sua conta precisa estar na lista de usuários de teste. O aviso não é
-              uma aprovação nem uma forma de contornar as regras do Google.
+              O Google vai avisar que <strong className="text-white">não verificou este app</strong>. É
+              esperado: o app em questão é o seu próprio projeto. Clique em{" "}
+              <strong className="text-white">Avançado</strong> e depois em{" "}
+              <strong className="text-white">Continuar</strong>.
             </p>
           </section>
 
           <section>
             <h2>5. Evitar pedir login toda semana</h2>
             <p>
-              Enquanto o projeto estiver no modo <strong className="text-white">Testando</strong>,
-              só os e-mails cadastrados como usuários de teste podem autorizar. Para apps externos
-              com escopos sensíveis ou restritos, publicar o projeto não substitui a verificação. O
-              escopo completo do Drive pode exigir verificação antes de distribuir o app amplamente;
-              consulte os{" "}
-              <External href="https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification">requisitos oficiais</External>.
+              Enquanto o projeto estiver no modo <strong className="text-white">Testando</strong>, o
+              Google só aceita os e-mails cadastrados como usuários de teste e encerra a autorização
+              a cada 7 dias. Publicar o projeto resolve as duas coisas.
             </p>
             <ol>
               <li>
@@ -177,9 +171,8 @@ export default function CustomGoogleCredentialsPage() {
               </li>
             </ol>
             <p className="mt-3">
-              Publicar pode alterar o comportamento do modo de teste, mas não torna o projeto
-              verificado nem garante que qualquer usuário possa autorizar. Não distribua amplamente
-              um client com escopo restrito sem cumprir os requisitos atuais do Google.
+              Publicar não expõe nada: o projeto continua sendo só seu, e o aviso de app não
+              verificado continua aparecendo apenas para você.
             </p>
           </section>
 
