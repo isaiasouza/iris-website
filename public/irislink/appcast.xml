@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+  <channel>
+    <title>IRIS Link</title>
+    <item>
+      <title>IRIS Link 0.1.1</title>
+      <pubDate>Sat, 24 Oct 2026 19:03:16 +0000</pubDate>
+      <sparkle:version>2</sparkle:version>
+      <sparkle:shortVersionString>0.1.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <enclosure url="https://www.irisdownloader.com.br/irislink/IRISLink_v0.1.1.dmg" length="1907531" type="application/octet-stream" sparkle:edSignature="Knz105dVZwv6pbvoI/f8Qe6+US5Nb1trJi0Y6TNqO60HAuet0MaQaIxQqOqikCstwX03oAq7qhBk2LXkCiD2DQ=="/>
+    </item>
+  </channel>
+</rss>
