@@ -1,33 +1,36 @@
 import { ArrowRight, Download } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { IrisMark, btnPrimary } from "./brand";
+import { cn } from "@/lib/utils";
 
 export default function CTAFinal() {
   return (
-    <section className="px-4 py-20 sm:px-6 sm:py-28">
-      <Card className="mx-auto max-w-4xl gap-0 rounded-md border border-[#404040] bg-[#262626] px-5 py-12 text-center shadow-none sm:px-10 sm:py-16">
-        <p className="font-mono text-[10px] font-semibold uppercase text-blue-400">Próximo passo</p>
-        <h2 className="mx-auto mt-4 max-w-2xl text-3xl font-medium tracking-tight text-white sm:text-5xl">
-          Seu próximo job não precisa virar ZIP.
+    <section className="px-4 pb-20 sm:px-6 sm:pb-28">
+      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[28px] bg-[#15131f] px-6 py-16 text-center ring-1 ring-brand-secondary/30 sm:px-12 sm:py-24">
+        <div className="iris-aurora !inset-0 !h-full" aria-hidden="true" />
+        <div className="relative">
+        <IrisMark size={64} className="mx-auto drop-shadow-[0_10px_28px_rgba(0,0,0,0.35)]" />
+        <h2 className="mx-auto mt-8 max-w-3xl text-balance font-display text-[30px] font-bold leading-[1.08] tracking-[-0.02em] text-white sm:text-[48px]">
+          Seu próximo job <span className="text-iris-grad">não precisa virar ZIP.</span>
         </h2>
-        <p className="mx-auto mt-5 max-w-xl text-base leading-7 text-neutral-400">
+        <p className="mx-auto mt-5 max-w-xl text-pretty text-base leading-7 text-white/85 sm:text-lg">
           Instale no Mac, conecte uma conta Google e teste com a pasta que mais dá trabalho hoje.
         </p>
-
-        <div className="mx-auto mt-8 flex max-w-xl flex-col justify-center gap-3 sm:flex-row">
-          <Button asChild size="lg" className="group h-12 rounded-md bg-blue-500 px-6 text-base font-semibold text-white hover:bg-blue-400">
-            <a href="/download">
-              <Download className="h-5 w-5" />
-              Baixar e testar agora
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </a>
-          </Button>
-          <Button asChild variant="outline" size="lg" className="h-12 rounded-md border-[#404040] bg-[#1f1f1f] px-5 text-sm font-medium text-neutral-300 hover:bg-[#303030] hover:text-white">
-            <a href="#pricing">Ver planos</a>
-          </Button>
+        <div className="mx-auto mt-9 flex max-w-xl flex-col justify-center gap-3 sm:flex-row">
+          <a href="/download" className={cn(btnPrimary, "iris-shine group shadow-[0_10px_34px_-10px_rgba(107,85,240,0.9)]")}>
+            <Download className="h-5 w-5" />
+            Baixar e testar agora
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </a>
+          <a
+            href="#pricing"
+            className="inline-flex h-12 items-center justify-center rounded-[10px] px-5 text-[15px] font-medium text-white ring-1 ring-inset ring-white/35 transition-colors hover:bg-white/10"
+          >
+            Ver planos
+          </a>
         </div>
-        <p className="mt-4 font-mono text-[10px] uppercase text-neutral-500">Sem cartão · macOS 14+ · 7 dias de garantia na compra</p>
-      </Card>
+        <p className="mt-5 text-xs text-white/75">Sem cartão · macOS 14+ · 7 dias de garantia na compra</p>
+        </div>
+      </div>
     </section>
   );
 }

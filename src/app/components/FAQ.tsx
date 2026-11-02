@@ -1,8 +1,20 @@
 "use client";
 
 import { useState } from "react";
+import { Plus } from "lucide-react";
+import { SectionHeader } from "./brand";
 
 const faqs = [
+  {
+    question: "Meus arquivos passam pelo servidor de vocês?",
+    answer:
+      "Não. O Iris se conecta à API oficial do Google e transfere os arquivos do Drive direto para o seu Mac, sem passar por nenhum servidor nosso ou de terceiros.",
+  },
+  {
+    question: "E se uma pasta grande falhar no meio?",
+    answer:
+      "Você acompanha arquivo por arquivo e pode pausar e retomar o download, sem perder tudo porque um ZIP corrompeu.",
+  },
   {
     question: "Posso testar antes de pagar?",
     answer:
@@ -16,7 +28,7 @@ const faqs = [
   {
     question: "Qual a diferença entre o plano Anual e o Vitalício?",
     answer:
-      "O Anual (R$ 49,90/ano) se renova automaticamente todo ano — cancele quando quiser. O Vitalício (R$ 110,99) é pagamento único: você paga uma vez e usa para sempre, incluindo todas as atualizações futuras da linha V2.",
+      "O Anual (R$ 49,90/ano) se renova automaticamente todo ano; cancele quando quiser. O Vitalício (R$ 110,99) é pagamento único: você paga uma vez e usa para sempre, incluindo todas as atualizações futuras da linha V2.",
   },
   {
     question: "O plano Vitalício inclui atualizações futuras?",
@@ -36,17 +48,12 @@ const faqs = [
   {
     question: "Funciona em Macs com chip Intel?",
     answer:
-      "Sim. O Iris V2 é universal — roda nativamente tanto em Apple Silicon (M1, M2, M3, M4) quanto em Intel.",
+      "Sim. O Iris V2 é universal: roda nativamente tanto em Apple Silicon (M1, M2, M3, M4) quanto em Intel.",
   },
   {
     question: "O macOS travou na abertura. O que faço?",
     answer:
       'É o Gatekeeper na primeira abertura. Clique com o botão direito no app → "Abrir" → "Abrir" novamente. Acontece uma vez só. O app é assinado com Developer ID da Apple.',
-  },
-  {
-    question: "Meus arquivos ficam em algum servidor externo?",
-    answer:
-      "Não. O app se comunica diretamente com a API oficial do Google Drive. Seus arquivos vão do Drive para o seu Mac — sem passar por nenhum servidor nosso ou de terceiros.",
   },
   {
     question: "O que é o Iris Downloader?",
@@ -56,48 +63,41 @@ const faqs = [
 ];
 
 export default function FAQ() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="relative py-24 md:py-32">
-      <div className="mx-auto max-w-3xl px-6">
-        <div className="text-center">
-          <span className="font-mono text-[10px] font-semibold uppercase text-blue-400">Dúvidas finais</span>
-          <h2 className="mt-3 text-3xl font-medium tracking-tight text-white md:text-4xl">
-            O que falta saber antes de baixar
-          </h2>
-        </div>
+    <section id="faq" className="scroll-mt-24 py-20 sm:py-28">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6">
+        <SectionHeader eyebrow="Dúvidas" title={<>O que falta saber <span className="text-iris-grad">antes de baixar</span></>} />
 
-        <div className="mt-12 space-y-2">
-          {faqs.map((faq, i) => (
-            <div
-              key={i}
-              className="rounded-md border border-[#404040] bg-[#262626] transition-colors hover:border-neutral-500"
-            >
-              <button
-                className="flex w-full items-center justify-between px-6 py-5 text-left"
-                onClick={() => setOpenIndex(openIndex === i ? null : i)}
-              >
-                <span className="pr-4 font-medium text-white">{faq.question}</span>
-                <svg
-                  className={`h-5 w-5 shrink-0 text-neutral-400 transition-transform ${
-                    openIndex === i ? "rotate-180" : ""
-                  }`}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                </svg>
-              </button>
-              {openIndex === i && (
-                <div className="px-6 pb-5">
-                  <p className="text-sm leading-relaxed text-neutral-400">{faq.answer}</p>
-                </div>
-              )}
-            </div>
-          ))}
+        <div className="mt-12 grid gap-2.5">
+          {faqs.map((faq, i) => {
+            const open = openIndex === i;
+            return (
+              <div key={faq.question} className={`overflow-hidden rounded-2xl bg-brand-surface ring-1 transition-colors ${open ? "ring-brand-secondary/35" : "ring-white/[0.07]"}`}>
+                <h3>
+                  <button
+                    type="button"
+                    aria-expanded={open}
+                    aria-controls={`faq-${i}`}
+                    className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors hover:bg-white/[0.02] sm:px-6 sm:py-5"
+                    onClick={() => setOpenIndex(open ? null : i)}
+                  >
+                    <span className="text-base font-medium text-white">{faq.question}</span>
+                    <Plus
+                      className={`h-5 w-5 shrink-0 text-brand-secondary transition-transform duration-200 ${open ? "rotate-45" : ""}`}
+                      aria-hidden="true"
+                    />
+                  </button>
+                </h3>
+                {open && (
+                  <div id={`faq-${i}`} className="px-5 pb-5 sm:px-6 sm:pb-6">
+                    <p className="max-w-2xl text-sm leading-7 text-brand-text-2">{faq.answer}</p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

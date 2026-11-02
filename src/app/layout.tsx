@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
+import { Inter, Unbounded } from "next/font/google";
 import "./globals.css";
+
+// Par tipográfico da marca fora do app: Unbounded nos títulos, Inter no texto (OFL).
+const display = Unbounded({ subsets: ["latin"], weight: ["400", "500", "700"], variable: "--font-unbounded", display: "swap" });
+const body = Inter({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-inter", display: "swap" });
 
 export const metadata: Metadata = {
   title: "Iris Downloader — Baixe pastas grandes do Drive sem ZIP",
@@ -60,13 +65,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR" className="dark">
+    <html lang="pt-BR" className={`dark ${display.variable} ${body.variable}`}>
       <head>
-        <link rel="icon" href="/logo.png" type="image/png" />
+        <link rel="icon" href="/iris-icon.svg" type="image/svg+xml" />
+        <link rel="alternate icon" href="/logo.png" type="image/png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,500;0,600;1,500&display=swap"
+          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,500;0,600;1,500&display=swap"
           rel="stylesheet"
         />
       </head>

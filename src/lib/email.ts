@@ -319,3 +319,44 @@ export async function sendDeviceRemovedEmail(params: {
 </div>`,
   });
 }
+
+/**
+ * Aviso para o administrador quando um e-mail de cliente não chega
+ * (devolvido, marcado como spam, falhou ou suprimido). Não entra em
+ * email_events, para o próprio aviso não gerar outro aviso.
+ */
+export async function sendDeliveryProblemAlert(params: {
+  adminEmail: string;
+  customerEmail: string;
+  subject: string;
+  type: string;
+  statusLabel: string;
+  detail: string | null;
+  sentAt: string;
+}) {
+  const adminUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/admin/emails?q=${encodeURIComponent(params.customerEmail)}`;
+  const sentAt = new Date(params.sentAt).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
+  const row = (label: string, value: string) =>
+    `<tr><td style="padding:8px 0;color:#9F9FA3;font-size:13px;width:130px;vertical-align:top;">${label}</td><td style="padding:8px 0;color:#fff;font-size:13px;">${value}</td></tr>`;
+
+  await getResend().emails.send({
+    from: FROM,
+    to: params.adminEmail,
+    subject: `⚠️ E-mail não entregue: ${params.statusLabel.toLowerCase()} para ${params.customerEmail}`,
+    html: `
+<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;max-width:520px;margin:32px auto;padding:28px;background:#19191E;border-radius:14px;">
+  <p style="margin:0;color:#9A85FF;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;">Entrega de e-mail</p>
+  <h2 style="margin:8px 0 4px;color:#fff;font-size:20px;">Um cliente não recebeu um e-mail</h2>
+  <p style="margin:0 0 16px;color:#9F9FA3;font-size:14px;line-height:1.5;">Confirme o endereço com o cliente, corrija na licença e reenvie pelo painel.</p>
+  <table width="100%" cellpadding="0" cellspacing="0">
+    ${row("Status", escapeHtml(params.statusLabel))}
+    ${row("Para", escapeHtml(params.customerEmail))}
+    ${row("Assunto", escapeHtml(params.subject))}
+    ${row("Tipo", escapeHtml(params.type))}
+    ${row("Enviado em", escapeHtml(sentAt))}
+    ${params.detail ? row("Motivo", escapeHtml(params.detail)) : ""}
+  </table>
+  <a href="${adminUrl}" style="display:inline-block;margin-top:20px;background:#4C3CC6;color:#fff;padding:12px 18px;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;">Abrir no painel</a>
+</div>`,
+  });
+}

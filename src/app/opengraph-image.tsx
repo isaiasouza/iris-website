@@ -1,11 +1,21 @@
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
-export const alt = "Iris Downloader — Baixe do Google Drive sem ZIP no Mac";
+// Node.js, não Edge: com as duas fontes a função passava do limite de 1 MB do Edge na Vercel.
+export const alt = "Iris Downloader — Baixe pastas grandes do Drive sem esperar o ZIP, direto no Mac";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
+// Identidade Iris: quatro cores e o par Unbounded (títulos) + Inter (texto).
+const C = { primaria: "#4C3CC6", secundaria: "#9A85FF", destaque: "#FFFFFF", fundo: "#13131A" };
+
 export default async function OGImage() {
+  const [unbounded, inter] = await Promise.all([
+    readFile(join(process.cwd(), "src/app/og-fonts/Unbounded-Bold.ttf")),
+    readFile(join(process.cwd(), "src/app/og-fonts/Inter-Medium.ttf")),
+  ]);
+
   return new ImageResponse(
     (
       <div
@@ -13,149 +23,79 @@ export default async function OGImage() {
           width: "100%",
           height: "100%",
           display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "#0E0E14",
-          fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          background: C.fundo,
+          fontFamily: "Inter",
           position: "relative",
         }}
       >
-        {/* Background glow top */}
+        {/* Faixa da marca à esquerda, no degradê Noite, com o ícone */}
         <div
           style={{
-            position: "absolute",
-            width: 700,
-            height: 500,
-            borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(126,96,248,0.22) 0%, transparent 65%)",
-            top: -100,
-            left: "50%",
-            transform: "translateX(-50%)",
-            display: "flex",
-          }}
-        />
-
-        {/* Content row */}
-        <div
-          style={{
+            width: 400,
+            height: "100%",
             display: "flex",
             alignItems: "center",
-            gap: 64,
-            padding: "0 96px",
-            position: "relative",
+            justifyContent: "center",
+            background: "linear-gradient(180deg, #6B55F0 0%, #3A2DA8 55%, #1A1446 100%)",
           }}
         >
-          {/* App icon */}
-          <div
-            style={{
-              width: 160,
-              height: 160,
-              borderRadius: 36,
-              background: "linear-gradient(145deg, #5b3fdf, #7E60F8)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
-              boxShadow: "0 0 80px rgba(126,96,248,0.5), 0 20px 60px rgba(0,0,0,0.4)",
-            }}
-          >
-            <svg width="88" height="88" viewBox="0 0 24 24" fill="none">
-              <path d="M12 3v13M7 12l5 5 5-5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M4 19h16" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-          </div>
-
-          {/* Text block */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {/* Label */}
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 10,
-              }}
-            >
-              <div
-                style={{
-                  background: "rgba(126,96,248,0.18)",
-                  border: "1px solid rgba(126,96,248,0.35)",
-                  borderRadius: 30,
-                  padding: "5px 16px",
-                  display: "flex",
-                }}
-              >
-                <span style={{ fontSize: 13, color: "#c4b5fd", fontWeight: 600, letterSpacing: "0.04em" }}>
-                  macOS 14+ · App nativo
-                </span>
-              </div>
-            </div>
-
-            {/* Main headline */}
-            <h1
-              style={{
-                fontSize: 52,
-                fontWeight: 800,
-                color: "#ffffff",
-                margin: 0,
-                lineHeight: 1.1,
-                letterSpacing: "-1.5px",
-              }}
-            >
-              Iris Downloader
-            </h1>
-
-            {/* Subheading */}
-            <p
-              style={{
-                fontSize: 24,
-                color: "#9F9FA3",
-                margin: 0,
-                lineHeight: 1.35,
-                maxWidth: 500,
-              }}
-            >
-              Baixe pastas do Google Drive sem ZIP. Direto no Mac.
-            </p>
-
-            {/* Price strip */}
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 16,
-                marginTop: 6,
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                borderRadius: 12,
-                padding: "10px 20px",
-                width: "fit-content",
-              }}
-            >
-              <span style={{ fontSize: 15, color: "#9F9FA3" }}>A partir de</span>
-              <span style={{ fontSize: 26, fontWeight: 700, color: "#c4b5fd" }}>
-                R$ 49,90/ano
-              </span>
-              <span style={{ fontSize: 13, color: "#58585F" }}>· 7 dias de garantia</span>
-            </div>
-          </div>
+          <svg width="200" height="200" viewBox="0 0 100 100">
+            <defs>
+              <linearGradient id="n" gradientUnits="userSpaceOnUse" x1="50" y1="0" x2="50" y2="100">
+                <stop offset="0" stopColor="#6B55F0" />
+                <stop offset="0.55" stopColor="#3A2DA8" />
+                <stop offset="1" stopColor="#1A1446" />
+              </linearGradient>
+            </defs>
+            <rect width="100" height="100" rx="22.5" fill="url(#n)" stroke="rgba(255,255,255,0.25)" strokeWidth="0.8" />
+            <circle cx="35" cy="56" r="13" fill="#fff" />
+            <circle cx="54" cy="46" r="19" fill="#fff" />
+            <circle cx="68" cy="57" r="11" fill="#fff" />
+            <rect x="20" y="54" width="60" height="21" rx="10.5" fill="#fff" />
+            <path d="M50 49v15M43.5 57.5L50 64l6.5-6.5" fill="none" stroke="#3A2DA8" strokeWidth="5.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
         </div>
 
-        {/* Bottom watermark */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: 28,
-            right: 52,
-            fontSize: 13,
-            color: "#3a3a45",
-            display: "flex",
-          }}
-        >
-          irisdownloader.com.br
+        {/* Texto */}
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 72px" }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 14, fontFamily: "Unbounded" }}>
+            <span style={{ fontSize: 30, color: C.destaque, letterSpacing: "0.02em" }}>IRIS</span>
+            <span style={{ fontSize: 18, color: C.secundaria, letterSpacing: "0.18em" }}>DOWNLOADER</span>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              marginTop: 36,
+              fontFamily: "Unbounded",
+              fontSize: 54,
+              lineHeight: 1.08,
+              letterSpacing: "-0.02em",
+            }}
+          >
+            <span style={{ color: C.destaque }}>Baixe pastas</span>
+            <span style={{ color: C.destaque }}>grandes do Drive.</span>
+            <span style={{ color: C.secundaria }}>Sem esperar o ZIP.</span>
+          </div>
+
+          {/* A barra de progresso, motivo da marca */}
+          <div style={{ display: "flex", marginTop: 40, height: 10, width: 520, borderRadius: 5, background: "#1E1E23" }}>
+            <div style={{ width: "72%", height: 10, borderRadius: 5, background: C.secundaria }} />
+          </div>
+
+          <div style={{ display: "flex", marginTop: 22, fontSize: 24, color: "#9F9FA3" }}>
+            App nativo para Mac · a partir de R$ 49,90/ano
+          </div>
         </div>
       </div>
     ),
-    { ...size }
+    {
+      ...size,
+      fonts: [
+        { name: "Unbounded", data: unbounded, weight: 700, style: "normal" },
+        { name: "Inter", data: inter, weight: 500, style: "normal" },
+      ],
+    }
   );
 }

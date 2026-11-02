@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import BrandWordmark from "../components/BrandWordmark";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -71,13 +72,13 @@ export function PaginaObrigado({ orderId, value, upsell }: PaginaObrigadoProps) 
     <main className="min-h-screen overflow-hidden bg-[#071018] px-4 py-6 text-white sm:px-6 sm:py-10">
       {orderId && value !== null && <PurchaseTracker orderId={orderId} value={value} />}
 
-      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(103,232,249,.10),transparent_38%)]" />
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(154,133,255,.10),transparent_38%)]" />
 
       <div className="relative mx-auto max-w-5xl">
         <header className="flex items-center justify-between border-b border-white/8 pb-5">
           <Link href="/" aria-label="Iris Downloader — início" className="flex items-center gap-3">
             <Image src="/logo-web.png" alt="" width={36} height={36} className="rounded-xl" priority />
-            <span className="text-sm font-semibold text-white/80">Iris Downloader</span>
+            <BrandWordmark className="text-[15px] text-white/80" />
           </Link>
           <span className="flex items-center gap-1.5 text-xs text-emerald-300">
             <CheckCircle2 className="h-4 w-4" /> Compra aprovada
@@ -88,7 +89,7 @@ export function PaginaObrigado({ orderId, value, upsell }: PaginaObrigadoProps) 
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-emerald-300/20 bg-emerald-300/10 text-emerald-300 shadow-[0_16px_60px_rgba(110,231,183,.12)]">
             <Check className="h-8 w-8" strokeWidth={2.4} />
           </div>
-          <p className="mt-6 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200/70">
+          <p className="mt-6 text-xs font-semibold uppercase tracking-[0.18em] text-iris-300/70">
             Pagamento confirmado
           </p>
           <h1 className="mt-3 text-[38px] font-semibold leading-[1.02] tracking-[-0.045em] sm:text-6xl">
@@ -115,7 +116,7 @@ export function PaginaObrigado({ orderId, value, upsell }: PaginaObrigadoProps) 
         <section className="rounded-2xl border border-white/10 bg-[#0C151E]/90 p-5 sm:p-8" aria-labelledby="next-steps-title">
           <div className="sm:flex sm:items-end sm:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-200/65">Agora faça isso</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-iris-300/65">Agora faça isso</p>
               <h2 id="next-steps-title" className="mt-2 text-2xl font-medium tracking-[-0.03em] text-white">
                 Três passos até o primeiro download
               </h2>
@@ -129,7 +130,7 @@ export function PaginaObrigado({ orderId, value, upsell }: PaginaObrigadoProps) 
               return (
                 <li key={step.title} className="relative rounded-xl border border-white/8 bg-white/3 p-4">
                   <div className="flex items-center justify-between">
-                    <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-200/8 text-cyan-200">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-iris-300/8 text-iris-300">
                       <Icon className="h-4.5 w-4.5" />
                     </span>
                     <span className="text-xs font-medium tabular-nums text-white/25">0{index + 1}</span>
@@ -144,7 +145,7 @@ export function PaginaObrigado({ orderId, value, upsell }: PaginaObrigadoProps) 
           <div className="mt-6 grid gap-3 sm:grid-cols-[1fr_auto]">
             <Link
               href="/minha-licenca"
-              className="group inline-flex min-h-13 items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-base font-semibold text-[#071018] transition hover:bg-cyan-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-200"
+              className="group inline-flex min-h-13 items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-base font-semibold text-[#071018] transition hover:bg-iris-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iris-300"
             >
               Acessar minha licença
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -169,7 +170,7 @@ export function PaginaObrigado({ orderId, value, upsell }: PaginaObrigadoProps) 
           <button
             type="button"
             onClick={sharePurchase}
-            className="mt-3 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 px-4 py-2.5 text-sm font-medium text-white/72 transition hover:border-cyan-200/25 hover:text-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-200"
+            className="mt-3 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 px-4 py-2.5 text-sm font-medium text-white/72 transition hover:border-iris-300/25 hover:text-iris-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iris-300"
           >
             {shareStatus === "copied" ? <Copy className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
             {shareStatus === "shared" && "Compartilhado"}

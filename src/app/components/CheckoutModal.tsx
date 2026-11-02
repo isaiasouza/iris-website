@@ -1,7 +1,6 @@
 "use client";
 
 import { ArrowUpRight, CreditCard, ShieldCheck } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,6 +8,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Eyebrow, btnPrimary } from "./brand";
+import { cn } from "@/lib/utils";
 
 const CAKTO_URLS = {
   annual: "https://pay.cakto.com.br/38zibpa_825842",
@@ -44,31 +45,31 @@ export default function CheckoutModal({ plan, onClose }: CheckoutModalProps) {
 
   return (
     <Dialog open onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="dark max-w-md gap-0 overflow-hidden rounded-md border-[#404040] bg-[#262626] p-0 text-white shadow-2xl">
-        <DialogHeader className="border-b border-[#404040] bg-[#1f1f1f] p-6 pr-14">
-          <p className="font-mono text-[10px] font-semibold uppercase text-blue-400">{info.label}</p>
-          <DialogTitle className="text-2xl font-semibold tracking-tight text-white">{info.price}</DialogTitle>
-          <DialogDescription className="leading-6 text-neutral-400">{info.description}</DialogDescription>
+      <DialogContent className="dark max-w-md gap-0 overflow-hidden rounded-2xl border-0 bg-brand-surface p-0 text-white ring-1 ring-white/10">
+        <DialogHeader className="bg-noite p-7 pr-14">
+          <Eyebrow onBrand>{info.label}</Eyebrow>
+          <DialogTitle className="font-display text-3xl font-bold text-white">{info.price}</DialogTitle>
+          <DialogDescription className="leading-6 text-white/80">{info.description}</DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-5 p-6">
-          <div className="grid grid-cols-2 gap-3 text-xs text-neutral-400">
-            <div className="rounded-md border border-[#404040] bg-[#1f1f1f] p-3">
-              <ShieldCheck className="mb-2 h-4 w-4 text-emerald-300" />
+        <div className="space-y-5 p-7">
+          <div className="grid grid-cols-2 gap-3 text-sm text-brand-text-2">
+            <div className="rounded-xl bg-brand-bg p-4 ring-1 ring-white/[0.06]">
+              <ShieldCheck className="mb-2 h-5 w-5 text-brand-secondary" />
               7 dias de garantia
             </div>
-            <div className="rounded-md border border-[#404040] bg-[#1f1f1f] p-3">
-              <CreditCard className="mb-2 h-4 w-4 text-blue-400" />
+            <div className="rounded-xl bg-brand-bg p-4 ring-1 ring-white/[0.06]">
+              <CreditCard className="mb-2 h-5 w-5 text-brand-secondary" />
               PIX, cartão ou boleto
             </div>
           </div>
 
-          <Button type="button" onClick={handleCheckout} className="h-12 w-full rounded-md bg-blue-500 font-semibold text-white hover:bg-blue-400">
+          <button type="button" onClick={handleCheckout} className={cn(btnPrimary, "w-full")}>
             Continuar no checkout seguro
-            <ArrowUpRight data-icon="inline-end" />
-          </Button>
+            <ArrowUpRight className="h-4 w-4" />
+          </button>
 
-          <p className="text-center text-xs leading-5 text-neutral-500">
+          <p className="text-center text-xs leading-5 text-brand-muted">
             Você será direcionado para o checkout seguro da Cakto.
           </p>
         </div>

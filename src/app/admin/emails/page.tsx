@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { DELIVERY_LABELS, PROBLEM_STATUSES, type DeliveryStatus } from "@/lib/email-delivery";
 
 interface EmailEvent {
   id: string;
@@ -13,6 +15,9 @@ interface EmailEvent {
   error_message: string | null;
   metadata: Record<string, unknown> | null;
   created_at: string;
+  delivery_status: DeliveryStatus | null;
+  delivery_detail: string | null;
+  delivery_updated_at: string | null;
 }
 
 interface EmailResponse {
@@ -39,22 +44,53 @@ function fmt(date: string) {
   });
 }
 
-function StatusBadge({ status }: { status: EmailEvent["status"] }) {
-  const sent = status === "sent";
+/**
+ * Status real do e-mail: primeiro se o Resend aceitou (Falhou ao enviar),
+ * depois o que o webhook informou (Entregue, Devolvido…). Sem notícia do
+ * webhook, fica "Enviado", aguardando confirmação.
+ */
+function StatusBadge({ email }: { email: EmailEvent }) {
+  let label: string;
+  let tone: "ok" | "warn" | "bad" | "neutral";
+  if (email.status === "failed") {
+    label = "Falhou ao enviar";
+    tone = "bad";
+  } else if (!email.delivery_status) {
+    label = "Enviado";
+    tone = "neutral";
+  } else {
+    label = DELIVERY_LABELS[email.delivery_status];
+    tone = email.delivery_status === "delivered" ? "ok" : email.delivery_status === "delivery_delayed" ? "warn" : "bad";
+  }
+  const styles = {
+    ok: "border-green-500/25 bg-green-500/10 text-green-300",
+    warn: "border-amber-500/25 bg-amber-500/10 text-amber-300",
+    bad: "border-red-500/25 bg-red-500/10 text-red-300",
+    neutral: "border-white/10 bg-white/5 text-[#D6D6DA]",
+  }[tone];
   return (
-    <span className={`rounded-full border px-2 py-0.5 text-xs font-medium ${
-      sent
-        ? "border-green-500/25 bg-green-500/10 text-green-300"
-        : "border-red-500/25 bg-red-500/10 text-red-300"
-    }`}>
-      {sent ? "Enviado" : "Falhou"}
+    <span
+      className={`whitespace-nowrap rounded-full border px-2 py-0.5 text-xs font-medium ${styles}`}
+      title={email.delivery_status ? undefined : "Aceito pelo Resend; ainda sem confirmação de entrega"}
+    >
+      {label}
     </span>
   );
 }
 
 export default function AdminEmailsPage() {
+  return (
+    <Suspense>
+      <AdminEmails />
+    </Suspense>
+  );
+}
+
+function AdminEmails() {
+  // O aviso de e-mail não entregue abre o painel já filtrado (?q=endereço).
+  const initialQuery = useSearchParams().get("q") ?? "";
   const [data, setData] = useState<EmailResponse | null>(null);
-  const [q, setQ] = useState("");
+  const [q, setQ] = useState(initialQuery);
   const [status, setStatus] = useState("all");
   const [type, setType] = useState("all");
   const [page, setPage] = useState(1);
@@ -110,8 +146,10 @@ export default function AdminEmailsPage() {
           className="rounded-lg border border-white/8 bg-[#13131A] px-3 py-2 text-sm text-white outline-none focus:border-iris-500/50"
         >
           <option value="all">Todos os status</option>
-          <option value="sent">Enviados</option>
-          <option value="failed">Falharam</option>
+          <option value="problem">Não entregues</option>
+          <option value="delivered">Entregues</option>
+          <option value="pending">Sem confirmação</option>
+          <option value="failed">Falharam ao enviar</option>
         </select>
       </div>
 
@@ -140,6 +178,11 @@ export default function AdminEmailsPage() {
                   <td className="px-5 py-4">
                     <p className="text-sm text-white">{email.to_email}</p>
                     <p className="mt-1 max-w-md truncate text-xs text-[#9F9FA3]">{email.subject}</p>
+                    {email.delivery_status && PROBLEM_STATUSES.has(email.delivery_status) && email.delivery_detail && (
+                      <p className="mt-2 max-w-md rounded-lg border border-red-500/20 bg-red-500/10 px-2 py-1 text-xs text-red-300">
+                        {email.delivery_detail}
+                      </p>
+                    )}
                     {email.error_message && (
                       <p className="mt-2 max-w-md rounded-lg border border-red-500/20 bg-red-500/10 px-2 py-1 text-xs text-red-300">
                         {email.error_message}
@@ -147,7 +190,7 @@ export default function AdminEmailsPage() {
                     )}
                   </td>
                   <td className="px-5 py-4 text-sm text-[#D6D6DA]">{typeLabels[email.type] ?? email.type}</td>
-                  <td className="px-5 py-4"><StatusBadge status={email.status} /></td>
+                  <td className="px-5 py-4"><StatusBadge email={email} /></td>
                   <td className="px-5 py-4 text-xs text-[#9F9FA3]">{fmt(email.created_at)}</td>
                   <td className="px-5 py-4">
                     <p className="text-xs text-[#9F9FA3]">{email.provider}</p>

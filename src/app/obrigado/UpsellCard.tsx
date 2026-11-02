@@ -43,9 +43,9 @@ export function UpsellCard({ offer, orderId }: UpsellCardProps) {
   }
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-cyan-200/15 bg-[#0A1821]" aria-labelledby="upsell-title">
-      <div className="border-b border-white/8 bg-cyan-200/6 px-5 py-3">
-        <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-cyan-200">
+    <section className="overflow-hidden rounded-2xl border border-iris-300/15 bg-[#0A1821]" aria-labelledby="upsell-title">
+      <div className="border-b border-white/8 bg-iris-300/6 px-5 py-3">
+        <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-iris-300">
           <Sparkles className="h-4 w-4" />
           Oferta após a compra
         </p>
@@ -63,7 +63,7 @@ export function UpsellCard({ offer, orderId }: UpsellCardProps) {
             type="button"
             onClick={acceptOffer}
             disabled={status === "loading" || status === "success"}
-            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-cyan-200 px-5 py-3 text-sm font-semibold text-[#071018] transition hover:bg-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-100 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-iris-300 px-5 py-3 text-sm font-semibold text-[#071018] transition hover:bg-iris-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iris-100 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
           >
             {status === "loading" && <LoaderCircle className="h-4 w-4 animate-spin" />}
             {status === "success" ? "Oferta adicionada" : offer.actionLabel}

@@ -1,118 +1,100 @@
-"use client";
-
-import { useEffect, useRef } from "react";
-import { Check, X } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import AnimatedGradient from "@/components/ui/animated-gradient";
-
-const painGradient = {
-  preset: "custom",
-  color1: "#1d4ed8",
-  color2: "#171717",
-  color3: "#450a0a",
-  rotation: 90,
-  proportion: 48,
-  scale: 0.38,
-  speed: 5,
-  distortion: 2,
-  swirl: 10,
-  swirlIterations: 3,
-  softness: 92,
-  offset: -240,
-  shape: "Edge",
-  shapeSize: 52,
-} as const;
+import { ArrowRight, CircleX, FileArchive, FolderOpen } from "lucide-react";
+import { SectionHeader } from "./brand";
+import { FileRows } from "./HeroApp";
 
 const pains = [
   {
-    problem: "ZIP de vários GB que trava na entrega do job",
+    pain: "ZIP de vários GB que trava na entrega do job",
     fix: "O Iris baixa arquivo por arquivo. Sem ZIP, sem corrupção.",
   },
   {
-    problem: "O Drive demora para preparar e divide o download",
+    pain: "O Drive demora para preparar e divide o download",
     fix: "O Iris transfere arquivo por arquivo, sem montar um pacote antes.",
   },
   {
-    problem: "Abrir o navegador só para pegar um arquivo",
+    pain: "Abrir o navegador só para pegar um arquivo",
     fix: "Tudo no app. Navegue, baixe e envie sem sair do Mac.",
   },
   {
-    problem: "Trocar de conta Google é uma via-sacra",
+    pain: "Trocar de conta Google é uma via-sacra",
     fix: "Todas as contas na barra lateral. Um clique para trocar.",
   },
 ];
 
+const files = [
+  { name: "A001_C004_0912.mov", size: "4,82 GB" },
+  { name: "A001_C005_0912.mov", size: "3,10 GB" },
+  { name: "Trilha_final.wav", size: "94 MB" },
+];
+
 export default function PainSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("in-view");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-    const targets = sectionRef.current?.querySelectorAll(".fade-up-hidden");
-    targets?.forEach((t) => observer.observe(t));
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <section ref={sectionRef} className="relative py-20 md:py-28">
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="relative isolate overflow-hidden rounded-md border border-[#404040] px-4 py-14 shadow-[0_28px_100px_-60px_rgba(59,130,246,0.65)] sm:px-8 md:px-12 md:py-20">
-          <AnimatedGradient
-            config={painGradient}
-            noise={{ opacity: 0.14, scale: 0.65 }}
-            radius="0.375rem"
-            style={{ zIndex: 0 }}
+    <section className="py-20 sm:py-28" aria-labelledby="pain-title">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div id="pain-title">
+          <SectionHeader
+            eyebrow="O vilão é o ZIP"
+            title={<>Um único ZIP pode atrasar <span className="text-iris-grad">a pasta inteira</span></>}
+            text="Para quem trabalha com arquivos grandes, repetir download não é detalhe: é prazo perdido."
           />
-          <div className="pointer-events-none absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(23,23,23,0.66)_0%,rgba(23,23,23,0.82)_48%,rgba(23,23,23,0.92)_100%)]" />
+        </div>
 
-          <div className="relative z-10">
-            <div className="text-center">
-              <span className="font-mono text-[10px] font-semibold uppercase text-blue-300">
-                O vilão é o ZIP
+        {/* Comparação: o mesmo pedido, dois caminhos */}
+        <div className="mt-14 grid gap-4 md:grid-cols-2">
+          <div className="rounded-2xl bg-brand-surface p-6 ring-1 ring-white/[0.06] sm:p-8">
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.05] text-brand-muted">
+                <FileArchive className="h-5 w-5" />
               </span>
-              <h2 className="mt-3 text-3xl font-medium tracking-tight text-white md:text-4xl">
-                Um único ZIP pode atrasar a pasta inteira
-              </h2>
-              <p className="mx-auto mt-4 max-w-xl text-neutral-300">
-                Para quem trabalha com arquivos grandes, repetir download não é detalhe: é prazo perdido.
+              <div>
+                <p className="text-sm font-semibold text-brand-text-2">Pelo navegador</p>
+                <p className="text-xs text-brand-muted">drive-download-20260912.zip</p>
+              </div>
+            </div>
+            <div className="mt-8">
+              <div className="flex items-baseline justify-between text-sm">
+                <span className="text-brand-text-2">Compactando a pasta…</span>
+                <span className="tabular-nums text-brand-muted">98%</span>
+              </div>
+              <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/[0.06]">
+                <i className="iris-stuck block h-full rounded-full bg-brand-muted/70" />
+              </div>
+              <p className="mt-4 inline-flex items-center gap-2 rounded-lg bg-red-400/[0.08] px-3 py-2 text-sm text-red-400 ring-1 ring-inset ring-red-400/25">
+                <CircleX className="h-4 w-4" /> Falha no download. Tente de novo.
+              </p>
+              <p className="mt-4 text-sm leading-6 text-brand-muted">
+                Nada chega ao Mac até o ZIP ficar pronto. Se falhar no fim, o download recomeça do zero.
               </p>
             </div>
+          </div>
 
-            <div className="mt-12 grid gap-4 sm:grid-cols-2">
-              {pains.map((item, i) => (
-                <Card
-                  key={i}
-                  className="fade-up-hidden gap-0 rounded-md border border-white/10 bg-[#171717]/75 p-6 py-6 backdrop-blur-sm transition-colors hover:border-blue-400/40"
-                  style={{ transitionDelay: `${(i % 2) * 80}ms` }}
-                >
-                  {/* Problem */}
-                  <div className="flex items-start gap-3">
-                    <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-red-500/15">
-                      <X className="h-3.5 w-3.5 text-red-300" strokeWidth={2.5} />
-                    </div>
-                    <p className="text-sm text-neutral-300">{item.problem}</p>
-                  </div>
-                  {/* Fix */}
-                  <div className="mt-4 flex items-start gap-3 border-t border-white/8 pt-4">
-                    <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-blue-500/20">
-                      <Check className="h-3.5 w-3.5 text-blue-300" strokeWidth={2.5} />
-                    </div>
-                    <p className="text-sm font-medium text-white">{item.fix}</p>
-                  </div>
-                </Card>
-              ))}
+          <div className="rounded-2xl bg-brand-surface p-6 shadow-[0_30px_80px_-40px_rgba(107,85,240,0.6)] ring-1 ring-brand-secondary/35 sm:p-8">
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-secondary/12 text-brand-secondary">
+                <FolderOpen className="h-5 w-5" />
+              </span>
+              <div>
+                <p className="text-sm font-semibold text-white">Com o Iris</p>
+                <p className="text-xs text-brand-muted">Brutos — Cena 04 · 48 arquivos</p>
+              </div>
+            </div>
+            <div className="mt-6">
+              <FileRows items={files} />
             </div>
           </div>
         </div>
+
+        <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {pains.map(({ pain, fix }) => (
+            <li key={pain} className="rounded-2xl bg-brand-surface p-5 ring-1 ring-white/[0.06]">
+              <p className="text-sm text-brand-muted line-through decoration-red-400/60">{pain}</p>
+              <p className="mt-3 flex items-start gap-2.5 text-[15px] leading-6 text-white">
+                <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-brand-secondary" />
+                {fix}
+              </p>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

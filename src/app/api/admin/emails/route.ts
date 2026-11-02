@@ -16,10 +16,15 @@ export async function GET(req: NextRequest) {
 
   let query = supabaseAdmin
     .from("email_events")
-    .select("id,to_email,subject,type,status,provider,provider_id,error_message,metadata,created_at", { count: "exact" });
+    .select("id,to_email,subject,type,status,provider,provider_id,error_message,metadata,created_at,delivery_status,delivery_detail,delivery_updated_at", { count: "exact" });
 
   if (q) query = query.or(`to_email.ilike.%${q}%,subject.ilike.%${q}%`);
-  if (status !== "all") query = query.eq("status", status);
+  // "sent"/"failed": o Resend aceitou ou não o envio.
+  // "delivered"/"problem"/"pending": o que o webhook do Resend disse depois.
+  if (status === "sent" || status === "failed") query = query.eq("status", status);
+  else if (status === "delivered") query = query.eq("delivery_status", "delivered");
+  else if (status === "problem") query = query.in("delivery_status", ["bounced", "complained", "failed", "suppressed"]);
+  else if (status === "pending") query = query.eq("status", "sent").is("delivery_status", null);
   if (type !== "all") query = query.eq("type", type);
 
   query = query.order("created_at", { ascending: false }).range(offset, offset + perPage - 1);
