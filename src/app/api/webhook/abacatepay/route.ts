@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin, generateLicenseKey } from "@/lib/supabase";
 import { sendAdminNotice, sendLicenseEmail, sendPaymentFailedEmail } from "@/lib/email";
 import {
+  acceptsPayment,
   findId,
   getAbacateCheckout,
   getAbacateCustomer,
@@ -119,6 +120,18 @@ export async function POST(req: NextRequest) {
   }
 }
 
+/** Aviso único: um pagamento de teste em produção indica chave de teste no site. */
+async function warnDevModePayment(id: string) {
+  await sendAdminNotice({
+    subject: "⚠️ AbacatePay: pagamento do modo de teste chegou na produção",
+    title: "Pagamento de teste ignorado",
+    lines: [
+      ["Id", id],
+      ["O que fazer", "Confira se ABACATEPAY_API_KEY na Vercel é a chave de produção."],
+    ],
+  }).catch(() => {});
+}
+
 async function findLicense(column: "abacatepay_checkout_id" | "abacatepay_subscription_id", id: string) {
   if (!id) return null;
   const { data, error } = await supabaseAdmin
@@ -208,6 +221,7 @@ async function handlePaidCheckout(checkoutId: string, eventId: string) {
   }
 
   if (billing.status !== "PAID") return;
+  if (!acceptsPayment(billing)) return warnDevModePayment(checkoutId);
   const productIds = (billing.items ?? []).map((item) => item.id);
   if (!productIds.includes(getProductId("lifetime"))) {
     throw new Error(`Checkout pago com produto desconhecido: ${productIds.join(", ") || "nenhum"}`);
@@ -223,6 +237,7 @@ async function handleNewSubscription(subscriptionId: string, eventId: string) {
 
   const subscription = await getAbacateSubscription(subscriptionId);
   if (subscription.status !== "ACTIVE") return;
+  if (!acceptsPayment(subscription)) return warnDevModePayment(subscriptionId);
 
   const billing = subscription.checkoutId
     ? await getAbacateSubscriptionCheckout(subscription.checkoutId).catch(() => null)

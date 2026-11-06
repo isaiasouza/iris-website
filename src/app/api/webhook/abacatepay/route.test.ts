@@ -63,6 +63,7 @@ vi.mock("@/lib/abacatepay", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@/lib/abacatepay")>();
   return {
     findId: actual.findId,
+    acceptsPayment: actual.acceptsPayment,
     getProductId: (plan: string) => (plan === "lifetime" ? "prod_lifetime" : "prod_annual"),
     getAbacateCheckout: (...args: unknown[]) => getAbacateCheckout(...args),
     getAbacateSubscription: (...args: unknown[]) => getAbacateSubscription(...args),
@@ -146,5 +147,17 @@ describe("POST /api/webhook/abacatepay", () => {
     licenses.push({ id: "lic-1", abacatepay_checkout_id: "bill_1", status: "active" });
     await POST(request({ id: "log_4", event: "checkout.refunded", data: { id: "bill_1" } }));
     expect(licenses[0].status).toBe("cancelled");
+  });
+
+  it("em produção, pagamento do modo de teste não vira licença", async () => {
+    process.env.VERCEL_ENV = "production";
+    try {
+      getAbacateCheckout.mockResolvedValue({ id: "bill_1", status: "PAID", devMode: true, customerId: "cust_1", items: [{ id: "prod_lifetime", quantity: 1 }] });
+      const res = await POST(request(paidEvent));
+      expect(res.status).toBe(200);
+      expect(licenses).toHaveLength(0);
+    } finally {
+      delete process.env.VERCEL_ENV;
+    }
   });
 });

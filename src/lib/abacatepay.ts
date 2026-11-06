@@ -20,6 +20,7 @@ export interface AbacateBilling {
   amount?: number;
   metadata?: Record<string, unknown> | null;
   items?: Array<{ id: string; quantity: number }>;
+  devMode?: boolean;
 }
 
 export interface AbacateSubscription {
@@ -28,6 +29,7 @@ export interface AbacateSubscription {
   customerId: string;
   status: "PENDING" | "ACTIVE" | "CANCELLED";
   amount: number;
+  devMode?: boolean;
 }
 
 interface AbacateCustomer {
@@ -49,6 +51,15 @@ function getApiKey() {
 
 function getSiteUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.irisdownloader.com.br";
+}
+
+/**
+ * Pagamentos do modo de teste (cartão 4242…) não podem virar licença no site
+ * em produção. Fora da produção (local, preview) eles servem para testar.
+ */
+export function acceptsPayment(record: { devMode?: boolean }) {
+  if (record.devMode !== true) return true;
+  return process.env.VERCEL_ENV !== "production";
 }
 
 export function getProductId(plan: Plan) {
