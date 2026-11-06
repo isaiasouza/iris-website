@@ -61,6 +61,8 @@ export default function LicenseDetailPage() {
   const [modal, setModal] = useState<ModalType>(null);
   const [note, setNote] = useState("");
   const [savingNote, setSavingNote] = useState(false);
+  const [resendState, setResendState] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [resendError, setResendError] = useState("");
 
   function load() {
     fetch(`/api/admin/licenses/${id}`)
@@ -94,6 +96,21 @@ export default function LicenseDetailPage() {
   async function removeDevice(deviceId: string) {
     await fetch(`/api/admin/licenses/${id}/devices/${deviceId}/remove`, { method: "POST" });
     load();
+  }
+
+  async function resendLicenseEmail() {
+    setResendState("sending");
+    setResendError("");
+    try {
+      const response = await fetch(`/api/admin/licenses/${id}/resend-email`, { method: "POST" });
+      const json = await response.json().catch(() => null);
+      if (!response.ok) throw new Error(json?.error || "Não foi possível reenviar o e-mail.");
+      setResendState("sent");
+      load();
+    } catch (issue) {
+      setResendState("error");
+      setResendError(issue instanceof Error ? issue.message : "Não foi possível reenviar o e-mail.");
+    }
   }
 
   async function saveNote() {
@@ -240,6 +257,14 @@ export default function LicenseDetailPage() {
           <div className="rounded-xl border border-white/5 bg-[#19191E] p-5">
             <h2 className="mb-4 text-sm font-semibold text-white">Ações</h2>
             <div className="space-y-2">
+              <button
+                onClick={resendLicenseEmail}
+                disabled={resendState === "sending"}
+                className="w-full rounded-lg border border-[#7E60F8]/30 bg-[#7E60F8]/10 py-2.5 text-sm font-medium text-[#c4b5fd] hover:bg-[#7E60F8]/20 transition-colors disabled:opacity-50"
+              >
+                {resendState === "sending" ? "Enviando…" : resendState === "sent" ? "E-mail reenviado" : "Reenviar e-mail da licença"}
+              </button>
+              {resendState === "error" && <p className="text-xs text-red-400">{resendError}</p>}
               {license.status === "active" && (
                 <button
                   onClick={() => setModal("suspend")}

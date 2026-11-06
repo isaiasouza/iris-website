@@ -38,18 +38,23 @@ export async function POST(req: NextRequest) {
     activeCounts.set(device.license_id, (activeCounts.get(device.license_id) ?? 0) + 1);
   }
 
-  await sendLicenseRecoveryEmail({
-    to: email,
-    name: licenses[0].name ?? "Cliente",
-    licenses: licenses.map((license) => ({
-      licenseKey: license.license_key,
-      plan: license.plan,
-      status: license.status,
-      expiresAt: license.expires_at,
-      devicesUsed: activeCounts.get(license.id) ?? 0,
-      devicesMax: license.max_devices,
-    })),
-  });
+  try {
+    await sendLicenseRecoveryEmail({
+      to: email,
+      name: licenses[0].name ?? "Cliente",
+      licenses: licenses.map((license) => ({
+        licenseKey: license.license_key,
+        plan: license.plan,
+        status: license.status,
+        expiresAt: license.expires_at,
+        devicesUsed: activeCounts.get(license.id) ?? 0,
+        devicesMax: license.max_devices,
+      })),
+    });
+  } catch {
+    // O envio já foi registrado como falha e o administrador avisado.
+    return NextResponse.json({ error: "SEND_FAILED" }, { status: 502 });
+  }
 
   return NextResponse.json({ ok: true });
 }

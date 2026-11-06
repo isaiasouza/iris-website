@@ -46,50 +46,81 @@ async function logEmailEvent(params: {
   }
 }
 
-async function sendTrackedEmail(params: SendTrackedEmailParams) {
-  try {
-    const result = await getResend().emails.send({
-      from: FROM,
-      to: params.to,
-      subject: params.subject,
-      html: params.html,
-    });
+// A versão 6 do SDK do Resend não lança exceção quando a API recusa o envio:
+// devolve { error }. Antes só exceções contavam como falha, e envios recusados
+// ficavam registrados como "sent", sem id para o webhook de entrega achar.
+const SEND_ATTEMPTS = 2;
 
-    await logEmailEvent({
-      to: params.to,
-      subject: params.subject,
-      type: params.type,
-      status: "sent",
-      providerId: result.data?.id ?? null,
-      metadata: params.metadata,
-    });
+type ResendFailure = { message?: string; statusCode?: number | null; name?: string };
 
-    return result;
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    await logEmailEvent({
-      to: params.to,
-      subject: params.subject,
-      type: params.type,
-      status: "failed",
-      errorMessage: message,
-      metadata: params.metadata,
-    });
-    throw error;
-  }
+/** Erros de validação (endereço inválido, domínio, chave) não melhoram tentando de novo. */
+export function isRetryableResendError(error: ResendFailure | null | undefined) {
+  const status = error?.statusCode ?? null;
+  if (status === null) return true;
+  return status === 429 || status >= 500;
 }
 
-async function getLatestDownloadUrl(): Promise<string> {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/appcast.xml`, { cache: "no-store" });
-    const xml = await res.text();
-    const match = xml.match(/sparkle:shortVersionString>([^<]+)</);
-    if (match?.[1]) {
-      const version = match[1].trim();
-      return `${process.env.NEXT_PUBLIC_SITE_URL}/Iris%20Downloader%20${encodeURIComponent(version)}.zip`;
+async function sendTrackedEmail(params: SendTrackedEmailParams) {
+  let lastError = "Falha desconhecida no envio";
+
+  for (let attempt = 1; attempt <= SEND_ATTEMPTS; attempt++) {
+    let retryable = true;
+    try {
+      const { data, error } = await getResend().emails.send({
+        from: FROM,
+        to: params.to,
+        subject: params.subject,
+        html: params.html,
+      });
+      if (!error && data?.id) {
+        await logEmailEvent({
+          to: params.to,
+          subject: params.subject,
+          type: params.type,
+          status: "sent",
+          providerId: data.id,
+          metadata: params.metadata,
+        });
+        return data;
+      }
+      lastError = error?.message ?? "O Resend não devolveu o id do envio";
+      retryable = isRetryableResendError(error);
+    } catch (error) {
+      lastError = error instanceof Error ? error.message : String(error);
     }
-  } catch {}
-  return `${process.env.NEXT_PUBLIC_SITE_URL}/Iris%20Downloader%202.7.2.zip`;
+    if (!retryable) break;
+    if (attempt < SEND_ATTEMPTS) await new Promise((resolve) => setTimeout(resolve, 1000));
+  }
+
+  await logEmailEvent({
+    to: params.to,
+    subject: params.subject,
+    type: params.type,
+    status: "failed",
+    errorMessage: lastError,
+    metadata: params.metadata,
+  });
+  await alertAdminAboutFailedSend(params, lastError);
+  throw new Error(lastError);
+}
+
+/** Avisa o administrador na hora em que um envio falha, sem derrubar quem chamou. */
+async function alertAdminAboutFailedSend(params: SendTrackedEmailParams, reason: string) {
+  const adminEmail = process.env.ADMIN_EMAIL?.trim();
+  if (!adminEmail) return;
+  try {
+    await sendDeliveryProblemAlert({
+      adminEmail,
+      customerEmail: params.to,
+      subject: params.subject,
+      type: params.type,
+      statusLabel: "Falhou no envio",
+      detail: reason,
+      sentAt: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error("[email] admin alert failed", error instanceof Error ? error.message : "unknown");
+  }
 }
 
 // Dados vindos do comprador (nome, chave, dispositivo) entram no HTML do
@@ -112,14 +143,16 @@ export async function sendLicenseEmail(params: {
   const planLabel = params.plan === "lifetime" ? "Vitalício" : "Anual";
   const portalUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/minha-licenca`;
 
-  const downloadUrl = await getLatestDownloadUrl();
+  // /download redireciona sempre para o DMG da versão mais recente.
+  const downloadUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/download`;
 
   const subject = "🔑 Iris Downloader — Sua licença está pronta";
   await sendTrackedEmail({
     to: params.to,
     subject,
     type: "license_created",
-    metadata: { plan: params.plan, license_key: params.licenseKey },
+    // A chave não vai para o registro de e-mails: ela já está na licença.
+    metadata: { plan: params.plan },
     html: `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -180,7 +213,7 @@ export async function sendLicenseEmail(params: {
             </td>
             <td style="padding-bottom:16px;padding-left:12px;vertical-align:top;">
               <p style="margin:0;color:#e4e4e7;font-size:13px;font-weight:600;line-height:26px;">Baixe e instale o app</p>
-              <p style="margin:2px 0 0;color:#9F9FA3;font-size:12px;">Clique no botão acima, abra o .dmg e arraste para Applications</p>
+              <p style="margin:2px 0 0;color:#9F9FA3;font-size:12px;">Clique no botão acima, abra o .dmg e arraste o Iris para Aplicativos</p>
             </td>
           </tr>
           <tr>
@@ -188,8 +221,8 @@ export async function sendLicenseEmail(params: {
               <div style="width:26px;height:26px;border-radius:50%;background:rgba(126,96,248,0.2);border:1px solid rgba(126,96,248,0.3);text-align:center;line-height:26px;color:#c4b5fd;font-size:12px;font-weight:700;">2</div>
             </td>
             <td style="padding-bottom:16px;padding-left:12px;vertical-align:top;">
-              <p style="margin:0;color:#e4e4e7;font-size:13px;font-weight:600;line-height:26px;">Conecte sua conta Google</p>
-              <p style="margin:2px 0 0;color:#9F9FA3;font-size:12px;">Faça login com a conta do Google Drive que deseja usar</p>
+              <p style="margin:0;color:#e4e4e7;font-size:13px;font-weight:600;line-height:26px;">Abra o Iris e ative</p>
+              <p style="margin:2px 0 0;color:#9F9FA3;font-size:12px;">Na primeira abertura o app pede a chave: cole a chave acima e clique em Ativar</p>
             </td>
           </tr>
           <tr>
@@ -197,8 +230,8 @@ export async function sendLicenseEmail(params: {
               <div style="width:26px;height:26px;border-radius:50%;background:rgba(126,96,248,0.2);border:1px solid rgba(126,96,248,0.3);text-align:center;line-height:26px;color:#c4b5fd;font-size:12px;font-weight:700;">3</div>
             </td>
             <td style="padding-left:12px;vertical-align:top;">
-              <p style="margin:0;color:#e4e4e7;font-size:13px;font-weight:600;line-height:26px;">Ative sua licença</p>
-              <p style="margin:2px 0 0;color:#9F9FA3;font-size:12px;">Vá em <strong style="color:#c4b5fd;">Configurações → Licença</strong>, cole a chave acima e clique em Ativar</p>
+              <p style="margin:0;color:#e4e4e7;font-size:13px;font-weight:600;line-height:26px;">Comece a baixar</p>
+              <p style="margin:2px 0 0;color:#9F9FA3;font-size:12px;">Cole um link do Drive, Dropbox, OneDrive ou YouTube, ou entre com sua conta Google para baixar pastas inteiras</p>
             </td>
           </tr>
         </table>
@@ -269,7 +302,7 @@ export async function sendLicenseRecoveryEmail(params: {
     return `
       <tr>
         <td style="padding:16px;border-bottom:1px solid rgba(255,255,255,0.06);">
-          <p style="margin:0 0 8px;color:#c4b5fd;font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:700;letter-spacing:2px;">${license.licenseKey}</p>
+          <p style="margin:0 0 8px;color:#c4b5fd;font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:700;letter-spacing:2px;">${escapeHtml(license.licenseKey)}</p>
           <p style="margin:0;color:#9F9FA3;font-size:12px;">Plano ${planLabel} · ${license.status} · ${license.devicesUsed}/${license.devicesMax} dispositivos · ${expires}</p>
         </td>
       </tr>`;
@@ -279,10 +312,7 @@ export async function sendLicenseRecoveryEmail(params: {
     to: params.to,
     subject: "Iris Downloader — suas licenças",
     type: "license_recovery",
-    metadata: {
-      licenses_count: params.licenses.length,
-      license_keys: params.licenses.map((license) => license.licenseKey),
-    },
+    metadata: { licenses_count: params.licenses.length },
     html: `
 <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;max-width:560px;margin:40px auto;padding:0;background:#19191E;border-radius:16px;color:#e4e4e7;overflow:hidden;border:1px solid rgba(255,255,255,0.06);">
   <div style="padding:32px;text-align:center;background:linear-gradient(135deg,#1E1440 0%,#13131A 100%);">
@@ -339,7 +369,7 @@ export async function sendDeliveryProblemAlert(params: {
   const row = (label: string, value: string) =>
     `<tr><td style="padding:8px 0;color:#9F9FA3;font-size:13px;width:130px;vertical-align:top;">${label}</td><td style="padding:8px 0;color:#fff;font-size:13px;">${value}</td></tr>`;
 
-  await getResend().emails.send({
+  const { error } = await getResend().emails.send({
     from: FROM,
     to: params.adminEmail,
     subject: `⚠️ E-mail não entregue: ${params.statusLabel.toLowerCase()} para ${params.customerEmail}`,
@@ -359,4 +389,5 @@ export async function sendDeliveryProblemAlert(params: {
   <a href="${adminUrl}" style="display:inline-block;margin-top:20px;background:#4C3CC6;color:#fff;padding:12px 18px;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;">Abrir no painel</a>
 </div>`,
   });
+  if (error) throw new Error(error.message);
 }

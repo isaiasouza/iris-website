@@ -95,7 +95,8 @@ async function handlePurchaseApproved(data: {
     .single();
   if (existing) return;
 
-  const email = data.customer.email;
+  // Gravado em minúsculas: recuperar a chave e consultar a licença procuram assim.
+  const email = data.customer.email.trim().toLowerCase();
   const name  = data.customer.name ?? "Cliente";
 
   // Determina plano pelo valor ou pelo ID da oferta da Cakto

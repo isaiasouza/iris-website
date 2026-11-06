@@ -16,6 +16,7 @@ import {
 import { useState } from "react";
 import { formatPurchaseValue } from "@/lib/purchase";
 import { PurchaseTracker } from "./PurchaseTracker";
+import { ResendLicenseForm } from "./ResendLicenseForm";
 import { UpsellCard, type UpsellOffer } from "./UpsellCard";
 
 interface PaginaObrigadoProps {
@@ -38,7 +39,7 @@ const nextSteps = [
   {
     icon: KeyRound,
     title: "Ative sua licença",
-    text: "Cole a chave no Iris e conecte sua conta Google para começar.",
+    text: "Na primeira abertura o Iris pede a chave: cole a do e-mail e clique em Ativar.",
   },
 ];
 
@@ -157,6 +158,8 @@ export function PaginaObrigado({ orderId, value, upsell }: PaginaObrigadoProps) 
               <Download className="h-4 w-4" /> Baixar o app
             </Link>
           </div>
+
+          <ResendLicenseForm />
         </section>
 
         {upsell && orderId && (

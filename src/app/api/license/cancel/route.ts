@@ -1,22 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
-import { cancelSubscription } from "@/lib/asaas";
-import { getAsaasEnv } from "@/lib/env";
 
 export async function POST(req: NextRequest) {
-  try {
-    getAsaasEnv();
-  } catch (error) {
-    console.error(
-      "[license/cancel] Asaas unavailable",
-      error instanceof Error ? error.message : "unknown"
-    );
-    return NextResponse.json(
-      { error: "PAYMENT_PROVIDER_UNAVAILABLE" },
-      { status: 503 }
-    );
-  }
-
   let body: { license_key: string; email: string };
   try {
     body = await req.json();
@@ -39,10 +24,6 @@ export async function POST(req: NextRequest) {
 
   if (license.plan !== "annual") {
     return NextResponse.json({ error: "Plano vitalício não tem assinatura para cancelar." }, { status: 400 });
-  }
-
-  if (license.asaas_subscription_id) {
-    await cancelSubscription(license.asaas_subscription_id);
   }
 
   await supabaseAdmin

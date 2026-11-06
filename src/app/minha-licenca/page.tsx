@@ -97,11 +97,15 @@ export default function MinhaLicenca() {
 
     setRecoverLoading(true);
     try {
-      await fetch("/api/license/recover", {
+      const res = await fetch("/api/license/recover", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
+      if (!res.ok) {
+        setError("Não conseguimos enviar o email agora. Tente de novo em alguns minutos ou fale com contato@irisdownloader.com.br.");
+        return;
+      }
       setRecoverSent(true);
     } catch {
       setError("Erro de conexão. Tente novamente.");

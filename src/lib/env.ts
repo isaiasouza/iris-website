@@ -16,19 +16,8 @@ type CoreEnvKey = (typeof CORE_ENV_KEYS)[number];
 export type CoreEnvSource = Partial<Record<CoreEnvKey, string | undefined>>;
 export type CoreEnv = Readonly<Record<CoreEnvKey, string>>;
 
-export interface AsaasEnv {
-  readonly ASAAS_API_KEY: string;
-  readonly ASAAS_ENV: string;
-  readonly ASAAS_WEBHOOK_TOKEN: string;
-}
-
 export interface ResendWebhookEnv {
   readonly RESEND_WEBHOOK_SECRET: string;
-}
-
-export interface StripeEnv {
-  readonly STRIPE_SECRET_KEY: string;
-  readonly STRIPE_WEBHOOK_SECRET: string;
 }
 
 type EnvEntry<K extends string> = readonly [K, string | undefined];
@@ -91,24 +80,9 @@ export function getCoreEnv(): CoreEnv {
   return cachedCoreEnv;
 }
 
-export function getAsaasEnv(): AsaasEnv {
-  return validateEntries("ASAAS", [
-    ["ASAAS_API_KEY", process.env.ASAAS_API_KEY],
-    ["ASAAS_ENV", process.env.ASAAS_ENV],
-    ["ASAAS_WEBHOOK_TOKEN", process.env.ASAAS_WEBHOOK_TOKEN],
-  ]);
-}
-
 /** Segredo de assinatura do webhook do Resend (começa com "whsec_"). Opcional: sem ele a rota responde 503. */
 export function getResendWebhookEnv(): ResendWebhookEnv {
   return validateEntries("RESEND_WEBHOOK", [
     ["RESEND_WEBHOOK_SECRET", process.env.RESEND_WEBHOOK_SECRET],
-  ]);
-}
-
-export function getStripeEnv(): StripeEnv {
-  return validateEntries("STRIPE", [
-    ["STRIPE_SECRET_KEY", process.env.STRIPE_SECRET_KEY],
-    ["STRIPE_WEBHOOK_SECRET", process.env.STRIPE_WEBHOOK_SECRET],
   ]);
 }
