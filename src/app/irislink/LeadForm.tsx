@@ -14,7 +14,7 @@ const MESSAGES: Record<string, string> = {
 };
 
 const input =
-  "h-12 w-full rounded-[10px] bg-brand-bg px-4 text-[15px] text-white placeholder:text-brand-muted ring-1 ring-inset ring-white/10 transition focus:outline-none focus:ring-2 focus:ring-brand-secondary";
+  "h-12 w-full rounded-[10px] bg-brand-bg px-4 text-base text-white placeholder:text-brand-muted ring-1 ring-inset ring-white/10 transition focus:outline-none focus:ring-2 focus:ring-brand-secondary";
 
 export default function LeadForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "done">("idle");
