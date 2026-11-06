@@ -49,6 +49,7 @@ export default function MinhaLicenca() {
   const [loading, setLoading] = useState(false);
   const [recoverLoading, setRecoverLoading] = useState(false);
   const [recoverSent, setRecoverSent] = useState(false);
+  const [renewalCancelled, setRenewalCancelled] = useState(false);
   const [error, setError] = useState("");
   const [licenseData, setLicenseData] = useState<LicenseData | null>(null);
   const [copied, setCopied] = useState(false);
@@ -167,11 +168,12 @@ export default function MinhaLicenca() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ license_key: licenseKey, email }),
       });
+      const json = await res.json().catch(() => ({}));
+      setCancelConfirm(false);
       if (res.ok) {
-        setLicenseData((prev) => prev ? { ...prev, status: "cancelled" } : prev);
-        setCancelConfirm(false);
+        setRenewalCancelled(true);
       } else {
-        setError("Erro ao cancelar. Entre em contato pelo email.");
+        setError(json.error ?? "Erro ao cancelar. Entre em contato pelo email.");
       }
     } catch {
       setError("Erro de conexão.");
@@ -439,16 +441,18 @@ export default function MinhaLicenca() {
                 <div className="text-sm text-white">Plano Anual — R$ 49,90/ano</div>
                 {licenseData.expires_at && (
                   <div className="text-xs text-[#58585F] mt-1">
-                    Próxima cobrança: {formatDate(licenseData.expires_at)}
+                    {renewalCancelled ? "Renovação cancelada. Vale até" : "Próxima cobrança:"} {formatDate(licenseData.expires_at)}
                   </div>
                 )}
               </div>
-              <button
-                onClick={() => setCancelConfirm(true)}
-                className="text-xs text-red-400/60 hover:text-red-400 transition-colors"
-              >
-                Cancelar assinatura
-              </button>
+              {!renewalCancelled && (
+                <button
+                  onClick={() => setCancelConfirm(true)}
+                  className="text-xs text-red-400/60 hover:text-red-400 transition-colors"
+                >
+                  Cancelar assinatura
+                </button>
+              )}
             </div>
           </div>
         )}

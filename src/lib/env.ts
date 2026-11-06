@@ -7,8 +7,6 @@ const CORE_ENV_KEYS = [
   "ADMIN_JWT_SECRET",
   "RESEND_API_KEY",
   "NEXT_PUBLIC_SITE_URL",
-  "CAKTO_WEBHOOK_SECRET",
-  "NEXT_PUBLIC_CAKTO_LIFETIME_ID",
 ] as const;
 
 type CoreEnvKey = (typeof CORE_ENV_KEYS)[number];
@@ -51,8 +49,6 @@ export function validateEnv(source: CoreEnvSource): CoreEnv {
     ["ADMIN_JWT_SECRET", source.ADMIN_JWT_SECRET],
     ["RESEND_API_KEY", source.RESEND_API_KEY],
     ["NEXT_PUBLIC_SITE_URL", source.NEXT_PUBLIC_SITE_URL],
-    ["CAKTO_WEBHOOK_SECRET", source.CAKTO_WEBHOOK_SECRET],
-    ["NEXT_PUBLIC_CAKTO_LIFETIME_ID", source.NEXT_PUBLIC_CAKTO_LIFETIME_ID],
   ]);
 }
 
@@ -66,8 +62,6 @@ function readCoreProcessEnv(): CoreEnvSource {
     ADMIN_JWT_SECRET: process.env.ADMIN_JWT_SECRET,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
-    CAKTO_WEBHOOK_SECRET: process.env.CAKTO_WEBHOOK_SECRET,
-    NEXT_PUBLIC_CAKTO_LIFETIME_ID: process.env.NEXT_PUBLIC_CAKTO_LIFETIME_ID,
   };
 }
 

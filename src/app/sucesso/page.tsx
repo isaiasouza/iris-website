@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-// Página antiga de pós-compra (Asaas/AbacatePay). A Cakto manda para /obrigado.
+// Endereço antigo de pós-compra: o checkout agora volta para /obrigado.
 export default function SucessoPage() {
   redirect("/obrigado");
 }

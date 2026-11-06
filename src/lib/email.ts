@@ -274,7 +274,7 @@ export async function sendPaymentFailedEmail(params: {
 <div style="font-family:sans-serif;max-width:480px;margin:40px auto;padding:32px;background:#19191E;border-radius:16px;color:#e4e4e7;">
   <h2 style="color:#fff;">Problema no pagamento</h2>
   <p style="color:#9F9FA3;">Olá ${escapeHtml(params.name)}, identificamos um problema na cobrança da sua assinatura Iris Downloader.</p>
-  <p style="color:#9F9FA3;">Sua licença permanecerá ativa por mais <strong>7 dias</strong>. Atualize sua forma de pagamento para não perder o acesso.</p>
+  <p style="color:#9F9FA3;">A renovação anual não foi cobrada. Sua licença continua valendo até o vencimento; atualize o cartão para não perder o acesso depois dele.</p>
   <a href="${escapeHtml(params.portalUrl)}" style="display:block;background:#5A3ED4;color:#fff;text-align:center;padding:14px;border-radius:10px;text-decoration:none;font-weight:600;margin-top:24px;">Atualizar pagamento →</a>
 </div>`,
   });
@@ -387,6 +387,27 @@ export async function sendDeliveryProblemAlert(params: {
     ${params.detail ? row("Motivo", escapeHtml(params.detail)) : ""}
   </table>
   <a href="${adminUrl}" style="display:inline-block;margin-top:20px;background:#4C3CC6;color:#fff;padding:12px 18px;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;">Abrir no painel</a>
+</div>`,
+  });
+  if (error) throw new Error(error.message);
+}
+
+/** Aviso genérico para o administrador (ex.: pagamento que não virou licença). Não entra em email_events. */
+export async function sendAdminNotice(params: { subject: string; title: string; lines: Array<[string, string]> }) {
+  const adminEmail = process.env.ADMIN_EMAIL?.trim();
+  if (!adminEmail) return;
+  const rows = params.lines
+    .map(([label, value]) =>
+      `<tr><td style="padding:8px 0;color:#9F9FA3;font-size:13px;width:130px;vertical-align:top;">${escapeHtml(label)}</td><td style="padding:8px 0;color:#fff;font-size:13px;">${escapeHtml(value)}</td></tr>`)
+    .join("");
+  const { error } = await getResend().emails.send({
+    from: FROM,
+    to: adminEmail,
+    subject: params.subject,
+    html: `
+<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;max-width:520px;margin:32px auto;padding:28px;background:#19191E;border-radius:14px;">
+  <h2 style="margin:0 0 16px;color:#fff;font-size:20px;">${escapeHtml(params.title)}</h2>
+  <table width="100%" cellpadding="0" cellspacing="0">${rows}</table>
 </div>`,
   });
   if (error) throw new Error(error.message);

@@ -10,8 +10,6 @@ const validSource: CoreEnvSource = {
   ADMIN_JWT_SECRET: "admin-jwt-test",
   RESEND_API_KEY: "re_test",
   NEXT_PUBLIC_SITE_URL: "https://example.com",
-  CAKTO_WEBHOOK_SECRET: "cakto-test",
-  NEXT_PUBLIC_CAKTO_LIFETIME_ID: "offer-test",
 };
 
 describe("validateEnv", () => {

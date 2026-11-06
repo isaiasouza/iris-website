@@ -83,7 +83,7 @@ export default function Pricing() {
           <ul className="mx-auto mt-6 grid max-w-4xl gap-3 sm:grid-cols-3">
             {[
               { icon: ShieldCheck, title: "7 dias de garantia", text: "Reembolso de 100% se não servir." },
-              { icon: CreditCard, title: "Checkout Cakto", text: "PIX, cartão ou boleto." },
+              { icon: CreditCard, title: "Pagamento seguro", text: "PIX ou cartão, via AbacatePay." },
               { icon: Check, title: "2.000+ downloads", text: "App assinado com Developer ID." },
             ].map(({ icon: Icon, title, text }) => (
               <li key={title} className="flex items-start gap-3 rounded-2xl bg-brand-surface p-5 ring-1 ring-white/[0.06]">
