@@ -16,11 +16,13 @@ import {
 import { useState } from "react";
 import { formatPurchaseValue } from "@/lib/purchase";
 import { PurchaseTracker } from "./PurchaseTracker";
+import { LicenseReveal } from "./LicenseReveal";
 import { ResendLicenseForm } from "./ResendLicenseForm";
 import { UpsellCard, type UpsellOffer } from "./UpsellCard";
 
 interface PaginaObrigadoProps {
   orderId: string | null;
+  checkoutRef: string | null;
   value: number | null;
   upsell: UpsellOffer | null;
 }
@@ -43,7 +45,7 @@ const nextSteps = [
   },
 ];
 
-export function PaginaObrigado({ orderId, value, upsell }: PaginaObrigadoProps) {
+export function PaginaObrigado({ orderId, value, checkoutRef, upsell }: PaginaObrigadoProps) {
   const [shareStatus, setShareStatus] = useState<"idle" | "shared" | "copied" | "error">("idle");
   const formattedValue = formatPurchaseValue(value);
 
@@ -113,6 +115,8 @@ export function PaginaObrigado({ orderId, value, upsell }: PaginaObrigadoProps) 
             </dl>
           )}
         </section>
+
+        {checkoutRef && <LicenseReveal checkoutRef={checkoutRef} />}
 
         <section className="rounded-2xl border border-white/10 bg-[#0C151E]/90 p-5 sm:p-8" aria-labelledby="next-steps-title">
           <div className="sm:flex sm:items-end sm:justify-between">

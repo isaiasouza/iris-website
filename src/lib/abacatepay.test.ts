@@ -38,3 +38,23 @@ describe("createAbacateCheckout", () => {
     expect(calls.at(-1)).toMatchObject({ path: "/subscriptions/create", body: { methods: ["PIX"] } });
   });
 });
+
+describe("parseCheckoutRef", () => {
+  it("aceita só o ref que o próprio site gera", async () => {
+    const { parseCheckoutRef } = await import("./abacatepay");
+    expect(parseCheckoutRef("iris-lifetime-0b7c6a3e-1f2d-4c5b-9a8e-7d6c5b4a3f2e")).toEqual({
+      plan: "lifetime",
+      ref: "iris-lifetime-0b7c6a3e-1f2d-4c5b-9a8e-7d6c5b4a3f2e",
+    });
+    expect(parseCheckoutRef("iris-lifetime-x")).toBeNull();
+    expect(parseCheckoutRef("iris-pro-0b7c6a3e-1f2d-4c5b-9a8e-7d6c5b4a3f2e")).toBeNull();
+    expect(parseCheckoutRef(undefined)).toBeNull();
+  });
+
+  it("devolve /obrigado com o ref no checkout", async () => {
+    const calls = mockApi(false);
+    await createAbacateCheckout({ plan: "lifetime", name: "Cliente", email: "c@example.com" });
+    const body = calls.at(-1)!.body;
+    expect(body.completionUrl).toBe(`https://www.irisdownloader.com.br/obrigado?ref=${body.externalId}`);
+  });
+});

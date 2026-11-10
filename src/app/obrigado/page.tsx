@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PaginaObrigado } from "./PaginaObrigado";
 import type { UpsellOffer } from "./UpsellCard";
 import { parseOrderId, parsePurchaseValue } from "@/lib/purchase";
+import { parseCheckoutRef } from "@/lib/abacatepay";
 
 export const metadata: Metadata = {
   title: "Compra confirmada — Iris Downloader",
@@ -34,6 +35,7 @@ export default async function ObrigadoPage({ searchParams }: ObrigadoPageProps) 
   const params = await searchParams;
   const orderId = parseOrderId(params.order_id);
   const value = parsePurchaseValue(params.valor);
+  const checkoutRef = parseCheckoutRef(params.ref)?.ref ?? null;
 
-  return <PaginaObrigado orderId={orderId} value={value} upsell={readUpsellOffer()} />;
+  return <PaginaObrigado orderId={orderId} value={value} checkoutRef={checkoutRef} upsell={readUpsellOffer()} />;
 }

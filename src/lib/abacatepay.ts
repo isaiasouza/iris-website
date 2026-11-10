@@ -106,12 +106,14 @@ export async function createAbacateCheckout(params: {
   const customer = await abacateRequest<{ id: string }>("POST", "/customers/create", customerPayload);
 
   const siteUrl = getSiteUrl();
+  const externalId = `iris-${params.plan}-${crypto.randomUUID()}`;
   const payload = {
     items: [{ id: getProductId(params.plan), quantity: 1 }],
     customerId: customer.id,
-    externalId: `iris-${params.plan}-${crypto.randomUUID()}`,
+    externalId,
     returnUrl: `${siteUrl}/#pricing`,
-    completionUrl: `${siteUrl}/obrigado`,
+    // O ref aleatório só chega a quem pagou; com ele /obrigado mostra a chave.
+    completionUrl: `${siteUrl}/obrigado?ref=${externalId}`,
     metadata: { plan: params.plan, email: params.email, name: params.name, source: "iris-website" },
   };
 
@@ -136,6 +138,21 @@ export function isCardUnavailable(error: unknown) {
 
 export function getAbacateCheckout(id: string) {
   return abacateRequest<AbacateBilling>("GET", "/checkouts/get", { id });
+}
+
+/** ref que o site gera em createAbacateCheckout e devolve em /obrigado?ref=. */
+export function parseCheckoutRef(value: unknown): { plan: Plan; ref: string } | null {
+  if (typeof value !== "string") return null;
+  const match = /^iris-(annual|lifetime)-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.exec(value);
+  return match ? { plan: match[1] as Plan, ref: value } : null;
+}
+
+export function getAbacateCheckoutByRef(externalId: string) {
+  return abacateRequest<AbacateBilling>("GET", "/checkouts/get", { externalId });
+}
+
+export function getAbacateSubscriptionByRef(externalId: string) {
+  return abacateRequest<AbacateSubscription>("GET", "/subscriptions/get", { externalId });
 }
 
 /** Checkout que originou uma assinatura: não aparece em /checkouts/get. */
