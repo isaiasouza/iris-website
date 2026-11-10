@@ -115,12 +115,23 @@ export async function createAbacateCheckout(params: {
     metadata: { plan: params.plan, email: params.email, name: params.name, source: "iris-website" },
   };
 
-  // Anual é assinatura no cartão (renova sozinha); vitalício é pagamento único.
-  const checkout = params.plan === "annual"
-    ? await abacateRequest<AbacateBilling>("POST", "/subscriptions/create", { ...payload, methods: ["CARD"] })
-    : await abacateRequest<AbacateBilling>("POST", "/checkouts/create", { ...payload, methods: ["PIX", "CARD"] });
+  // Anual é assinatura (renova sozinha); vitalício é pagamento único.
+  const path = params.plan === "annual" ? "/subscriptions/create" : "/checkouts/create";
+  const preferred = params.plan === "annual" ? ["CARD"] : ["PIX", "CARD"];
+  try {
+    const checkout = await abacateRequest<AbacateBilling>("POST", path, { ...payload, methods: preferred });
+    return checkout.url;
+  } catch (error) {
+    // Enquanto a AbacatePay não libera cartão na loja, a API recusa CARD.
+    // Nesse caso o checkout sai só com PIX (no anual, Pix Automático).
+    if (!isCardUnavailable(error)) throw error;
+    const checkout = await abacateRequest<AbacateBilling>("POST", path, { ...payload, methods: ["PIX"] });
+    return checkout.url;
+  }
+}
 
-  return checkout.url;
+export function isCardUnavailable(error: unknown) {
+  return error instanceof Error && /CARD is not available/i.test(error.message);
 }
 
 export function getAbacateCheckout(id: string) {
