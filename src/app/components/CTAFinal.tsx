@@ -13,7 +13,7 @@ export default function CTAFinal() {
           Seu próximo job <span className="text-iris-grad">não precisa virar ZIP.</span>
         </h2>
         <p className="mx-auto mt-5 max-w-xl text-pretty text-base leading-7 text-white/85 sm:text-lg">
-          Instale no Mac, conecte uma conta Google e teste com a pasta que mais dá trabalho hoje.
+          Instale no Mac, cole o link da pasta que mais dá trabalho hoje e veja chegar arquivo por arquivo. Sem login.
         </p>
         <div className="mx-auto mt-9 flex max-w-xl flex-col justify-center gap-3 sm:flex-row">
           <a href="/download" className={cn(btnPrimary, "iris-shine group shadow-[0_10px_34px_-10px_rgba(107,85,240,0.9)]")}>

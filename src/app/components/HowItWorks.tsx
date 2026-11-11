@@ -1,20 +1,21 @@
-import { SectionHeader } from "./brand";
+import { BetaBadge, SectionHeader } from "./brand";
 
-const steps = [
+const steps: { title: string; description: string; note?: string }[] = [
   {
     title: "Baixe e instale",
     description:
       "Abra o DMG e arraste para a pasta Aplicativos. Pronto. Nenhum terminal, nenhuma dependência extra, nenhum Homebrew.",
   },
   {
-    title: "Conecte sua conta Google",
+    title: "Cole um link",
     description:
-      "Clique em “Continuar com Google”, faça login no navegador e autorize o acesso. O Iris guarda a conexão com segurança no seu Mac: você não precisa fazer isso de novo.",
+      "Pasta ou arquivo público do Drive, Dropbox ou OneDrive, ou um vídeo do YouTube, Instagram, TikTok e X. Não precisa entrar com o Google.",
+    note: "Navegar pelo seu Drive inteiro com login no Google está em Beta, em liberação gradual.",
   },
   {
-    title: "Navegue e baixe sem ZIP",
+    title: "Baixe sem ZIP",
     description:
-      "Escolha qualquer arquivo ou pasta do seu Drive e clique em baixar. Cada arquivo vai direto para o Mac, na mesma estrutura de pastas do Drive: sem compactar, sem esperar, sem travar.",
+      "Escolha a pasta de destino uma vez: o Iris lembra nas próximas. Cada arquivo vai direto para o Mac, na mesma estrutura de pastas: sem compactar, sem esperar, sem travar.",
   },
 ];
 
@@ -37,6 +38,12 @@ export default function HowItWorks() {
                 {step.title}
               </h3>
               <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-brand-text-2">{step.description}</p>
+              {step.note && (
+                <p className="mx-auto mt-3 flex max-w-sm items-start justify-center gap-2 text-xs leading-5 text-brand-muted">
+                  <BetaBadge className="mt-0.5" />
+                  <span>{step.note}</span>
+                </p>
+              )}
             </li>
           ))}
         </ol>

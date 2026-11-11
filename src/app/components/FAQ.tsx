@@ -6,6 +6,11 @@ import { SectionHeader } from "./brand";
 
 const faqs = [
   {
+    question: "Preciso entrar com a minha conta Google?",
+    answer:
+      "Não para começar. Baixar por link (pastas e arquivos públicos do Drive, Dropbox e OneDrive) e baixar do YouTube, Instagram, TikTok e X funciona sem login. Entrar com o Google para navegar pelo seu Drive inteiro, inclusive pastas privadas, está em Beta: estamos concluindo a verificação de segurança do Google e liberando aos poucos.",
+  },
+  {
     question: "Meus arquivos passam pelo servidor de vocês?",
     answer:
       "Não. O Iris se conecta à API oficial do Google e transfere os arquivos do Drive direto para o seu Mac, sem passar por nenhum servidor nosso ou de terceiros.",

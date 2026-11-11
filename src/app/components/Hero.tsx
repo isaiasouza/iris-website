@@ -30,7 +30,7 @@ export default function Hero() {
           className="iris-rise mx-auto mt-6 max-w-xl text-pretty text-base leading-7 text-brand-text-2 sm:text-lg sm:leading-8"
           style={{ animationDelay: "0.2s" }}
         >
-          O Iris baixa 10, 50 ou 100 GB direto no Mac, preserva as pastas e reúne todas as suas contas Google em um app nativo.
+          Cole o link de uma pasta do Drive, Dropbox ou OneDrive, ou de um vídeo do YouTube, Instagram ou TikTok. O Iris baixa 10, 50 ou 100 GB direto no Mac, com as pastas no lugar.
         </p>
 
         <div className="iris-rise mt-8 flex flex-col justify-center gap-3 sm:flex-row" style={{ animationDelay: "0.3s" }}>
@@ -46,7 +46,7 @@ export default function Hero() {
         </div>
 
         <p className="iris-rise mt-4 text-xs text-brand-muted" style={{ animationDelay: "0.35s" }}>
-          Teste sem cartão · macOS 14+ · Apple Silicon e Intel
+          Teste sem cartão · Não precisa entrar com o Google · macOS 14+ · Apple Silicon e Intel
         </p>
 
         <div className="iris-rise" style={{ animationDelay: "0.45s" }}>

@@ -83,6 +83,17 @@ export function SectionHeader({
 }
 
 /** Ação principal: sólido em #4C3CC6 com texto branco (7,58:1). */
+/** Selo das funções que pedem login no Google, em liberação gradual. */
+export function BetaBadge({ className = "" }: { className?: string }) {
+  return (
+    <span
+      className={`inline-flex shrink-0 items-center rounded-md bg-amber-400/15 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-300 ring-1 ring-inset ring-amber-300/25 ${className}`}
+    >
+      Beta
+    </span>
+  );
+}
+
 export const btnPrimary =
   "inline-flex h-12 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-[10px] bg-brand-primary px-5 text-[15px] font-semibold text-white ring-1 ring-inset ring-white/12 transition-colors hover:bg-brand-primary-hover active:opacity-85";
 

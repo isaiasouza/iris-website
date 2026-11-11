@@ -1,5 +1,5 @@
-import { Check, FolderDown, FolderTree, Link2, PauseCircle, ShieldCheck, Trash2, Upload, Users } from "lucide-react";
-import { SectionHeader } from "./brand";
+import { Check, FolderDown, FolderTree, PauseCircle, PlaySquare, ShieldCheck, Trash2, Upload, Users } from "lucide-react";
+import { BetaBadge, SectionHeader } from "./brand";
 import SpotlightCard from "./SpotlightCard";
 
 const tree = [
@@ -15,13 +15,14 @@ const accounts = [
   { letter: "P", color: "#22C55E" },
 ];
 
-const sideFeatures = [
+// beta: precisa entrar com o Google, o que está em liberação gradual.
+const sideFeatures: { icon: typeof Check; title: string; description: string; beta?: boolean }[] = [
   { icon: PauseCircle, title: "Pausar e retomar", description: "A internet caiu? Retome de onde parou, sem recomeçar a pasta inteira." },
-  { icon: Upload, title: "Envio arrastando", description: "Arraste arquivos do Finder direto para qualquer pasta do Drive." },
-  { icon: ShieldCheck, title: "Seus dados não saem do seu Mac", description: "Comunicação direta com o Google. Nenhum servidor intermediário." },
-  { icon: FolderTree, title: "Navegador de pastas", description: "Navegue pelo Drive dentro do app, sem abrir o navegador." },
-  { icon: Link2, title: "Copiar link de compartilhamento", description: "Um clique para copiar o link de qualquer arquivo." },
-  { icon: Trash2, title: "Excluir pelo app", description: "Mova arquivos para a lixeira do Drive sem abrir o navegador." },
+  { icon: PlaySquare, title: "YouTube, Instagram e TikTok", description: "Vídeo até 4K ou só o áudio em MP3. Cole o link e pronto, sem conta." },
+  { icon: ShieldCheck, title: "Seus dados não saem do seu Mac", description: "Comunicação direta com o serviço de origem. Nenhum servidor intermediário." },
+  { icon: FolderTree, title: "Navegador de pastas", description: "Navegue pelo seu Drive dentro do app, sem abrir o navegador.", beta: true },
+  { icon: Upload, title: "Envio arrastando", description: "Arraste arquivos do Finder direto para qualquer pasta do Drive.", beta: true },
+  { icon: Trash2, title: "Excluir pelo app", description: "Mova arquivos para a lixeira do Drive sem abrir o navegador.", beta: true },
 ];
 
 function Icon({ icon: I }: { icon: typeof Check }) {
@@ -39,7 +40,7 @@ export default function Features() {
         <SectionHeader
           eyebrow="O que muda"
           title={<>O fluxo do Drive, <span className="text-iris-grad">sem sair do Mac</span></>}
-          text="Não é sincronização automática nem navegador disfarçado. É download e envio sob seu controle."
+          text="Não é sincronização automática nem navegador disfarçado. É download e envio sob seu controle. O que tem o selo Beta pede login no Google e está em liberação gradual."
         />
 
         <div className="mt-14 grid gap-4 md:grid-cols-6">
@@ -69,7 +70,7 @@ export default function Features() {
 
           <SpotlightCard className="p-6 md:col-span-2">
             <Icon icon={Users} />
-            <h3 className="mt-5 text-base font-semibold text-white">Várias contas Google no mesmo app</h3>
+            <h3 className="mt-5 flex flex-wrap items-center gap-2 text-base font-semibold text-white">Várias contas Google no mesmo app <BetaBadge /></h3>
             <p className="mt-2 text-sm leading-6 text-brand-text-2">Pessoal, trabalho e cliente: tudo em um lugar. Um clique para trocar.</p>
             <div className="mt-5 flex" aria-hidden="true">
               {accounts.map((a, i) => (
@@ -86,10 +87,10 @@ export default function Features() {
           </SpotlightCard>
 
           {/* 5 cards: 2 numa linha (3+3) e 3 na outra (2+2+2), sem buraco no grid */}
-          {sideFeatures.slice(1).map(({ icon, title, description }, i) => (
+          {sideFeatures.slice(1).map(({ icon, title, description, beta }, i) => (
             <SpotlightCard key={title} className={`p-6 ${i < 2 ? "md:col-span-3" : "md:col-span-2"}`}>
               <Icon icon={icon} />
-              <h3 className="mt-5 text-base font-semibold text-white">{title}</h3>
+              <h3 className="mt-5 flex flex-wrap items-center gap-2 text-base font-semibold text-white">{title}{beta && <BetaBadge />}</h3>
               <p className="mt-2 text-sm leading-6 text-brand-text-2">{description}</p>
             </SpotlightCard>
           ))}

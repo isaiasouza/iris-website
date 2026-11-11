@@ -9,8 +9,8 @@ import { cn } from "@/lib/utils";
 const CheckoutModal = dynamic(() => import("./CheckoutModal"), { ssr: false });
 
 const annualFeatures = [
-  "Downloads e uploads sem limite",
-  "Múltiplas contas Google",
+  "Downloads por link e de redes sociais sem limite",
+  "Seu Google Drive com login (Beta)",
   "Pausar e retomar transferências",
   "Atualizações durante o plano",
   "Uso em 1 Mac",
