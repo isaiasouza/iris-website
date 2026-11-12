@@ -45,22 +45,6 @@ const STEPS = ["Seus dados", "Pagamento", "Licença"];
 const inputClass =
   "h-11 w-full rounded-[10px] bg-brand-bg px-3 text-base text-white ring-1 ring-inset ring-white/10 outline-none transition placeholder:text-brand-muted focus:ring-2 focus:ring-brand-secondary/70";
 
-/** Mostra o CPF ou CNPJ com pontos e traço enquanto a pessoa digita. O servidor recebe só os números. */
-function formatTaxId(raw: string): string {
-  const d = raw.replace(/\D/g, "").slice(0, 14);
-  if (d.length <= 11) {
-    return d
-      .replace(/^(\d{3})(\d)/, "$1.$2")
-      .replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3")
-      .replace(/\.(\d{3})(\d{1,2})$/, ".$1-$2");
-  }
-  return d
-    .replace(/^(\d{2})(\d)/, "$1.$2")
-    .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
-    .replace(/\.(\d{3})(\d)/, ".$1/$2")
-    .replace(/(\d{4})(\d{1,2})$/, "$1-$2");
-}
-
 interface CheckoutModalProps {
   plan: Plan;
   onClose: () => void;
@@ -71,7 +55,6 @@ export default function CheckoutModal({ plan: initialPlan, onClose }: CheckoutMo
   const info = PLAN_INFO[plan];
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [taxId, setTaxId] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -83,7 +66,8 @@ export default function CheckoutModal({ plan: initialPlan, onClose }: CheckoutMo
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan, name, email, taxId: taxId.replace(/\D/g, "") || undefined }),
+        // CPF/CNPJ não é pedido aqui: a AbacatePay pede no checkout dela.
+        body: JSON.stringify({ plan, name, email }),
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok || !json.checkoutUrl) throw new Error(json.error ?? "Não foi possível abrir o pagamento.");
@@ -189,20 +173,6 @@ export default function CheckoutModal({ plan: initialPlan, onClose }: CheckoutMo
                 <Mail className="h-3.5 w-3.5 text-brand-secondary" /> Sua chave de licença chega neste e-mail.
               </span>
             </label>
-            <label className="block">
-              <span className="mb-1.5 block text-xs font-medium text-brand-text-2">
-                CPF ou CNPJ <span className="text-brand-muted">(opcional)</span>
-              </span>
-              <input
-                value={taxId}
-                onChange={(event) => setTaxId(formatTaxId(event.target.value))}
-                inputMode="numeric"
-                autoComplete="off"
-                placeholder="000.000.000-00"
-                className={inputClass}
-              />
-            </label>
-
             {/* Formas de pagamento e garantia */}
             <div className="rounded-xl bg-brand-bg p-4 ring-1 ring-white/[0.06]">
               <p className="text-xs font-medium text-brand-text-2">Você paga na próxima tela com</p>
