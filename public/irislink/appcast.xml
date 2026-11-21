@@ -3,12 +3,12 @@
   <channel>
     <title>IRIS Link</title>
     <item>
-      <title>IRIS Link 0.1.6</title>
-      <pubDate>Sat, 21 Nov 2026 03:58:38 +0000</pubDate>
-      <sparkle:version>7</sparkle:version>
-      <sparkle:shortVersionString>0.1.6</sparkle:shortVersionString>
+      <title>IRIS Link 0.1.7</title>
+      <pubDate>Sat, 21 Nov 2026 06:29:47 +0000</pubDate>
+      <sparkle:version>8</sparkle:version>
+      <sparkle:shortVersionString>0.1.7</sparkle:shortVersionString>
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-      <enclosure url="https://www.irisdownloader.com.br/irislink/IRISLink_v0.1.6.dmg" length="1989115" type="application/octet-stream" sparkle:edSignature="qPeBSZ10bC9SaXU/GVL1cTk9PDkz5t9d+p+l6v4skZxTvFDWGLJ8oMliVignh4oen6IjuqkQw1OjcC7LkP6mDg=="/>
+      <enclosure url="https://www.irisdownloader.com.br/irislink/IRISLink_v0.1.7.dmg" length="2040024" type="application/octet-stream" sparkle:edSignature="4XZ8DHGBqWIgrALz9f078cJAfF75nZ+TX4hZizITJRX14zNzLaiMlSPbwHpouH3gPePOILkaWvM5ruQ8PHhEAw=="/>
     </item>
   </channel>
 </rss>
